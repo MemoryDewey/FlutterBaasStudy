@@ -1,3 +1,7 @@
+import 'package:baas_study/dao/banner_dao.dart';
+import 'package:baas_study/dao/home_course_dao.dart';
+import 'package:baas_study/widget/course_discount_card.dart';
+import 'package:baas_study/widget/home_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
@@ -9,16 +13,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List _listBannerUrl = [
-    'http://47.102.97.205/images/course-cover/9bc1873da8cdaab9a72f0d5fc6fb242a.jpg',
-    'http://47.102.97.205/images/course-cover/6fac3bea49ac0bb07af8cc2f95c49cd1.jpg',
-    'http://47.102.97.205/images/banner/9ecc3b5d322fc7bb81c740aff510d1cc.jpeg'
-  ];
+  List<String> _listBannerUrl = [];
   double appBarAlpha = 0;
 
   // 滚动事件触发
   // 改变AppBar透明度
-  void _onScroll(double offset) {
+  _onScroll(double offset) {
     double alpha = offset / APPBAR_SCROLL_OFFSET;
     if (alpha < 0)
       alpha = 0;
@@ -26,6 +26,33 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       appBarAlpha = alpha;
     });
+  }
+
+  // 加载banner
+  _loadBanner() {
+    BannerDao.fetch().then((result) {
+      result.banners.forEach((item) {
+        setState(() {
+          _listBannerUrl.add('http://47.102.97.205${item.image}');
+        });
+      });
+    });
+  }
+
+  // 加载课程
+  _loadCourse() {
+    HomeCourseDao.fetch().then((result) {
+      result.discount.forEach((item){
+        print(item.courseName);
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBanner();
+    _loadCourse();
   }
 
   @override
@@ -47,6 +74,7 @@ class _HomePageState extends State<HomePage> {
                   // 滚动且是列表滚动的时候
                   _onScroll(scrollNotification.metrics.pixels);
                 }
+                return null;
               },
               child: ListView(
                 children: <Widget>[
@@ -65,9 +93,46 @@ class _HomePageState extends State<HomePage> {
                       pagination: SwiperPagination(),
                     ),
                   ),
-                  Container(
-                    height: 800,
-                    child: Text('test'),
+                  // 首页课程内容
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
+                    child: Container(
+                      height: 800,
+                      child: ListView(
+                        children: <Widget>[
+                          // 标题
+                          HomeTitleWidget(
+                            text: '限时优惠',
+                            icon: Icons.access_time,
+                            colors: Color(0xffff976a),
+                          ),
+                          // 限时抢购课程
+                          Container(
+                            height: 220,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: <Widget>[
+                                CourseDiscountCard(id: 1),
+                                CourseDiscountCard(id: 1),
+                                CourseDiscountCard(id: 1),
+                                CourseDiscountCard(id: 1),
+                                CourseDiscountCard(id: 1)
+                              ],
+                            ),
+                          ),
+                          HomeTitleWidget(
+                            text: '最新课程',
+                            icon: Icons.fiber_new,
+                            colors: Color(0xff07c160),
+                          ),
+                          HomeTitleWidget(
+                            text: '热门课程',
+                            icon: Icons.whatshot,
+                            colors: Color(0xffee0a24),
+                          ),
+                        ],
+                      ),
+                    ),
                   )
                 ],
               ),
