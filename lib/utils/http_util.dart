@@ -6,18 +6,17 @@ import 'package:dio/dio.dart';
 class HttpUtil {
   static Dio dio;
 
+  /// 设置请求地址
+  static const String URL_PREFIX = 'http://47.102.97.205';
+
   /// API前缀
-  static const String _API_PREFIX = 'http://47.102.97.205/api';
+  static const String _API_PREFIX = '$URL_PREFIX/api';
 
   /// 连接服务器超时时间
   static const int _CONNECT_TIMEOUT = 10000;
 
   /// 接收数据的最长时间
   static const int _RECEIVE_TIMEOUT = 5000;
-
-  /// http请求方法
-  static const String _GET = 'get';
-  static const String _POST = 'post';
 
   /// token
   static String _token;
@@ -44,6 +43,7 @@ class HttpUtil {
         options: new Options(method: method),
       );
       result = response.data;
+
       /// 打印响应相关信息
       print('响应数据成功！');
     } on DioError catch (e) {
@@ -64,6 +64,7 @@ class HttpUtil {
         connectTimeout: _CONNECT_TIMEOUT,
         receiveTimeout: _RECEIVE_TIMEOUT,
         headers: {"user-agent": "dio", "authorization": _token},
+
         /// [responseType] 表示期望以那种格式(方式)接受响应数据。
         /// [ResponseType] 接受三种类型 `JSON`, `STREAM`, `PLAIN`
         responseType: ResponseType.json,

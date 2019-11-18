@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// 限时抢购课程卡片
@@ -5,17 +6,16 @@ class CourseDiscountCard extends StatelessWidget {
   final int id;
   final String imageUrl;
   final String name;
-  final double price;
+  final int price;
   final double discount;
   final int applyCount;
 
   const CourseDiscountCard(
       {Key key,
       @required this.id,
-      this.imageUrl =
-          'http://47.102.97.205/images/banner/d932a253b1edcb8728f97a71248381b0.jpg',
-      this.name = ' (东华大学BaaS区块链实验室)区块链入门课程 ',
-      this.price = 1000,
+      @required this.imageUrl,
+      this.name = '课程',
+      this.price = 313,
       this.discount = 1,
       this.applyCount = 0})
       : super(key: key);
@@ -46,12 +46,40 @@ class CourseDiscountCard extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: Row(
+              child: Column(
                 children: <Widget>[
-                  Text(
-                    '￥ $price',
-                    style: TextStyle(color: Color(0xffee0a24)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Text(
+                        '￥ $price',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Color(0xff7d7e80),
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                      Text(
+                        '￥ ${(price * discount).toStringAsFixed(2)}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Color(0xffee0a24)),
+                      ),
+                    ],
                   ),
+                  Text(
+                    '$applyCount 人已抢',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Color(0xff7d7e80)),
+                  ),
+                  MaterialButton(
+                    color: Color(0xffff976a),
+                    textColor: Colors.white,
+                    minWidth: 150,
+                    onPressed: (){
+                      print('course:$id');
+                    },
+                    child: Text('马上抢购'),
+                  )
                 ],
               ),
             ),

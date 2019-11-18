@@ -22,6 +22,7 @@ class _TabNavigatorState extends State<TabNavigator> {
       // 页面
       body: PageView(
         controller: _controller,
+        physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           HomePage(), // 首页
           CourseListPage(), // 课程列表页

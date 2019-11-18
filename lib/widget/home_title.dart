@@ -10,24 +10,27 @@ class HomeTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Icon(
-          icon,
-          size: 25,
-          color: colors,
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: Text(
-            text,
-            style: TextStyle(
-              color: colors,
-              fontSize: 20,
-            ),
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Row(
+        children: <Widget>[
+          Icon(
+            icon,
+            size: 25,
+            color: colors,
           ),
-        )
-      ],
+          Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: Text(
+              text,
+              style: TextStyle(
+                color: colors,
+                fontSize: 20,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -36,16 +36,14 @@ class Banners {
   int id;
   String image;
   String url;
-  String fillColor;
 
-  Banners({this.id, this.image, this.url, this.fillColor});
+  Banners({this.id, this.image, this.url});
 
   factory Banners.fromJson(Map<String, dynamic> json) {
     return Banners(
       id: json['id'],
       image: json['image'],
       url: json['url'],
-      fillColor: json['fillColor'],
     );
   }
 
@@ -54,7 +52,6 @@ class Banners {
     data['id'] = this.id;
     data['image'] = this.image;
     data['url'] = this.url;
-    data['fillColor'] = this.fillColor;
     return data;
   }
 }
