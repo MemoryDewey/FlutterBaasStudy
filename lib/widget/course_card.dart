@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CourseCard extends StatelessWidget {
   final int id;
@@ -24,14 +25,20 @@ class CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
-      margin: EdgeInsets.only(bottom: 5),
+      height: 90,
+      margin: EdgeInsets.only(bottom: 10),
       child: Row(
         children: <Widget>[
           Container(
-            width: 160,
-            child: Image.network(
-              imageUrl,
+            width: 144,
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              placeholder: (context, url) => Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.image),
               fit: BoxFit.cover,
             ),
           ),
@@ -72,7 +79,7 @@ class CourseCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      '$applyCount人报名 | 好评${(rate*100).toStringAsFixed(0)}%',
+                      '$applyCount人报名 | 好评${(rate * 100).toStringAsFixed(0)}%',
                       style: TextStyle(fontSize: 14, color: Color(0xff999999)),
                     ),
                     Text(

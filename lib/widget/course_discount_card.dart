@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,16 @@ class CourseDiscountCard extends StatelessWidget {
           children: <Widget>[
             AspectRatio(
               aspectRatio: 16 / 9,
-              child: Image.network(imageUrl, fit: BoxFit.cover),
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                placeholder: (context, url) => Container(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.image),
+                fit: BoxFit.cover,
+              ),
             ),
             Padding(
               padding: EdgeInsets.all(10),
@@ -75,7 +85,7 @@ class CourseDiscountCard extends StatelessWidget {
                     color: Color(0xffff976a),
                     textColor: Colors.white,
                     minWidth: 150,
-                    onPressed: (){
+                    onPressed: () {
                       print('course:$id');
                     },
                     child: Text('马上抢购'),

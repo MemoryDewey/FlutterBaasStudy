@@ -1,12 +1,18 @@
+import 'dart:io';
+import 'dart:ui';
 import 'package:baas_study/dao/banner_dao.dart';
 import 'package:baas_study/dao/home_course_dao.dart';
 import 'package:baas_study/model/banner_model.dart';
 import 'package:baas_study/model/course_model.dart';
+import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/course_card.dart';
 import 'package:baas_study/widget/course_discount_card.dart';
 import 'package:baas_study/widget/home_title.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
@@ -22,7 +28,17 @@ class _HomePageState extends State<HomePage>
   List<CourseModel> _listDiscountCourse = [];
   List<CourseModel> _listNewestCourse = [];
   List<CourseModel> _listRecommendCourse = [];
-  double appBarAlpha = 0;
+  bool _statusBarDark = false;
+  double _appBarAlpha = 0;
+  EdgeInsetsGeometry _padding = EdgeInsets.fromLTRB(
+    AutoSizeUtil.size(16),
+    AutoSizeUtil.size(10),
+    AutoSizeUtil.size(16),
+    AutoSizeUtil.size(10),
+  );
+  static num _paddingTop = Platform.isAndroid
+      ? MediaQueryData.fromWindow(window).padding.top
+      : AutoSizeUtil.size(20);
 
   @override
   void initState() {
@@ -34,10 +50,13 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    EdgeInsetsGeometry padding = EdgeInsets.fromLTRB(16, 10, 16, 10);
+    ScreenUtil.instance = ScreenUtil(
+      width: AutoSizeUtil.width,
+      height: AutoSizeUtil.height,
+    )..init(context);
+    //print(MediaQuery.of(context).size);
     return Scaffold(
-      /// 使用Stack布局固定AppBar位置
-      /// 数组index越大在越上面层
+      /// 使用Stack布局固定AppBar位置 - 数组index越大在越上面层
       body: Stack(
         children: <Widget>[
           /// 移除顶部区域padding
@@ -61,7 +80,7 @@ class _HomePageState extends State<HomePage>
 
                   /// 限时抢购课程
                   Padding(
-                    padding: padding,
+                    padding: _padding,
                     child: Column(
                       children: <Widget>[
                         HomeTitleWidget(
@@ -76,7 +95,7 @@ class _HomePageState extends State<HomePage>
 
                   /// 最新课程
                   Padding(
-                    padding: padding,
+                    padding: _padding,
                     child: Column(
                       children: <Widget>[
                         /// 最新课程
@@ -92,7 +111,7 @@ class _HomePageState extends State<HomePage>
 
                   /// 热门课程
                   Padding(
-                    padding: padding,
+                    padding: _padding,
                     child: Column(
                       children: <Widget>[
                         HomeTitleWidget(
@@ -111,13 +130,13 @@ class _HomePageState extends State<HomePage>
 
           /// 自定义AppBar
           Opacity(
-            opacity: appBarAlpha,
+            opacity: _appBarAlpha,
             child: Container(
-              height: 80,
+              height: _paddingTop + AutoSizeUtil.size(100),
               decoration: BoxDecoration(color: Colors.white),
               child: Center(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.only(top: _paddingTop),
                   child: Text('首页'),
                 ),
               ),
@@ -131,15 +150,33 @@ class _HomePageState extends State<HomePage>
   @override
   bool get wantKeepAlive => true;
 
-  /// 滚动事件触发
-  /// 改变AppBar透明度
+  /// 滚动事件触发 - 改变AppBar透明度
   _onScroll(double offset) {
     double alpha = offset / APPBAR_SCROLL_OFFSET;
     if (alpha < 0)
       alpha = 0;
-    else if (alpha > 1) alpha = 1;
+    else if (alpha > 0) {
+      if (alpha > 1) alpha = 1;
+
+      /// Android平台改变状态栏颜色
+      if (Platform.isAndroid && !_statusBarDark) {
+        SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+          statusBarColor: Color(0x00),
+          statusBarIconBrightness: Brightness.dark,
+        );
+        _statusBarDark = true;
+        SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+      }
+    } else if (alpha == 0 && Platform.isAndroid && _statusBarDark) {
+      SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+        statusBarColor: Color(0x00),
+        statusBarIconBrightness: Brightness.light,
+      );
+      _statusBarDark = false;
+      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    }
     setState(() {
-      appBarAlpha = alpha;
+      _appBarAlpha = alpha;
     });
   }
 
@@ -155,19 +192,27 @@ class _HomePageState extends State<HomePage>
   /// Banner轮播图
   Widget get _banner {
     return Container(
-      height: 210,
-      child: Swiper(
-        itemCount: _listBanner.length,
-        autoplay: true,
-        itemBuilder: (BuildContext context, index) {
-          return Image.network(
-            '${HttpUtil.URL_PREFIX}${_listBanner[index].image}',
-            fit: BoxFit.fill,
-          );
-        },
-        pagination: SwiperPagination(),
-      ),
-    );
+        height: 230,
+        child: AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Swiper(
+            itemCount: _listBanner.length,
+            autoplay: true,
+            itemBuilder: (BuildContext context, index) {
+              return CachedNetworkImage(
+                imageUrl: '${HttpUtil.URL_PREFIX}${_listBanner[index].image}',
+                placeholder: (context, url) => Container(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.image),
+                fit: BoxFit.cover,
+              );
+            },
+            pagination: SwiperPagination(),
+          ),
+        ));
   }
 
   /// 加载课程
