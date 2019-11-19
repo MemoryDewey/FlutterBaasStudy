@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:baas_study/pages/course_list_page.dart';
 import 'package:baas_study/pages/home_page.dart';
 import 'package:baas_study/pages/profile_page.dart';
 import 'package:baas_study/pages/search_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TabNavigator extends StatefulWidget {
@@ -14,6 +16,8 @@ class _TabNavigatorState extends State<TabNavigator> {
   final _defaultColor = Colors.grey;
   final _activeColor = Colors.blue;
   int _currentIndex = 0;
+  Brightness homeBrightness = Brightness.light;
+
   final PageController _controller = PageController(
     initialPage: 0,
   );
@@ -42,6 +46,7 @@ class _TabNavigatorState extends State<TabNavigator> {
         currentIndex: _currentIndex,
         // 点击改变页面
         onTap: (index) {
+          _setHomeBrightness(index);
           _controller.jumpToPage(index);
           setState(() {
             _currentIndex = index;
@@ -96,5 +101,14 @@ class _TabNavigatorState extends State<TabNavigator> {
         ],
       ),
     );
+  }
+
+  /// 切换至首页时需要根据情况改变statusBar颜色
+  _setHomeBrightness(index) {
+    if (Platform.isAndroid && index == 0) {
+      if (HomePage.getBarLight()) {
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+      }
+    }
   }
 }

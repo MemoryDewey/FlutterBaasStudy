@@ -7,8 +7,7 @@ import 'package:baas_study/model/course_model.dart';
 import 'package:baas_study/model/home_course_model.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
-import 'package:baas_study/widget/course_card.dart';
-import 'package:baas_study/widget/course_discount_card.dart';
+import 'package:baas_study/widget/home_course.dart';
 import 'package:baas_study/widget/home_title.dart';
 import 'package:baas_study/widget/loading_container.dart';
 import 'package:baas_study/widget/search_bar.dart';
@@ -19,18 +18,23 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
 const SEARCH_BAR_DEFAULT_TEXT = '区块链 以太坊 智能合约';
+bool homeStatusBarLight = true;
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
+
+  static bool getBarLight() {
+    return homeStatusBarLight;
+  }
 }
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   List<Banners> _listBanner = [];
-  List<CourseModel> _listDiscountCourse = [];
-  List<CourseModel> _listNewestCourse = [];
-  List<CourseModel> _listRecommendCourse = [];
+  List<CourseModel> _listDiscount = [];
+  List<CourseModel> _listNewest = [];
+  List<CourseModel> _listRecommend = [];
   bool _statusBarDark = false;
   double _appBarAlpha = 0;
   bool _loading = true;
@@ -40,11 +44,13 @@ class _HomePageState extends State<HomePage>
     AutoSizeUtil.size(16),
     AutoSizeUtil.size(10),
   );
-  static num _paddingTop =
-      Platform.isAndroid ? MediaQueryData.fromWindow(window).padding.top : 20;
+  static num _paddingTop = Platform.isAndroid
+      ? MediaQueryData.fromWindow(window).padding.top
+      : AutoSizeUtil.size(20);
 
   @override
   void initState() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     super.initState();
     _handleRefresh();
   }
@@ -83,7 +89,7 @@ class _HomePageState extends State<HomePage>
                       text: '限时优惠',
                       icon: Icons.access_time,
                       color: Color(0xffff976a),
-                      course: _discountCourse,
+                      course: HomeCourseWidget().rowCard(_listDiscount),
                     ),
 
                     /// 最新课程
@@ -91,7 +97,7 @@ class _HomePageState extends State<HomePage>
                       text: '最新课程',
                       icon: Icons.fiber_new,
                       color: Color(0xff07c160),
-                      course: _newestCourse,
+                      course: HomeCourseWidget().columnCard(_listNewest),
                     ),
 
                     /// 热门课程
@@ -99,7 +105,7 @@ class _HomePageState extends State<HomePage>
                       text: '热门课程',
                       icon: Icons.whatshot,
                       color: Color(0xffee0a24),
-                      course: _recommendCourse,
+                      course: HomeCourseWidget().columnCard(_listRecommend),
                     ),
                   ],
                 ),
@@ -127,20 +133,14 @@ class _HomePageState extends State<HomePage>
 
       /// Android平台改变状态栏颜色
       if (Platform.isAndroid && !_statusBarDark) {
-        SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
-          statusBarColor: Color(0x00),
-          statusBarIconBrightness: Brightness.dark,
-        );
         _statusBarDark = true;
-        SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+        homeStatusBarLight = false;
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
       }
     } else if (alpha == 0 && Platform.isAndroid && _statusBarDark) {
-      SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
-        statusBarColor: Color(0x00),
-        statusBarIconBrightness: Brightness.light,
-      );
       _statusBarDark = false;
-      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+      homeStatusBarLight = true;
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     }
     setState(() {
       _appBarAlpha = alpha;
@@ -154,9 +154,9 @@ class _HomePageState extends State<HomePage>
       HomeCourseModel courseModel = await HomeCourseDao.fetch();
       setState(() {
         _listBanner = bannerModel.banners;
-        _listDiscountCourse = courseModel.discount;
-        _listNewestCourse = courseModel.newest;
-        _listRecommendCourse = courseModel.recommend;
+        _listDiscount = courseModel.discount;
+        _listNewest = courseModel.newest;
+        _listRecommend = courseModel.recommend;
         _loading = false;
       });
     } catch (e) {
@@ -166,7 +166,7 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  /// 获取List课程
+  /// 课程
   Widget _course({String text, IconData icon, Color color, Widget course}) {
     return Padding(
       padding: _padding,
@@ -240,65 +240,5 @@ class _HomePageState extends State<HomePage>
             pagination: SwiperPagination(),
           ),
         ));
-  }
-
-  /// 限时抢购课程
-  Widget get _discountCourse {
-    List<Widget> courseDiscountCardList = [];
-    _listDiscountCourse.forEach((item) {
-      courseDiscountCardList.add(CourseDiscountCard(
-        id: item.id,
-        imageUrl: '${HttpUtil.URL_PREFIX}${item.imageUrl}',
-        name: item.name,
-        price: item.price,
-        discount: item.discount / 100,
-        applyCount: item.apply,
-      ));
-    });
-    return Container(
-      height: AutoSizeUtil.size(240),
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: courseDiscountCardList,
-      ),
-    );
-  }
-
-  /// 最新课程
-  Widget get _newestCourse {
-    List<Widget> courseNewestCardList = [];
-    _listNewestCourse.forEach((item) {
-      courseNewestCardList.add(
-        CourseCard(
-          id: item.id,
-          imageUrl: '${HttpUtil.URL_PREFIX}${item.imageUrl}',
-          name: item.name,
-          description: item.description,
-          price: item.price,
-          applyCount: item.apply,
-          rate: item.rate,
-        ),
-      );
-    });
-    return Column(children: courseNewestCardList);
-  }
-
-  /// 热门课程
-  Widget get _recommendCourse {
-    List<Widget> courseRecommendCardList = [];
-    _listRecommendCourse.forEach((item) {
-      courseRecommendCardList.add(
-        CourseCard(
-          id: item.id,
-          imageUrl: '${HttpUtil.URL_PREFIX}${item.imageUrl}',
-          name: item.name,
-          description: item.description,
-          price: item.price,
-          applyCount: item.apply,
-          rate: item.rate,
-        ),
-      );
-    });
-    return Column(children: courseRecommendCardList);
   }
 }

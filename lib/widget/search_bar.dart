@@ -62,7 +62,7 @@ class _SearchBarState extends State<SearchBar> {
     return AutoSizeUtil.font(fontSize);
   }
 
-  /// 课程页搜素框
+  /// 搜索页搜索框
   _genNormalSearch() {
     return Container(
       padding: EdgeInsets.fromLTRB(_size(6), _size(5), _size(10), _size(5)),
