@@ -1,3 +1,4 @@
+import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -25,72 +26,71 @@ class CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
-      margin: EdgeInsets.only(bottom: 10),
+      height: AutoSizeUtil.size(90),
+      margin: EdgeInsets.only(bottom: AutoSizeUtil.size(16)),
       child: Row(
         children: <Widget>[
-          Container(
-            width: 144,
-            child: CachedNetworkImage(
-              imageUrl: imageUrl,
-              placeholder: (context, url) => Container(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
+          Padding(
+            padding: EdgeInsets.only(right: AutoSizeUtil.size(10)),
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                errorWidget: (context, url, error) => Icon(Icons.image),
+                fit: BoxFit.cover,
               ),
-              errorWidget: (context, url, error) => Icon(Icons.image),
-              fit: BoxFit.cover,
             ),
           ),
-          Container(
-            width: 200,
-            margin: EdgeInsets.only(left: 10),
+          Expanded(
+            flex: 1,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: 200,
-                      child: Text(
-                        name,
-                        style:
-                            TextStyle(fontSize: 16, color: Color(0xff333333)),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    )
-                  ],
+                Container(
+                  child: Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: AutoSizeUtil.font(16),
+                      color: Color(0xff333333),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: 200,
-                      child: Text(
-                        description,
-                        maxLines: 2,
-                        style:
-                            TextStyle(fontSize: 14, color: Color(0xff666666)),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    )
-                  ],
+                Container(
+                  child: Text(
+                    description,
+                    maxLines: 2,
+                    style: TextStyle(
+                      fontSize: AutoSizeUtil.font(14),
+                      color: Color(0xff666666),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
                       '$applyCount人报名 | 好评${(rate * 100).toStringAsFixed(0)}%',
-                      style: TextStyle(fontSize: 14, color: Color(0xff999999)),
+                      style: TextStyle(
+                        fontSize: AutoSizeUtil.font(14),
+                        color: Color(0xff999999),
+                      ),
                     ),
                     Text(
-                      '￥$price',
-                      style: TextStyle(fontSize: 14, color: Color(0xff999999)),
+                      price == 0 ? '免费' : '￥$price',
+                      style: TextStyle(
+                        fontSize: AutoSizeUtil.font(14),
+                        color:
+                        price == 0 ? Color(0xff07c160) : Color(0xffee0a24),
+                      ),
                     )
                   ],
                 )
               ],
             ),
-          )
+          ),
         ],
       ),
     );

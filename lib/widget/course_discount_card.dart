@@ -1,3 +1,4 @@
+import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,55 +12,57 @@ class CourseDiscountCard extends StatelessWidget {
   final double discount;
   final int applyCount;
 
-  const CourseDiscountCard(
-      {Key key,
-      @required this.id,
-      @required this.imageUrl,
-      this.name = '课程',
-      this.price = 313,
-      this.discount = 1,
-      this.applyCount = 0})
-      : super(key: key);
+  const CourseDiscountCard({
+    Key key,
+    @required this.id,
+    @required this.imageUrl,
+    this.name,
+    this.price,
+    this.discount,
+    this.applyCount,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 170,
-      margin: EdgeInsets.only(right: 10),
+      width: AutoSizeUtil.size(170),
+      margin: EdgeInsets.only(right: AutoSizeUtil.size(10)),
       child: Card(
-        elevation: 2,
+        elevation: AutoSizeUtil.size(2),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
+          borderRadius: BorderRadius.all(Radius.circular(AutoSizeUtil.size(5))),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             AspectRatio(
               aspectRatio: 16 / 9,
               child: CachedNetworkImage(
                 imageUrl: imageUrl,
-                placeholder: (context, url) => Container(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
                 errorWidget: (context, url, error) => Icon(Icons.image),
                 fit: BoxFit.cover,
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(AutoSizeUtil.size(10)),
               child: Text(
                 name,
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: AutoSizeUtil.font(16)),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              padding: EdgeInsets.fromLTRB(
+                AutoSizeUtil.size(10),
+                0,
+                AutoSizeUtil.size(10),
+                0,
+              ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
                         '￥ $price',
@@ -84,7 +87,7 @@ class CourseDiscountCard extends StatelessWidget {
                   MaterialButton(
                     color: Color(0xffff976a),
                     textColor: Colors.white,
-                    minWidth: 150,
+                    minWidth: AutoSizeUtil.size(150),
                     onPressed: () {
                       print('course:$id');
                     },

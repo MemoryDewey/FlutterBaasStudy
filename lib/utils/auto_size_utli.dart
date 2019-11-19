@@ -1,10 +1,11 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AutoSizeUtil {
-  static double width = 785.4;
-  static double height = 1635;
+  static double size(double number) {
+    return ScreenUtil.getInstance().setWidth(number * 2);
+  }
 
-  static num size(num number) {
-    return ScreenUtil.getInstance().setWidth(number);
+  static double font(double fontSize) {
+    return ScreenUtil.getInstance().setSp(fontSize * 2);
   }
 }

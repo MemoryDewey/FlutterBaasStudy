@@ -1,7 +1,9 @@
 import 'package:baas_study/pages/course_list_page.dart';
 import 'package:baas_study/pages/home_page.dart';
 import 'package:baas_study/pages/profile_page.dart';
+import 'package:baas_study/pages/search_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TabNavigator extends StatefulWidget {
   @override
@@ -18,6 +20,11 @@ class _TabNavigatorState extends State<TabNavigator> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil(
+      width: 785.4,
+      height: 1635,
+    )..init(context);
+    /*print(MediaQuery.of(context).size);*/
     return Scaffold(
       // 页面
       body: PageView(
@@ -25,6 +32,7 @@ class _TabNavigatorState extends State<TabNavigator> {
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           HomePage(), // 首页
+          SearchPage(), //搜索页
           CourseListPage(), // 课程列表页
           ProfilePage(), // 个人信息页
         ],
@@ -52,14 +60,25 @@ class _TabNavigatorState extends State<TabNavigator> {
               ),
             ),
           ),
-          // 课程列表
+          // 搜索页
           BottomNavigationBarItem(
             icon: Icon(Icons.search, color: _defaultColor),
             activeIcon: Icon(Icons.search, color: _activeColor),
             title: Text(
-              '课程',
+              '搜索',
               style: TextStyle(
                 color: _currentIndex != 1 ? _defaultColor : _activeColor,
+              ),
+            ),
+          ),
+          // 课程列表
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_books, color: _defaultColor),
+            activeIcon: Icon(Icons.library_books, color: _activeColor),
+            title: Text(
+              '课程',
+              style: TextStyle(
+                color: _currentIndex != 2 ? _defaultColor : _activeColor,
               ),
             ),
           ),
@@ -70,7 +89,7 @@ class _TabNavigatorState extends State<TabNavigator> {
             title: Text(
               '我的',
               style: TextStyle(
-                color: _currentIndex != 2 ? _defaultColor : _activeColor,
+                color: _currentIndex != 3 ? _defaultColor : _activeColor,
               ),
             ),
           ),

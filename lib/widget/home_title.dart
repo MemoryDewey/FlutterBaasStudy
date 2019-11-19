@@ -1,3 +1,4 @@
+import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:flutter/material.dart';
 
 class HomeTitleWidget extends StatelessWidget {
@@ -11,21 +12,26 @@ class HomeTitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      margin: EdgeInsets.fromLTRB(
+        0,
+        AutoSizeUtil.size(10),
+        0,
+        AutoSizeUtil.size(10),
+      ),
       child: Row(
         children: <Widget>[
           Icon(
             icon,
-            size: 25,
+            size: AutoSizeUtil.size(25),
             color: colors,
           ),
           Padding(
-            padding: EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(left: AutoSizeUtil.size(10)),
             child: Text(
               text,
               style: TextStyle(
                 color: colors,
-                fontSize: 20,
+                fontSize: AutoSizeUtil.font(20),
               ),
             ),
           )

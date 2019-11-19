@@ -4,18 +4,21 @@ import 'package:baas_study/dao/banner_dao.dart';
 import 'package:baas_study/dao/home_course_dao.dart';
 import 'package:baas_study/model/banner_model.dart';
 import 'package:baas_study/model/course_model.dart';
+import 'package:baas_study/model/home_course_model.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/course_card.dart';
 import 'package:baas_study/widget/course_discount_card.dart';
 import 'package:baas_study/widget/home_title.dart';
+import 'package:baas_study/widget/loading_container.dart';
+import 'package:baas_study/widget/search_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
+const SEARCH_BAR_DEFAULT_TEXT = '区块链 以太坊 智能合约';
 
 class HomePage extends StatefulWidget {
   @override
@@ -30,119 +33,83 @@ class _HomePageState extends State<HomePage>
   List<CourseModel> _listRecommendCourse = [];
   bool _statusBarDark = false;
   double _appBarAlpha = 0;
+  bool _loading = true;
   EdgeInsetsGeometry _padding = EdgeInsets.fromLTRB(
     AutoSizeUtil.size(16),
     AutoSizeUtil.size(10),
     AutoSizeUtil.size(16),
     AutoSizeUtil.size(10),
   );
-  static num _paddingTop = Platform.isAndroid
-      ? MediaQueryData.fromWindow(window).padding.top
-      : AutoSizeUtil.size(20);
+  static num _paddingTop =
+      Platform.isAndroid ? MediaQueryData.fromWindow(window).padding.top : 20;
 
   @override
   void initState() {
     super.initState();
-    _loadBanner();
-    _loadCourse();
+    _handleRefresh();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    ScreenUtil.instance = ScreenUtil(
-      width: AutoSizeUtil.width,
-      height: AutoSizeUtil.height,
-    )..init(context);
     //print(MediaQuery.of(context).size);
     return Scaffold(
       /// 使用Stack布局固定AppBar位置 - 数组index越大在越上面层
-      body: Stack(
-        children: <Widget>[
-          /// 移除顶部区域padding
-          MediaQuery.removePadding(
-            removeTop: true,
-            context: context,
-            child: NotificationListener(
-              /// 监听滚动事件
-              onNotification: (scrollNotification) {
-                if (scrollNotification is ScrollNotification &&
-                    scrollNotification.depth == 0) {
-                  /// 滚动且是列表滚动的时候
-                  _onScroll(scrollNotification.metrics.pixels);
-                }
-                return null;
-              },
-              child: ListView(
-                children: <Widget>[
-                  /// Banner轮播图
-                  _banner,
+      body: LoadingContainer(
+        isLoading: _loading,
+        child: Stack(
+          children: <Widget>[
+            /// 移除顶部区域padding
+            MediaQuery.removePadding(
+              removeTop: true,
+              context: context,
+              child: NotificationListener(
+                /// 监听滚动事件
+                onNotification: (scrollNotification) {
+                  if (scrollNotification is ScrollNotification &&
+                      scrollNotification.depth == 0) {
+                    /// 滚动且是列表滚动的时候
+                    _onScroll(scrollNotification.metrics.pixels);
+                  }
+                  return null;
+                },
+                child: ListView(
+                  children: <Widget>[
+                    /// Banner轮播图
+                    _banner,
 
-                  /// 限时抢购课程
-                  Padding(
-                    padding: _padding,
-                    child: Column(
-                      children: <Widget>[
-                        HomeTitleWidget(
-                          text: '限时优惠',
-                          icon: Icons.access_time,
-                          colors: Color(0xffff976a),
-                        ),
-                        _discountCourse,
-                      ],
+                    /// 限时抢购课程
+                    _course(
+                      text: '限时优惠',
+                      icon: Icons.access_time,
+                      color: Color(0xffff976a),
+                      course: _discountCourse,
                     ),
-                  ),
 
-                  /// 最新课程
-                  Padding(
-                    padding: _padding,
-                    child: Column(
-                      children: <Widget>[
-                        /// 最新课程
-                        HomeTitleWidget(
-                          text: '最新课程',
-                          icon: Icons.fiber_new,
-                          colors: Color(0xff07c160),
-                        ),
-                        _newestCourse,
-                      ],
+                    /// 最新课程
+                    _course(
+                      text: '最新课程',
+                      icon: Icons.fiber_new,
+                      color: Color(0xff07c160),
+                      course: _newestCourse,
                     ),
-                  ),
 
-                  /// 热门课程
-                  Padding(
-                    padding: _padding,
-                    child: Column(
-                      children: <Widget>[
-                        HomeTitleWidget(
-                          text: '热门课程',
-                          icon: Icons.whatshot,
-                          colors: Color(0xffee0a24),
-                        ),
-                        _recommendCourse,
-                      ],
+                    /// 热门课程
+                    _course(
+                      text: '热门课程',
+                      icon: Icons.whatshot,
+                      color: Color(0xffee0a24),
+                      course: _recommendCourse,
                     ),
-                  )
-                ],
-              ),
-            ),
-          ),
-
-          /// 自定义AppBar
-          Opacity(
-            opacity: _appBarAlpha,
-            child: Container(
-              height: _paddingTop + AutoSizeUtil.size(100),
-              decoration: BoxDecoration(color: Colors.white),
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.only(top: _paddingTop),
-                  child: Text('首页'),
+                  ],
                 ),
               ),
             ),
-          ),
-        ],
+
+            /// 自定义AppBar
+            _appBar,
+          ],
+        ),
       ),
     );
   }
@@ -150,7 +117,7 @@ class _HomePageState extends State<HomePage>
   @override
   bool get wantKeepAlive => true;
 
-  /// 滚动事件触发 - 改变AppBar透明度
+  /// 滚动事件 - 改变AppBar透明度
   _onScroll(double offset) {
     double alpha = offset / APPBAR_SCROLL_OFFSET;
     if (alpha < 0)
@@ -180,19 +147,84 @@ class _HomePageState extends State<HomePage>
     });
   }
 
-  /// 加载banner
-  _loadBanner() {
-    BannerDao.fetch().then((result) {
+  /// 刷新
+  Future<Null> _handleRefresh() async {
+    try {
+      BannerModel bannerModel = await BannerDao.fetch();
+      HomeCourseModel courseModel = await HomeCourseDao.fetch();
       setState(() {
-        _listBanner = result.banners;
+        _listBanner = bannerModel.banners;
+        _listDiscountCourse = courseModel.discount;
+        _listNewestCourse = courseModel.newest;
+        _listRecommendCourse = courseModel.recommend;
+        _loading = false;
       });
-    });
+    } catch (e) {
+      setState(() {
+        _loading = false;
+      });
+    }
+  }
+
+  /// 获取List课程
+  Widget _course({String text, IconData icon, Color color, Widget course}) {
+    return Padding(
+      padding: _padding,
+      child: Column(
+        children: <Widget>[
+          HomeTitleWidget(
+            text: text,
+            icon: icon,
+            colors: color,
+          ),
+          course,
+        ],
+      ),
+    );
+  }
+
+  /// appbar
+  Widget get _appBar {
+    return Column(
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              /// appBar渐变背景
+              colors: [Color(0x66000000), Colors.transparent],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: Container(
+            height: AutoSizeUtil.size(80),
+            padding: EdgeInsets.only(top: _paddingTop),
+            decoration: BoxDecoration(
+              color:
+                  Color.fromARGB((_appBarAlpha * 255).toInt(), 255, 255, 255),
+            ),
+            child: SearchBar(
+              searchBarType: _appBarAlpha > 0.2
+                  ? SearchBarType.homeLight
+                  : SearchBarType.home,
+              defaultText: SEARCH_BAR_DEFAULT_TEXT,
+            ),
+          ),
+        ),
+        Container(
+          height: _appBarAlpha > 0.2 ? 0.5 : 0,
+          decoration: BoxDecoration(
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 0.5)],
+          ),
+        ),
+      ],
+    );
   }
 
   /// Banner轮播图
   Widget get _banner {
     return Container(
-        height: 230,
+        height: AutoSizeUtil.size(221),
         child: AspectRatio(
           aspectRatio: 16 / 9,
           child: Swiper(
@@ -201,11 +233,6 @@ class _HomePageState extends State<HomePage>
             itemBuilder: (BuildContext context, index) {
               return CachedNetworkImage(
                 imageUrl: '${HttpUtil.URL_PREFIX}${_listBanner[index].image}',
-                placeholder: (context, url) => Container(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
                 errorWidget: (context, url, error) => Icon(Icons.image),
                 fit: BoxFit.cover,
               );
@@ -213,15 +240,6 @@ class _HomePageState extends State<HomePage>
             pagination: SwiperPagination(),
           ),
         ));
-  }
-
-  /// 加载课程
-  _loadCourse() {
-    HomeCourseDao.fetch().then((result) {
-      _listDiscountCourse = result.discount;
-      _listNewestCourse = result.newest;
-      _listRecommendCourse = result.recommend;
-    });
   }
 
   /// 限时抢购课程
@@ -238,7 +256,7 @@ class _HomePageState extends State<HomePage>
       ));
     });
     return Container(
-      height: 240,
+      height: AutoSizeUtil.size(240),
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: courseDiscountCardList,
