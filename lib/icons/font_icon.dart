@@ -24,8 +24,13 @@ class FontIcons {
       IconData(0xe611, fontFamily: 'IconFont');
   static const IconData safety_setting =
       IconData(0xe612, fontFamily: 'IconFont');
-  static const IconData scan = IconData(0xe614, fontFamily: 'IconFont');
-  static const IconData qr_code = IconData(0xe63c, fontFamily: 'IconFont');
-  static const IconData sun = IconData(0xe6ee,fontFamily: 'IconFont');
-  static const IconData moon = IconData(0xe69a, fontFamily: 'IconFont');
+  static const IconData user = IconData(0xe613, fontFamily: 'IconFont');
+  static const IconData light_mode = IconData(0xe614, fontFamily: 'IconFont');
+  static const IconData dark_mode = IconData(0xe615, fontFamily: 'IconFont');
+  static const IconData qr_code = IconData(0xe616, fontFamily: 'IconFont');
+  static const IconData scan = IconData(0xe617, fontFamily: 'IconFont');
+  static const IconData wallet_border = IconData(0xe618, fontFamily: 'IconFont');
+  static const IconData wallet = IconData(0xe61c, fontFamily: 'IconFont');
+  static const IconData note = IconData(0xe61d, fontFamily: 'IconFont');
+  static const IconData search = IconData(0xe61e, fontFamily: 'Iconfont');
 }

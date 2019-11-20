@@ -1,3 +1,4 @@
+import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:flutter/material.dart';
 
@@ -170,7 +171,7 @@ class _SearchBarState extends State<SearchBar> {
     else
       inputBoxColor = Color(0xffededed);
     return Container(
-      height: 30,
+      height: _size(30),
       padding: EdgeInsets.fromLTRB(_size(10), 0, _size(10), 0),
       decoration: BoxDecoration(
           color: inputBoxColor,
@@ -179,12 +180,15 @@ class _SearchBarState extends State<SearchBar> {
           )),
       child: Row(
         children: <Widget>[
-          Icon(
-            Icons.search,
-            size: _size(20),
-            color: widget.searchBarType == SearchBarType.normal
-                ? Color(0xffa9a9a9)
-                : Colors.blue,
+          Container(
+            margin: EdgeInsets.only(right: _size(5)),
+            child: Icon(
+              FontIcons.search,
+              size: _size(15),
+              color: widget.searchBarType == SearchBarType.normal
+                  ? Color(0xffa9a9a9)
+                  : Colors.blue,
+            ),
           ),
           Expanded(
             flex: 1,

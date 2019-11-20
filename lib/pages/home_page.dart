@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage>
             ),
           ),
           child: Container(
-            height: AutoSizeUtil.size(80),
+            height: AutoSizeUtil.size(_paddingTop + 60),
             padding: EdgeInsets.only(top: _paddingTop),
             decoration: BoxDecoration(
               color:

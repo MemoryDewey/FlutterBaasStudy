@@ -1,5 +1,7 @@
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
+import 'package:baas_study/widget/list_tile_group.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -22,16 +24,35 @@ class _ProfilePageState extends State<ProfilePage>
         appBar: _appBar,
         backgroundColor: Color(0xfff2f2f6),
         body: Container(
-          child: Column(
+          child: ListView(
             children: <Widget>[
               _info,
-              Divider(
-                height: 0,
+              Divider(height: 0),
+              _gradGroup,
+              ListTileGroup(
+                color: Colors.white,
+                top: _size(10),
+                children: <Widget>[
+                  Text('222'),
+                ],
               ),
-              _gradItem,
-              Text('222'),
-              Text('333'),
-              Text('444'),
+              ListTileGroup(
+                color: Colors.white,
+                top: _size(10),
+                bottom: _size(10),
+                children: <Widget>[
+                  Text('333'),
+                  Text('333'),
+                  Text('333'),
+                ],
+              ),
+              ListTileGroup(
+                color: Colors.white,
+                children: <Widget>[
+                  Text('444'),
+                  Text('444'),
+                ],
+              ),
             ],
           ),
         ));
@@ -44,6 +65,11 @@ class _ProfilePageState extends State<ProfilePage>
     return AutoSizeUtil.size(size);
   }
 
+  _font(double fonSize) {
+    return AutoSizeUtil.font(fonSize);
+  }
+
+  /// appBar
   Widget get _appBar {
     return PreferredSize(
       child: AppBar(
@@ -52,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage>
           Padding(
             padding: EdgeInsets.only(right: _size(20)),
             child: Icon(
-              FontIcons.moon,
+              FontIcons.dark_mode,
               size: _size(22),
             ),
           ),
@@ -69,20 +95,36 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
+  /// 头像信息
   Widget get _info {
     return Container(
-      padding: EdgeInsets.only(bottom: _size(20)),
+      padding: EdgeInsets.only(bottom: _size(20), left: _size(20)),
       color: Colors.white,
       child: Row(
         children: <Widget>[
-          CircleAvatar(
-            radius: _size(40),
-            child: Icon(Icons.account_circle, size: _size(80)),
+          /// 未登录时占位组件
+          Container(
+            width: _size(64),
+            height: _size(64),
+            decoration: BoxDecoration(
+              color: Color(0xff999999),
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Icon(
+                FontIcons.user,
+                size: _size(40),
+                color: Colors.white,
+              ),
+            ),
           ),
-          /*Icon(
-            Icons.account_circle,
-            size: _size(80),
-            color: Color(0x85000000),
+
+          /// 成功登录后的头像
+          /*CircleAvatar(
+            radius: _size(32),
+            child: Container(
+              
+            ),
           ),*/
           Container(
             padding: EdgeInsets.only(left: _size(20)),
@@ -98,14 +140,49 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  Widget get _gradItem {
+  /// Grad布局导航
+  Widget get _gradGroup {
     return Container(
-      height: 80,
+      height: _size(90),
       color: Colors.white,
-      child: GridView.count(
-        crossAxisCount: 3,
-        children: <Widget>[Text('aaaa'), Text('bbbb'), Text('cccc')],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          _gradItem(
+            icon: FontIcons.note,
+            text: '课程',
+            color: Color(0xff3f98eb),
+          ),
+          _gradItem(
+            icon: FontIcons.wallet,
+            text: '钱包',
+            color: Color(0xffff5a00),
+          ),
+          _gradItem(
+            icon: Icons.favorite,
+            text: '收藏',
+            color: Color(0xffff2121),
+          )
+        ],
       ),
+    );
+  }
+
+  /// GradItem
+  Widget _gradItem({IconData icon, String text, Color color}) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(
+          icon,
+          size: _size(32),
+          color: color,
+        ),
+        Container(
+          margin: EdgeInsets.only(top: _size(5)),
+          child: Text(text, style: TextStyle(fontSize: _font(14))),
+        )
+      ],
     );
   }
 }
