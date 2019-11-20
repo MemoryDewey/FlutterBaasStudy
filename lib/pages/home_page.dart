@@ -166,23 +166,6 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  /// 课程
-  Widget _course({String text, IconData icon, Color color, Widget course}) {
-    return Padding(
-      padding: _padding,
-      child: Column(
-        children: <Widget>[
-          HomeTitleWidget(
-            text: text,
-            icon: icon,
-            colors: color,
-          ),
-          course,
-        ],
-      ),
-    );
-  }
-
   /// appbar
   Widget get _appBar {
     return Column(
@@ -237,8 +220,30 @@ class _HomePageState extends State<HomePage>
                 fit: BoxFit.cover,
               );
             },
-            pagination: SwiperPagination(),
+            pagination: SwiperPagination(
+                builder: DotSwiperPaginationBuilder(
+              activeColor: Colors.blue,
+              size: AutoSizeUtil.size(8),
+              activeSize: AutoSizeUtil.size(8),
+            )),
           ),
         ));
+  }
+
+  /// 课程
+  Widget _course({String text, IconData icon, Color color, Widget course}) {
+    return Padding(
+      padding: _padding,
+      child: Column(
+        children: <Widget>[
+          HomeTitleWidget(
+            text: text,
+            icon: icon,
+            colors: color,
+          ),
+          course,
+        ],
+      ),
+    );
   }
 }

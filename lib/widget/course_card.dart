@@ -33,13 +33,15 @@ class CourseCard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(right: AutoSizeUtil.size(10)),
             child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                errorWidget: (context, url, error) => Icon(Icons.image),
-                fit: BoxFit.cover,
-              ),
-            ),
+                aspectRatio: 16 / 9,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    errorWidget: (context, url, error) => Icon(Icons.image),
+                    fit: BoxFit.cover,
+                  ),
+                )),
           ),
           Expanded(
             flex: 1,
@@ -51,10 +53,9 @@ class CourseCard extends StatelessWidget {
                   child: Text(
                     name,
                     style: TextStyle(
-                      fontSize: AutoSizeUtil.font(16),
-                      color: Color(0xff333333),
-                      height: 1
-                    ),
+                        fontSize: AutoSizeUtil.font(16),
+                        color: Color(0xff333333),
+                        height: 1),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -84,7 +85,7 @@ class CourseCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: AutoSizeUtil.font(14),
                         color:
-                        price == 0 ? Color(0xff07c160) : Color(0xffee0a24),
+                            price == 0 ? Color(0xff07c160) : Color(0xffee0a24),
                       ),
                     )
                   ],

@@ -30,19 +30,24 @@ class CourseDiscountCard extends StatelessWidget {
       child: Card(
         elevation: AutoSizeUtil.size(2),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(AutoSizeUtil.size(5))),
+          borderRadius: BorderRadius.all(Radius.circular(AutoSizeUtil.size(8))),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             AspectRatio(
-              aspectRatio: 16 / 9,
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                errorWidget: (context, url, error) => Icon(Icons.image),
-                fit: BoxFit.cover,
-              ),
-            ),
+                aspectRatio: 16 / 9,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(AutoSizeUtil.size(8)),
+                    topRight: Radius.circular(AutoSizeUtil.size(8)),
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    errorWidget: (context, url, error) => Icon(Icons.image),
+                    fit: BoxFit.cover,
+                  ),
+                )),
             Padding(
               padding: EdgeInsets.all(AutoSizeUtil.size(10)),
               child: Text(
@@ -72,17 +77,36 @@ class CourseDiscountCard extends StatelessWidget {
                           decoration: TextDecoration.lineThrough,
                         ),
                       ),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xffee0a24))),
+                        padding: EdgeInsets.fromLTRB(
+                          AutoSizeUtil.size(8),
+                          AutoSizeUtil.size(2),
+                          AutoSizeUtil.size(8),
+                          AutoSizeUtil.size(2),
+                        ),
+                        child: Text(
+                          '限时抢购',
+                          style: TextStyle(color: Color(0xffee0a24)),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
                       Text(
                         '￥ ${(price * discount).toStringAsFixed(2)}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(color: Color(0xffee0a24)),
                       ),
+                      Text(
+                        '$applyCount 人已抢',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Color(0xff7d7e80)),
+                      ),
                     ],
-                  ),
-                  Text(
-                    '$applyCount 人已抢',
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Color(0xff7d7e80)),
                   ),
                   MaterialButton(
                     color: Color(0xffff976a),
