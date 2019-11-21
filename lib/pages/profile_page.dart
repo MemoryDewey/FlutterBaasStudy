@@ -1,7 +1,8 @@
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
+import 'package:baas_study/widget/list_tail_custom.dart';
 import 'package:baas_study/widget/list_tile_group.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -29,30 +30,9 @@ class _ProfilePageState extends State<ProfilePage>
               _info,
               Divider(height: 0),
               _gradGroup,
-              ListTileGroup(
-                color: Colors.white,
-                top: _size(10),
-                children: <Widget>[
-                  Text('222'),
-                ],
-              ),
-              ListTileGroup(
-                color: Colors.white,
-                top: _size(10),
-                bottom: _size(10),
-                children: <Widget>[
-                  Text('333'),
-                  Text('333'),
-                  Text('333'),
-                ],
-              ),
-              ListTileGroup(
-                color: Colors.white,
-                children: <Widget>[
-                  Text('444'),
-                  Text('444'),
-                ],
-              ),
+              _studyInfoList,
+              _balanceInfoList,
+              _accountInfoList,
             ],
           ),
         ));
@@ -76,14 +56,14 @@ class _ProfilePageState extends State<ProfilePage>
         elevation: 0,
         actions: <Widget>[
           Padding(
-            padding: EdgeInsets.only(right: _size(20)),
+            padding: EdgeInsets.only(right: _size(16)),
             child: Icon(
               FontIcons.dark_mode,
               size: _size(22),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(right: _size(20)),
+            padding: EdgeInsets.only(right: _size(16)),
             child: Icon(
               FontIcons.scan,
               size: _size(22),
@@ -98,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage>
   /// 头像信息
   Widget get _info {
     return Container(
-      padding: EdgeInsets.only(bottom: _size(20), left: _size(20)),
+      padding: EdgeInsets.only(bottom: _size(16), left: _size(16)),
       color: Colors.white,
       child: Row(
         children: <Widget>[
@@ -123,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage>
           /*CircleAvatar(
             radius: _size(32),
             child: Container(
-              
+
             ),
           ),*/
           Container(
@@ -165,6 +145,82 @@ class _ProfilePageState extends State<ProfilePage>
           )
         ],
       ),
+    );
+  }
+
+  /// 最近在学 - 我的考试 ListTile
+  Widget get _studyInfoList {
+    return ListTileGroup(
+      color: Colors.white,
+      top: _size(10),
+      children: <Widget>[
+        ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: _size(16)),
+          leading: Icon(Icons.access_time),
+          title: Text('最近在学'),
+        ),
+        Container(
+          height: _size(75),
+          padding: EdgeInsets.symmetric(horizontal: _size(16)),
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: <Widget>[
+              Text('111'),
+              Text('111'),
+              Text('111'),
+            ],
+          ),
+        ),
+        ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: _size(16)),
+          leading: Icon(FontIcons.paper),
+          title: Text('我的考试'),
+          trailing: Icon(Icons.arrow_forward_ios),
+        ),
+      ],
+    );
+  }
+
+  /// 账户余额 ListTile
+  Widget get _balanceInfoList {
+    return ListTileGroup(
+      color: Colors.white,
+      top: _size(10),
+      bottom: _size(10),
+      children: <Widget>[
+        ListTileCustom(
+          leading: FontIcons.coin,
+          leadingTitle: '账户余额',
+          color: Color(0xffffdf0c),
+        ),
+      ],
+    );
+  }
+
+  /// 邀请好友 - 反馈建议 - 设置 ListTile
+  Widget get _accountInfoList {
+    return ListTileGroup(
+      color: Colors.white,
+      children: <Widget>[
+        ListTileCustom(
+          leading: FontIcons.invite,
+          leadingTitle: '邀请好友',
+        ),
+        Divider(height: 0, indent: _size(16)),
+        ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: _size(16)),
+          leading: Icon(FontIcons.feedback),
+          title: Text('反馈建议'),
+          trailing: Icon(Icons.arrow_forward_ios),
+        ),
+        Divider(height: 0, indent: _size(16)),
+        ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: _size(16)),
+          leading: Icon(Icons.settings),
+          title: Text('设置'),
+          trailing: Icon(Icons.arrow_forward_ios),
+        ),
+      ],
     );
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 enum SearchBarType { home, normal, homeLight }
 
+/// 顶部搜索框
 class SearchBar extends StatefulWidget {
   final bool enable;
   final bool hideLeft;
@@ -87,8 +88,10 @@ class _SearchBarState extends State<SearchBar> {
           ),
           _wrapTap(
             Container(
-              padding:
-                  EdgeInsets.fromLTRB(_size(10), _size(5), _size(10), _size(5)),
+              padding: EdgeInsets.symmetric(
+                vertical: _size(5),
+                horizontal: _size(10),
+              ),
               child: Text(
                 '搜索',
                 style: TextStyle(
@@ -138,8 +141,10 @@ class _SearchBarState extends State<SearchBar> {
           ),
           _wrapTap(
             Container(
-              padding:
-                  EdgeInsets.fromLTRB(_size(10), _size(5), _size(10), _size(5)),
+              padding: EdgeInsets.symmetric(
+                vertical: _size(5),
+                horizontal: _size(10),
+              ),
               child: Icon(
                 Icons.playlist_play,
                 color: _homeFontColor(),
@@ -172,7 +177,7 @@ class _SearchBarState extends State<SearchBar> {
       inputBoxColor = Color(0xffededed);
     return Container(
       height: _size(30),
-      padding: EdgeInsets.fromLTRB(_size(10), 0, _size(10), 0),
+      padding: EdgeInsets.symmetric(vertical: 0, horizontal: _size(10)),
       decoration: BoxDecoration(
           color: inputBoxColor,
           borderRadius: BorderRadius.circular(
