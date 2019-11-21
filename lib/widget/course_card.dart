@@ -54,7 +54,6 @@ class CourseCard extends StatelessWidget {
                     name,
                     style: TextStyle(
                         fontSize: AutoSizeUtil.font(16),
-                        color: Color(0xff333333),
                         height: 1),
                     overflow: TextOverflow.ellipsis,
                   ),

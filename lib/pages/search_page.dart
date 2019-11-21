@@ -9,6 +9,8 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
+    print(themeData);
     return Scaffold(
         appBar: AppBar(),
         body: Column(
@@ -21,7 +23,8 @@ class _SearchPageState extends State<SearchPage> {
                 Navigator.pop(context);
               },
               onChanged: _onTextChange,
-            )
+            ),
+            TextField()
           ],
         )
     );

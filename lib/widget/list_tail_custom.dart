@@ -30,7 +30,7 @@ class ListTileCustom extends StatelessWidget {
             child: Text(
               leadingTitle,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: AutoSizeUtil.font(16)),
+              style: TextStyle(fontSize: AutoSizeUtil.font(17)),
             ),
           )
         ],
@@ -38,7 +38,8 @@ class ListTileCustom extends StatelessWidget {
       trailing: trailingTitle == null
           ? Icon(
               Icons.arrow_forward_ios,
-              size: AutoSizeUtil.size(20),
+              size: AutoSizeUtil.size(18),
+              color: Color(0xff969799),
             )
           : Row(
               mainAxisSize: MainAxisSize.min,
@@ -54,7 +55,8 @@ class ListTileCustom extends StatelessWidget {
                 ),
                 Icon(
                   Icons.arrow_forward_ios,
-                  size: AutoSizeUtil.size(20),
+                  size: AutoSizeUtil.size(18),
+                  color: Color(0xff969799),
                 ),
               ],
             ),

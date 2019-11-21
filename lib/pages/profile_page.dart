@@ -154,10 +154,10 @@ class _ProfilePageState extends State<ProfilePage>
       color: Colors.white,
       top: _size(10),
       children: <Widget>[
-        ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: _size(16)),
-          leading: Icon(Icons.access_time),
-          title: Text('最近在学'),
+        ListTileCustom(
+          leading: FontIcons.time,
+          leadingTitle: '最近在学',
+          color: Color(0xff3f98eb),
         ),
         Container(
           height: _size(75),
@@ -165,17 +165,14 @@ class _ProfilePageState extends State<ProfilePage>
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: <Widget>[
-              Text('111'),
-              Text('111'),
-              Text('111'),
+              Text('-----------------最近在学课程（未实现）---------------------'),
             ],
           ),
         ),
-        ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: _size(16)),
-          leading: Icon(FontIcons.paper),
-          title: Text('我的考试'),
-          trailing: Icon(Icons.arrow_forward_ios),
+        ListTileCustom(
+          leading: FontIcons.paper,
+          leadingTitle: '我的考试',
+          color: Color(0xffff2121),
         ),
       ],
     );
@@ -205,21 +202,18 @@ class _ProfilePageState extends State<ProfilePage>
         ListTileCustom(
           leading: FontIcons.invite,
           leadingTitle: '邀请好友',
+          color: Color(0xffffdf0c),
         ),
         Divider(height: 0, indent: _size(16)),
-        ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: _size(16)),
-          leading: Icon(FontIcons.feedback),
-          title: Text('反馈建议'),
-          trailing: Icon(Icons.arrow_forward_ios),
-        ),
+        ListTileCustom(
+            leading: FontIcons.feedback,
+            leadingTitle: '反馈建议',
+            color: Color(0xff00f6d0)),
         Divider(height: 0, indent: _size(16)),
-        ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: _size(16)),
-          leading: Icon(Icons.settings),
-          title: Text('设置'),
-          trailing: Icon(Icons.arrow_forward_ios),
-        ),
+        ListTileCustom(
+            leading: Icons.settings,
+            leadingTitle: '系统设置',
+            color: Color(0xff3f98eb)),
       ],
     );
   }
