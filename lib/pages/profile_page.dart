@@ -16,7 +16,7 @@ class _ProfilePageState extends State<ProfilePage>
     with AutomaticKeepAliveClientMixin {
   Color _cardColor;
   Color _appBarColor;
-  int _darkMode;
+  DarkModeModel _darkModeModel;
 
   @override
   void initState() {
@@ -26,12 +26,10 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    setState(() {
-      _darkMode = Provider.of<DarkModeModel>(context).darkMode;
-      ThemeData themeData = Theme.of(context);
-      _cardColor = themeData.cardColor;
-      _appBarColor = themeData.appBarTheme.color;
-    });
+    _darkModeModel = Provider.of<DarkModeModel>(context);
+    ThemeData themeData = Theme.of(context);
+    _cardColor = themeData.cardColor;
+    _appBarColor = themeData.appBarTheme.color;
 
     return Scaffold(
         appBar: _appBar,
@@ -67,13 +65,18 @@ class _ProfilePageState extends State<ProfilePage>
         elevation: 0,
         actions: <Widget>[
           Offstage(
-            offstage: _darkMode == 2,
+            offstage: _darkModeModel.darkMode == 2,
             child: Padding(
               padding: EdgeInsets.only(right: _size(16)),
               child: GestureDetector(
-                onTap: _changeDarkModel(_darkMode==1?2:1),
+                onTap: () {
+                  _darkModeModel
+                      .changeMode(_darkModeModel.darkMode == 1 ? 0 : 1);
+                },
                 child: Icon(
-                  _darkMode == 1 ? FontIcons.light_mode : FontIcons.dark_mode,
+                  _darkModeModel.darkMode == 1
+                      ? FontIcons.light_mode
+                      : FontIcons.dark_mode,
                   size: _size(22),
                 ),
               ),
@@ -227,10 +230,17 @@ class _ProfilePageState extends State<ProfilePage>
             leadingTitle: '反馈建议',
             color: Color(0xff00f6d0)),
         Divider(height: 0, indent: _size(16)),
-        ListTileCustom(
+        GestureDetector(
+          onTap: () {
+            _darkModeModel
+                .changeMode(_darkModeModel.darkMode == 2 ? 0 : 2);
+          },
+          child: ListTileCustom(
             leading: Icons.settings,
             leadingTitle: '系统设置',
-            color: Color(0xff3f98eb)),
+            color: Color(0xff3f98eb),
+          ),
+        )
       ],
     );
   }
@@ -251,10 +261,5 @@ class _ProfilePageState extends State<ProfilePage>
         )
       ],
     );
-  }
-
-  /// 改变主题色
-  _changeDarkModel(int i) {
-
   }
 }
