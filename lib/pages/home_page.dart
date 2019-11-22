@@ -43,8 +43,7 @@ class _HomePageState extends State<HomePage>
     AutoSizeUtil.size(16),
     AutoSizeUtil.size(10),
   );
-  static num _paddingTop =
-      MediaQueryData.fromWindow(window).padding.top;
+  static num _paddingTop = MediaQueryData.fromWindow(window).padding.top;
 
   @override
   void initState() {
@@ -172,16 +171,15 @@ class _HomePageState extends State<HomePage>
       children: <Widget>[
         Container(
           decoration: BoxDecoration(
+            /// appBar渐变背景
             gradient: LinearGradient(
-              /// appBar渐变背景
               colors: [Color(0x66000000), Colors.transparent],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
           ),
           child: Container(
-            height: AutoSizeUtil.size(_paddingTop + 60),
-            padding: EdgeInsets.only(top: AutoSizeUtil.size(_paddingTop)),
+            padding: EdgeInsets.only(top: _paddingTop),
             decoration: BoxDecoration(
               color: Color.fromARGB(
                 (_appBarAlpha * 255).toInt(),
@@ -239,7 +237,7 @@ class _HomePageState extends State<HomePage>
   }
 
   /// 课程
-  Widget _course({String text, IconData icon, Color color, Widget course}) {
+  _course({String text, IconData icon, Color color, Widget course}) {
     return Padding(
       padding: _padding,
       child: Column(

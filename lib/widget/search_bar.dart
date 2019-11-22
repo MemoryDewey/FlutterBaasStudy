@@ -40,6 +40,7 @@ class _SearchBarState extends State<SearchBar> {
   Color _homeColor;
   Color _primaryColor;
   Color _fillColor;
+  Color _searchBarColor;
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -59,6 +60,7 @@ class _SearchBarState extends State<SearchBar> {
     _primaryColor =
         themeData.brightness == Brightness.dark ? Colors.white : Colors.black54;
     _fillColor = themeData.inputDecorationTheme.fillColor;
+    _searchBarColor = themeData.appBarTheme.color;
     return widget.searchBarType == SearchBarType.normal
         ? _genNormalSearch()
         : _genHomeSearch();
@@ -75,17 +77,19 @@ class _SearchBarState extends State<SearchBar> {
   /// 搜索页搜索框
   _genNormalSearch() {
     return Container(
+      color: _searchBarColor,
       padding: EdgeInsets.fromLTRB(_size(6), _size(5), _size(10), _size(5)),
       child: Row(
         children: <Widget>[
           _wrapTap(
             Container(
+              padding: EdgeInsets.only(right: _size(6)),
               child: widget?.hideLeft ?? false
                   ? null
                   : Icon(
                       Icons.arrow_back_ios,
                       color: Colors.grey,
-                      size: _size(26),
+                      size: _size(16),
                     ),
             ),
             widget.leftButtonClick,
@@ -96,15 +100,16 @@ class _SearchBarState extends State<SearchBar> {
           ),
           _wrapTap(
             Container(
-              padding: EdgeInsets.symmetric(
-                vertical: _size(5),
-                horizontal: _size(10),
+              padding: EdgeInsets.only(
+                top: _size(3),
+                bottom: _size(3),
+                left: _size(10),
               ),
               child: Text(
                 '搜索',
                 style: TextStyle(
                   color: Colors.blue,
-                  fontSize: _font(17),
+                  fontSize: _font(16),
                 ),
               ),
             ),
@@ -118,12 +123,12 @@ class _SearchBarState extends State<SearchBar> {
   /// 首页搜索框
   _genHomeSearch() {
     return Container(
+      margin: EdgeInsets.fromLTRB(_size(6), _size(5), _size(10), _size(5)),
       child: Row(
         children: <Widget>[
           _wrapTap(
             Container(
-              padding:
-                  EdgeInsets.fromLTRB(_size(6), _size(5), _size(5), _size(5)),
+              padding: EdgeInsets.only(right: _size(5)),
               child: Row(
                 children: <Widget>[
                   Text(
@@ -149,10 +154,7 @@ class _SearchBarState extends State<SearchBar> {
           ),
           _wrapTap(
             Container(
-              padding: EdgeInsets.symmetric(
-                vertical: _size(5),
-                horizontal: _size(10),
-              ),
+              padding: EdgeInsets.only(left: _size(10)),
               child: Icon(
                 Icons.playlist_play,
                 color: _homeFontColor(),
@@ -187,10 +189,9 @@ class _SearchBarState extends State<SearchBar> {
       height: _size(30),
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: _size(10)),
       decoration: BoxDecoration(
-          color: inputBoxColor,
-          borderRadius: BorderRadius.circular(
-            widget.searchBarType == SearchBarType.normal ? _size(5) : _size(15),
-          )),
+        color: inputBoxColor,
+        borderRadius: BorderRadius.circular(_size(15)),
+      ),
       child: Row(
         children: <Widget>[
           Container(
@@ -209,10 +210,9 @@ class _SearchBarState extends State<SearchBar> {
                 ? TextField(
                     controller: _controller,
                     onChanged: _onChanged,
-                    autofocus: true,
+                    autofocus: false,
                     style: TextStyle(
-                      fontSize: _font(18),
-                      color: Colors.black,
+                      fontSize: _font(15),
                       fontWeight: FontWeight.w300,
                     ),
                     decoration: InputDecoration(
@@ -224,9 +224,7 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                       border: InputBorder.none,
                       hintText: widget.hint ?? '',
-                      hintStyle: TextStyle(
-                        fontSize: _font(15),
-                      ),
+                      hintStyle: TextStyle(fontSize: _font(15)),
                     ),
                   )
                 : _wrapTap(
@@ -234,7 +232,7 @@ class _SearchBarState extends State<SearchBar> {
                       child: Text(
                         widget.defaultText,
                         style: TextStyle(
-                          fontSize: _font(13),
+                          fontSize: _font(15),
                           color: Colors.grey,
                         ),
                       ),

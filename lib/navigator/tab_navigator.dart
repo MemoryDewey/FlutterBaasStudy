@@ -69,7 +69,7 @@ class _TabNavigatorState extends State<TabNavigator> {
             icon: Icon(Icons.search, color: _defaultColor),
             activeIcon: Icon(Icons.search, color: _activeColor),
             title: Text(
-              '搜索',
+              '找课',
               style: TextStyle(
                 color: _currentIndex != 1 ? _defaultColor : _activeColor,
               ),

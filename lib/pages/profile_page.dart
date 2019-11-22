@@ -61,6 +61,7 @@ class _ProfilePageState extends State<ProfilePage>
   /// appBar
   Widget get _appBar {
     return PreferredSize(
+      preferredSize: Size.fromHeight(_size(45)),
       child: AppBar(
         elevation: 0,
         actions: <Widget>[
@@ -91,7 +92,6 @@ class _ProfilePageState extends State<ProfilePage>
           )
         ],
       ),
-      preferredSize: Size.fromHeight(_size(45)),
     );
   }
 
@@ -222,7 +222,7 @@ class _ProfilePageState extends State<ProfilePage>
         ListTileCustom(
           leading: FontIcons.invite,
           leadingTitle: '邀请好友',
-          color: Color(0xffffdf0c),
+          color: Color(0xffff2121),
         ),
         Divider(height: 0, indent: _size(16)),
         ListTileCustom(
@@ -232,8 +232,7 @@ class _ProfilePageState extends State<ProfilePage>
         Divider(height: 0, indent: _size(16)),
         GestureDetector(
           onTap: () {
-            _darkModeModel
-                .changeMode(_darkModeModel.darkMode == 2 ? 0 : 2);
+            _darkModeModel.changeMode(_darkModeModel.darkMode == 2 ? 0 : 2);
           },
           child: ListTileCustom(
             leading: Icons.settings,
@@ -246,7 +245,7 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   /// GradItem
-  Widget _gradItem({IconData icon, String text, Color color}) {
+  _gradItem({IconData icon, String text, Color color}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[

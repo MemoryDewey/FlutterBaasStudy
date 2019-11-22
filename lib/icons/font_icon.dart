@@ -31,7 +31,6 @@ class FontIcons {
   static const IconData search = IconData(0xe61e, fontFamily: 'Iconfont');
   static const IconData time = IconData(0xe61f,fontFamily: 'IconFont');
   static const IconData feedback = IconData(0xe622,fontFamily: 'IconFont');
-  static const IconData invite = IconData(0xe623,fontFamily: 'IconFont');
   static const IconData paper = IconData(0xe624,fontFamily: 'IconFont');
-
+  static const IconData invite = IconData(0xe626,fontFamily: 'IconFont');
 }
