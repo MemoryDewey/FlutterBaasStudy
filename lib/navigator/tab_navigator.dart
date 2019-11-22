@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:baas_study/pages/course_list_page.dart';
 import 'package:baas_study/pages/home_page.dart';
 import 'package:baas_study/pages/profile_page.dart';
@@ -105,7 +104,7 @@ class _TabNavigatorState extends State<TabNavigator> {
 
   /// 切换至首页时需要根据情况改变statusBar颜色
   _setHomeBrightness(index) {
-    if (Platform.isAndroid && index == 0) {
+    if (index == 0) {
       if (HomePage.getBarLight()) {
         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
       }

@@ -1,9 +1,11 @@
 import 'package:baas_study/icons/font_icon.dart';
+import 'package:baas_study/model/dark_mode_model.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/widget/list_tail_custom.dart';
 import 'package:baas_study/widget/list_tile_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -12,18 +14,27 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage>
     with AutomaticKeepAliveClientMixin {
+  Color _cardColor;
+  Color _appBarColor;
+  int _darkMode;
+
   @override
   void initState() {
     super.initState();
-    print('I have been created!');
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    setState(() {
+      _darkMode = Provider.of<DarkModeModel>(context).darkMode;
+      ThemeData themeData = Theme.of(context);
+      _cardColor = themeData.cardColor;
+      _appBarColor = themeData.appBarTheme.color;
+    });
+
     return Scaffold(
         appBar: _appBar,
-        backgroundColor: Color(0xfff2f2f6),
         body: Container(
           child: ListView(
             children: <Widget>[
@@ -55,11 +66,17 @@ class _ProfilePageState extends State<ProfilePage>
       child: AppBar(
         elevation: 0,
         actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: _size(16)),
-            child: Icon(
-              FontIcons.dark_mode,
-              size: _size(22),
+          Offstage(
+            offstage: _darkMode == 2,
+            child: Padding(
+              padding: EdgeInsets.only(right: _size(16)),
+              child: GestureDetector(
+                onTap: _changeDarkModel(_darkMode==1?2:1),
+                child: Icon(
+                  _darkMode == 1 ? FontIcons.light_mode : FontIcons.dark_mode,
+                  size: _size(22),
+                ),
+              ),
             ),
           ),
           Padding(
@@ -79,7 +96,7 @@ class _ProfilePageState extends State<ProfilePage>
   Widget get _info {
     return Container(
       padding: EdgeInsets.only(bottom: _size(16), left: _size(16)),
-      color: Colors.white,
+      color: _appBarColor,
       child: Row(
         children: <Widget>[
           /// 未登录时占位组件
@@ -124,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage>
   Widget get _gradGroup {
     return Container(
       height: _size(90),
-      color: Colors.white,
+      color: _cardColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
@@ -151,7 +168,7 @@ class _ProfilePageState extends State<ProfilePage>
   /// 最近在学 - 我的考试 ListTile
   Widget get _studyInfoList {
     return ListTileGroup(
-      color: Colors.white,
+      color: _cardColor,
       top: _size(10),
       children: <Widget>[
         ListTileCustom(
@@ -181,7 +198,7 @@ class _ProfilePageState extends State<ProfilePage>
   /// 账户余额 ListTile
   Widget get _balanceInfoList {
     return ListTileGroup(
-      color: Colors.white,
+      color: _cardColor,
       top: _size(10),
       bottom: _size(10),
       children: <Widget>[
@@ -197,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage>
   /// 邀请好友 - 反馈建议 - 设置 ListTile
   Widget get _accountInfoList {
     return ListTileGroup(
-      color: Colors.white,
+      color: _cardColor,
       children: <Widget>[
         ListTileCustom(
           leading: FontIcons.invite,
@@ -234,5 +251,10 @@ class _ProfilePageState extends State<ProfilePage>
         )
       ],
     );
+  }
+
+  /// 改变主题色
+  _changeDarkModel(int i) {
+
   }
 }

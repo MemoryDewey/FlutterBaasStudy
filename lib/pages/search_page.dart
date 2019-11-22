@@ -9,8 +9,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    ThemeData themeData = Theme.of(context);
-    print(themeData);
+    //ThemeData themeData = Theme.of(context);
     return Scaffold(
         appBar: AppBar(),
         body: Column(

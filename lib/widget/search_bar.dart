@@ -37,6 +37,9 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   bool showClear = false;
+  Color _homeColor;
+  Color _primaryColor;
+  Color _fillColor;
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -51,6 +54,11 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
+    _homeColor = themeData.cardColor;
+    _primaryColor =
+        themeData.brightness == Brightness.dark ? Colors.white : Colors.black54;
+    _fillColor = themeData.inputDecorationTheme.fillColor;
     return widget.searchBarType == SearchBarType.normal
         ? _genNormalSearch()
         : _genHomeSearch();
@@ -172,9 +180,9 @@ class _SearchBarState extends State<SearchBar> {
   _inputBox() {
     Color inputBoxColor;
     if (widget.searchBarType == SearchBarType.home)
-      inputBoxColor = Colors.white;
+      inputBoxColor = _homeColor;
     else
-      inputBoxColor = Color(0xffededed);
+      inputBoxColor = _fillColor;
     return Container(
       height: _size(30),
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: _size(10)),
@@ -275,7 +283,7 @@ class _SearchBarState extends State<SearchBar> {
   // 首页背景色
   _homeFontColor() {
     return widget.searchBarType == SearchBarType.homeLight
-        ? Colors.black54
+        ? _primaryColor
         : Colors.white;
   }
 }

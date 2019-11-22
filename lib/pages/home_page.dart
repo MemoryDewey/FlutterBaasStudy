@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 import 'package:baas_study/dao/banner_dao.dart';
 import 'package:baas_study/dao/home_course_dao.dart';
@@ -44,9 +43,8 @@ class _HomePageState extends State<HomePage>
     AutoSizeUtil.size(16),
     AutoSizeUtil.size(10),
   );
-  static num _paddingTop = Platform.isAndroid
-      ? MediaQueryData.fromWindow(window).padding.top
-      : AutoSizeUtil.size(20);
+  static num _paddingTop =
+      MediaQueryData.fromWindow(window).padding.top;
 
   @override
   void initState() {
@@ -58,6 +56,9 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    ThemeData themeData = Theme.of(context);
+    bool isDark = themeData.brightness == Brightness.dark;
+    Color appBarColor = themeData.appBarTheme.color;
     //print(MediaQuery.of(context).size);
     return Scaffold(
       /// 使用Stack布局固定AppBar位置 - 数组index越大在越上面层
@@ -75,7 +76,7 @@ class _HomePageState extends State<HomePage>
                   if (scrollNotification is ScrollNotification &&
                       scrollNotification.depth == 0) {
                     /// 滚动且是列表滚动的时候
-                    _onScroll(scrollNotification.metrics.pixels);
+                    _onScroll(scrollNotification.metrics.pixels, isDark);
                   }
                   return null;
                 },
@@ -113,7 +114,7 @@ class _HomePageState extends State<HomePage>
             ),
 
             /// 自定义AppBar
-            _appBar,
+            _appBar(appBarColor, isDark),
           ],
         ),
       ),
@@ -124,20 +125,19 @@ class _HomePageState extends State<HomePage>
   bool get wantKeepAlive => true;
 
   /// 滚动事件 - 改变AppBar透明度
-  _onScroll(double offset) {
+  _onScroll(double offset, bool isDark) {
     double alpha = offset / APPBAR_SCROLL_OFFSET;
     if (alpha < 0)
       alpha = 0;
     else if (alpha > 0) {
       if (alpha > 1) alpha = 1;
 
-      /// Android平台改变状态栏颜色
-      if (Platform.isAndroid && !_statusBarDark) {
+      if (!_statusBarDark && !isDark) {
         _statusBarDark = true;
         homeStatusBarLight = false;
         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
       }
-    } else if (alpha == 0 && Platform.isAndroid && _statusBarDark) {
+    } else if (alpha == 0 && _statusBarDark && !isDark) {
       _statusBarDark = false;
       homeStatusBarLight = true;
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage>
   }
 
   /// appbar
-  Widget get _appBar {
+  Widget _appBar(Color appBarColor, bool isDark) {
     return Column(
       children: <Widget>[
         Container(
@@ -181,10 +181,14 @@ class _HomePageState extends State<HomePage>
           ),
           child: Container(
             height: AutoSizeUtil.size(_paddingTop + 60),
-            padding: EdgeInsets.only(top: _paddingTop),
+            padding: EdgeInsets.only(top: AutoSizeUtil.size(_paddingTop)),
             decoration: BoxDecoration(
-              color:
-                  Color.fromARGB((_appBarAlpha * 255).toInt(), 255, 255, 255),
+              color: Color.fromARGB(
+                (_appBarAlpha * 255).toInt(),
+                appBarColor.red,
+                appBarColor.green,
+                appBarColor.blue,
+              ),
             ),
             child: SearchBar(
               searchBarType: _appBarAlpha > 0.2
@@ -197,7 +201,11 @@ class _HomePageState extends State<HomePage>
         Container(
           height: _appBarAlpha > 0.2 ? 0.5 : 0,
           decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 0.5)],
+            boxShadow: [
+              BoxShadow(
+                  color: isDark ? Colors.white12 : Colors.black12,
+                  blurRadius: 0.5)
+            ],
           ),
         ),
       ],
