@@ -1,40 +1,41 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum DarkModel { on, off, manual }
+enum DarkModel { off, on, auto }
 
 /// 控制夜间模式模型
-class DarkModeModel with ChangeNotifier {
-  int _darkMode;
-  static const Map<int, String> DARK_MODE_MAP = {
-    0: '关闭',
-    1: '开启',
-    2: '跟随系统',
+class DarkMode with ChangeNotifier {
+  DarkModel _darkModel;
+  static const Map<int, DarkModel> DARK_MODE_MAP = {
+    0: DarkModel.off,
+    1: DarkModel.on,
+    2: DarkModel.auto,
   };
   static const String STORE_KEY = 'darkMode';
 
   ///使用SharedPreferences来保存用户配置
   SharedPreferences _preferences;
 
-  int get darkMode => _darkMode;
+  DarkModel get darkMode => _darkModel;
 
-  DarkModeModel() {
+  DarkMode() {
     _init();
   }
 
   void _init() async {
+    print(DarkModel.off.index);
     this._preferences = await SharedPreferences.getInstance();
     int localMode = this._preferences.get(STORE_KEY);
 
     /// 默认夜间模式跟随系统
-    changeMode(localMode ?? 2);
+    changeMode(DARK_MODE_MAP[localMode] ?? DARK_MODE_MAP[2]);
   }
 
-  void changeMode(int darkMode) async {
-    _darkMode = darkMode;
+  void changeMode(DarkModel darkModel) async {
+    _darkModel = darkModel;
     notifyListeners();
     SharedPreferences preferences =
         this._preferences ?? SharedPreferences.getInstance();
-    await preferences.setInt(STORE_KEY, darkMode);
+    await preferences.setInt(STORE_KEY, darkModel.index);
   }
 }

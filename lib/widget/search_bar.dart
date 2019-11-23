@@ -78,7 +78,7 @@ class _SearchBarState extends State<SearchBar> {
   _genNormalSearch() {
     return Container(
       color: _searchBarColor,
-      padding: EdgeInsets.fromLTRB(_size(6), _size(5), _size(10), _size(5)),
+      padding: EdgeInsets.fromLTRB(_size(6), _size(10), _size(10), _size(10)),
       child: Row(
         children: <Widget>[
           _wrapTap(
@@ -123,7 +123,7 @@ class _SearchBarState extends State<SearchBar> {
   /// 首页搜索框
   _genHomeSearch() {
     return Container(
-      margin: EdgeInsets.fromLTRB(_size(6), _size(5), _size(10), _size(5)),
+      margin: EdgeInsets.fromLTRB(_size(6), _size(10), _size(10), _size(10)),
       child: Row(
         children: <Widget>[
           _wrapTap(

@@ -1,5 +1,5 @@
 import 'package:baas_study/icons/font_icon.dart';
-import 'package:baas_study/model/dark_mode_model.dart';
+import 'package:baas_study/utils/dark_mode.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/widget/list_tail_custom.dart';
 import 'package:baas_study/widget/list_tile_group.dart';
@@ -16,7 +16,7 @@ class _ProfilePageState extends State<ProfilePage>
     with AutomaticKeepAliveClientMixin {
   Color _cardColor;
   Color _appBarColor;
-  DarkModeModel _darkModeModel;
+  DarkMode _darkModeModel;
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    _darkModeModel = Provider.of<DarkModeModel>(context);
+    _darkModeModel = Provider.of<DarkMode>(context);
     ThemeData themeData = Theme.of(context);
     _cardColor = themeData.cardColor;
     _appBarColor = themeData.appBarTheme.color;
@@ -66,16 +66,18 @@ class _ProfilePageState extends State<ProfilePage>
         elevation: 0,
         actions: <Widget>[
           Offstage(
-            offstage: _darkModeModel.darkMode == 2,
+            offstage: _darkModeModel.darkMode == DarkModel.auto,
             child: Padding(
               padding: EdgeInsets.only(right: _size(16)),
               child: GestureDetector(
                 onTap: () {
-                  _darkModeModel
-                      .changeMode(_darkModeModel.darkMode == 1 ? 0 : 1);
+                  _darkModeModel.changeMode(
+                      _darkModeModel.darkMode == DarkModel.on
+                          ? DarkModel.off
+                          : DarkModel.on);
                 },
                 child: Icon(
-                  _darkModeModel.darkMode == 1
+                  _darkModeModel.darkMode == DarkModel.on
                       ? FontIcons.light_mode
                       : FontIcons.dark_mode,
                   size: _size(22),
@@ -232,7 +234,9 @@ class _ProfilePageState extends State<ProfilePage>
         Divider(height: 0, indent: _size(16)),
         GestureDetector(
           onTap: () {
-            _darkModeModel.changeMode(_darkModeModel.darkMode == 2 ? 0 : 2);
+            _darkModeModel.changeMode(_darkModeModel.darkMode == DarkModel.auto
+                ? DarkModel.off
+                : DarkModel.auto);
           },
           child: ListTileCustom(
             leading: Icons.settings,

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:baas_study/model/dark_mode_model.dart';
+import 'package:baas_study/utils/dark_mode.dart';
 import 'package:baas_study/navigator/tab_navigator.dart';
 import 'package:baas_study/theme/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +8,10 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(builder: (_) => DarkModeModel())],
-    child: Consumer<DarkModeModel>(
+    providers: [ChangeNotifierProvider(builder: (_) => DarkMode())],
+    child: Consumer<DarkMode>(
       builder: (context, darkModeModel, _) {
-        return darkModeModel.darkMode == 2
+        return darkModeModel.darkMode == DarkModel.auto
             ? autoMode
             : manualMode(darkModeModel.darkMode);
       },
@@ -30,17 +30,19 @@ void main() {
 
 Widget get autoMode {
   return MaterialApp(
-    title: 'Auto Mode',
+    title: '区块课堂',
     theme: AppTheme.themeLight(),
     darkTheme: AppTheme.themeDark(),
     home: TabNavigator(),
   );
 }
 
-Widget manualMode(int darkMode) {
+Widget manualMode(DarkModel darkModel) {
   return MaterialApp(
-    title: 'Manual Mode',
-    theme: darkMode == 0 ? AppTheme.themeLight() : AppTheme.themeDark(),
+    title: '区块课堂',
+    theme: darkModel == DarkModel.off
+        ? AppTheme.themeLight()
+        : AppTheme.themeDark(),
     home: TabNavigator(),
   );
 }
