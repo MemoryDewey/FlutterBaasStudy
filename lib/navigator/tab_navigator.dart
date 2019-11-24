@@ -35,7 +35,7 @@ class _TabNavigatorState extends State<TabNavigator> {
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           HomePage(), // 首页
-          SearchPage(), //搜索页
+          SearchPage(hideLeft: true), //搜索页
           CourseListPage(), // 课程列表页
           ProfilePage(), // 个人信息页
         ],
@@ -54,50 +54,32 @@ class _TabNavigatorState extends State<TabNavigator> {
         type: BottomNavigationBarType.fixed,
         items: [
           // 首页
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: _defaultColor),
-            activeIcon: Icon(Icons.home, color: _activeColor),
-            title: Text(
-              '首页',
-              style: TextStyle(
-                color: _currentIndex != 0 ? _defaultColor : _activeColor,
-              ),
-            ),
-          ),
+          _barItem(iconData: Icons.home, text: '首页', index: 0),
           // 搜索页
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search, color: _defaultColor),
-            activeIcon: Icon(Icons.search, color: _activeColor),
-            title: Text(
-              '找课',
-              style: TextStyle(
-                color: _currentIndex != 1 ? _defaultColor : _activeColor,
-              ),
-            ),
-          ),
+          _barItem(iconData: Icons.search, text: '找课', index: 1),
           // 课程列表
-          BottomNavigationBarItem(
-            icon: Icon(Icons.library_books, color: _defaultColor),
-            activeIcon: Icon(Icons.library_books, color: _activeColor),
-            title: Text(
-              '课程',
-              style: TextStyle(
-                color: _currentIndex != 2 ? _defaultColor : _activeColor,
-              ),
-            ),
-          ),
+          _barItem(iconData: Icons.library_books, text: '课程', index: 2),
           // 个人信息
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle, color: _defaultColor),
-            activeIcon: Icon(Icons.account_circle, color: _activeColor),
-            title: Text(
-              '我的',
-              style: TextStyle(
-                color: _currentIndex != 3 ? _defaultColor : _activeColor,
-              ),
-            ),
-          ),
+          _barItem(iconData: Icons.account_circle, text: '我的', index: 3),
         ],
+      ),
+    );
+  }
+
+  /// BottomNavigationBarItem设计
+  BottomNavigationBarItem _barItem({
+    @required IconData iconData,
+    @required String text,
+    @required int index,
+  }) {
+    return BottomNavigationBarItem(
+      icon: Icon(iconData, color: _defaultColor),
+      activeIcon: Icon(iconData, color: _activeColor),
+      title: Text(
+        text,
+        style: TextStyle(
+          color: _currentIndex != index ? _defaultColor : _activeColor,
+        ),
       ),
     );
   }

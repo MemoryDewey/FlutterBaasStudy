@@ -7,6 +7,17 @@ const SEARCH_BAR_DEFAULT_TEXT = '区块链 以太坊 智能合约';
 const SEARCH_HISTORY_KEY = 'searchHistory';
 
 class SearchPage extends StatefulWidget {
+  final bool hideLeft;
+  final String keyWord;
+  final String hint;
+
+  const SearchPage({
+    Key key,
+    this.hideLeft,
+    this.keyWord,
+    this.hint,
+  }) : super(key: key);
+
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -14,7 +25,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   SharedPreferences _sharedPreferences;
   Set<String> _searchHistory;
-  String _inputText = '';
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -28,17 +39,30 @@ class _SearchPageState extends State<SearchPage> {
         appBar: _appBar,
         body: Column(
           children: <Widget>[
-            SearchBar(
-              hint: SEARCH_BAR_DEFAULT_TEXT,
-              leftButtonClick: () {},
-              onChanged: (text) {
-                setState(() {
-                  _inputText = text;
-                });
-              },
-              rightButtonClick: _search,
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0x66000000), Colors.transparent],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+              child: SearchBar(
+                hideLeft: widget.hideLeft,
+                controller: _controller,
+                defaultText: widget.keyWord,
+                hint: widget.hint ?? SEARCH_BAR_DEFAULT_TEXT,
+                leftButtonClick: () {
+                  Navigator.pop(context);
+                },
+                rightButtonClick: _search(_controller.text),
+                onSubmitted: (text) {
+                  _search(text);
+                },
+              ),
             ),
             Expanded(
+              flex: 1,
               child: ListView(
                 children: ListTile.divideTiles(
                   context: context,
@@ -50,6 +74,7 @@ class _SearchPageState extends State<SearchPage> {
         ));
   }
 
+  /// appBar Widget
   Widget get _appBar {
     return PreferredSize(
       preferredSize: Size.fromHeight(0),
@@ -57,6 +82,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
+  /// 本地搜索记录Widget
   List<Widget> get _searchHistoryList {
     List<Widget> history = [];
     if (_searchHistory != null)
@@ -78,7 +104,7 @@ class _SearchPageState extends State<SearchPage> {
       history.add(
         ListTile(
           title: Text('清除搜索记录', textAlign: TextAlign.center),
-          onTap: (){
+          onTap: () {
             _removeHistory(all: true);
           },
         ),
@@ -86,10 +112,12 @@ class _SearchPageState extends State<SearchPage> {
     return history;
   }
 
-  _search() {
-    _addHistory(_inputText);
+  /// 搜索
+  _search(String searchContent) {
+    if (searchContent.length > 0) _addHistory(searchContent);
   }
 
+  /// 获取本地搜索记录
   _getHistory() async {
     _sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
@@ -99,6 +127,7 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  /// 添加本地搜索记录
   _addHistory(String search) async {
     setState(() {
       _searchHistory.add(search);
@@ -107,6 +136,7 @@ class _SearchPageState extends State<SearchPage> {
         SEARCH_HISTORY_KEY, _searchHistory.toList());
   }
 
+  /// 清除本地搜索记录
   _removeHistory({bool all = false, String search}) async {
     if (all) {
       await _sharedPreferences.remove(SEARCH_HISTORY_KEY);

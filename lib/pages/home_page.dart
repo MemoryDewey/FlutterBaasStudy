@@ -4,6 +4,7 @@ import 'package:baas_study/dao/home_course_dao.dart';
 import 'package:baas_study/model/banner_model.dart';
 import 'package:baas_study/model/course_model.dart';
 import 'package:baas_study/model/home_course_model.dart';
+import 'package:baas_study/pages/search_page.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/home_course.dart';
@@ -193,6 +194,7 @@ class _HomePageState extends State<HomePage>
                   ? SearchBarType.homeLight
                   : SearchBarType.home,
               defaultText: SEARCH_BAR_DEFAULT_TEXT,
+              inputBoxClick: _jumpToSearch,
             ),
           ),
         ),
@@ -201,8 +203,9 @@ class _HomePageState extends State<HomePage>
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                  color: isDark ? Colors.white12 : Colors.black12,
-                  blurRadius: 0.5)
+                color: isDark ? Colors.white12 : Colors.black12,
+                blurRadius: 0.5,
+              )
             ],
           ),
         ),
@@ -251,5 +254,12 @@ class _HomePageState extends State<HomePage>
         ],
       ),
     );
+  }
+
+  /// 跳转到搜索页
+  _jumpToSearch() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return SearchPage(hint: SEARCH_BAR_DEFAULT_TEXT);
+    }));
   }
 }

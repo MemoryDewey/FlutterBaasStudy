@@ -16,6 +16,8 @@ class SearchBar extends StatefulWidget {
   final void Function() speakClick;
   final void Function() inputBoxClick;
   final ValueChanged<String> onChanged;
+  final ValueChanged<String> onSubmitted;
+  final TextEditingController controller;
 
   const SearchBar({
     Key key,
@@ -29,6 +31,8 @@ class SearchBar extends StatefulWidget {
     this.speakClick,
     this.inputBoxClick,
     this.onChanged,
+    this.controller,
+    this.onSubmitted,
   }) : super(key: key);
 
   @override
@@ -41,13 +45,14 @@ class _SearchBarState extends State<SearchBar> {
   Color _primaryColor;
   Color _fillColor;
   Color _searchBarColor;
-  final TextEditingController _controller = TextEditingController();
+  TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
     if (widget.defaultText != null) {
       setState(() {
+        _controller = widget.controller ?? TextEditingController();
         _controller.text = widget.defaultText;
       });
     }
@@ -210,6 +215,7 @@ class _SearchBarState extends State<SearchBar> {
                 ? TextField(
                     controller: _controller,
                     onChanged: _onChanged,
+                    onSubmitted: _onSubmitted,
                     autofocus: false,
                     style: TextStyle(
                       fontSize: _font(15),
@@ -226,6 +232,7 @@ class _SearchBarState extends State<SearchBar> {
                       hintText: widget.hint ?? '',
                       hintStyle: TextStyle(fontSize: _font(15)),
                     ),
+                    textInputAction: TextInputAction.search,
                   )
                 : _wrapTap(
                     Container(
@@ -276,6 +283,11 @@ class _SearchBarState extends State<SearchBar> {
         showClear = false;
       });
     if (widget.onChanged != null) widget.onChanged(text);
+  }
+
+  /// 输入内容提交
+  _onSubmitted(String text) {
+    if (text.length > 0 && widget.onSubmitted != null) widget.onSubmitted(text);
   }
 
   // 首页背景色
