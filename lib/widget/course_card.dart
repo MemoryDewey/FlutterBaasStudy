@@ -25,12 +25,12 @@ class CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: AutoSizeUtil.size(90),
-      margin: EdgeInsets.only(bottom: AutoSizeUtil.size(16)),
+      height: AutoSize.size(90),
+      margin: EdgeInsets.only(bottom: AutoSize.size(16)),
       child: Row(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(right: AutoSizeUtil.size(10)),
+            padding: EdgeInsets.only(right: AutoSize.size(10)),
             child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: ClipRRect(
@@ -51,9 +51,7 @@ class CourseCard extends StatelessWidget {
                 Container(
                   child: Text(
                     name,
-                    style: TextStyle(
-                        fontSize: AutoSizeUtil.font(16),
-                        height: 1),
+                    style: TextStyle(fontSize: AutoSize.font(16), height: 1),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -62,7 +60,7 @@ class CourseCard extends StatelessWidget {
                     description,
                     maxLines: 2,
                     style: TextStyle(
-                      fontSize: AutoSizeUtil.font(14),
+                      fontSize: AutoSize.font(14),
                       color: Color(0xff666666),
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -74,14 +72,14 @@ class CourseCard extends StatelessWidget {
                     Text(
                       '$applyCount人报名 | 好评${(rate * 100).toStringAsFixed(0)}%',
                       style: TextStyle(
-                        fontSize: AutoSizeUtil.font(14),
+                        fontSize: AutoSize.font(14),
                         color: Color(0xff999999),
                       ),
                     ),
                     Text(
                       price == 0 ? '免费' : '￥$price',
                       style: TextStyle(
-                        fontSize: AutoSizeUtil.font(14),
+                        fontSize: AutoSize.font(14),
                         color:
                             price == 0 ? Color(0xff07c160) : Color(0xffee0a24),
                       ),

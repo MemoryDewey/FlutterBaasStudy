@@ -51,7 +51,7 @@ class CourseDiscountCard extends StatelessWidget {
               padding: EdgeInsets.all(_size(10)),
               child: Text(
                 name,
-                style: TextStyle(fontSize: AutoSizeUtil.font(16)),
+                style: TextStyle(fontSize: AutoSize.font(16)),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -124,6 +124,6 @@ class CourseDiscountCard extends StatelessWidget {
   }
 
   _size(double size) {
-    return AutoSizeUtil.size(size);
+    return AutoSize.size(size);
   }
 }

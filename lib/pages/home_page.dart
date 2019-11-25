@@ -31,14 +31,13 @@ class _HomePageState extends State<HomePage>
   List<CourseModel> _listDiscount = [];
   List<CourseModel> _listNewest = [];
   List<CourseModel> _listRecommend = [];
-  bool _statusBarDark = false;
   double _appBarAlpha = 0;
   bool _loading = true;
   EdgeInsetsGeometry _padding = EdgeInsets.fromLTRB(
-    AutoSizeUtil.size(16),
-    AutoSizeUtil.size(10),
-    AutoSizeUtil.size(16),
-    AutoSizeUtil.size(10),
+    AutoSize.size(16),
+    AutoSize.size(10),
+    AutoSize.size(16),
+    AutoSize.size(10),
   );
   static num _paddingTop = MediaQueryData.fromWindow(window).padding.top;
 
@@ -238,7 +237,7 @@ class _HomePageState extends State<HomePage>
   /// Banner轮播图
   Widget get _banner {
     return Container(
-        height: AutoSizeUtil.size(221),
+        height: AutoSize.size(221),
         child: AspectRatio(
           aspectRatio: 16 / 9,
           child: Swiper(
@@ -254,8 +253,8 @@ class _HomePageState extends State<HomePage>
             pagination: SwiperPagination(
                 builder: DotSwiperPaginationBuilder(
               activeColor: Colors.blue,
-              size: AutoSizeUtil.size(8),
-              activeSize: AutoSizeUtil.size(8),
+              size: AutoSize.size(8),
+              activeSize: AutoSize.size(8),
             )),
           ),
         ));

@@ -9,7 +9,7 @@ class HomeCourseWidget {
   /// 横排
   Widget rowCard(List<CourseModel> course) {
     return Container(
-      height: AutoSizeUtil.size(240),
+      height: AutoSize.size(240),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: course.length,

@@ -19,18 +19,18 @@ class ListTileCustom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: AutoSizeUtil.size(16)),
+      contentPadding: EdgeInsets.symmetric(horizontal: AutoSize.size(16)),
       leading: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Icon(leading, color: color),
           Container(
-            margin: EdgeInsets.only(left: AutoSizeUtil.size(16)),
+            margin: EdgeInsets.only(left: AutoSize.size(16)),
             child: Text(
               leadingTitle,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: AutoSizeUtil.font(17)),
+              style: TextStyle(fontSize: AutoSize.font(17)),
             ),
           )
         ],
@@ -38,7 +38,7 @@ class ListTileCustom extends StatelessWidget {
       trailing: trailingTitle == null
           ? Icon(
               Icons.arrow_forward_ios,
-              size: AutoSizeUtil.size(18),
+              size: AutoSize.size(18),
               color: Color(0xff969799),
             )
           : Row(
@@ -49,13 +49,13 @@ class ListTileCustom extends StatelessWidget {
                   trailingTitle,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: AutoSizeUtil.font(14),
+                    fontSize: AutoSize.font(14),
                     color: Color(0xff969799),
                   ),
                 ),
                 Icon(
                   Icons.arrow_forward_ios,
-                  size: AutoSizeUtil.size(18),
+                  size: AutoSize.size(18),
                   color: Color(0xff969799),
                 ),
               ],

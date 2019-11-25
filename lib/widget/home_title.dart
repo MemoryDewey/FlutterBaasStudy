@@ -12,26 +12,21 @@ class HomeTitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(
-        0,
-        AutoSizeUtil.size(10),
-        0,
-        AutoSizeUtil.size(10),
-      ),
+      margin: EdgeInsets.fromLTRB(0, AutoSize.size(10), 0, AutoSize.size(10)),
       child: Row(
         children: <Widget>[
           Icon(
             icon,
-            size: AutoSizeUtil.size(25),
+            size: AutoSize.size(25),
             color: colors,
           ),
           Padding(
-            padding: EdgeInsets.only(left: AutoSizeUtil.size(10)),
+            padding: EdgeInsets.only(left: AutoSize.size(10)),
             child: Text(
               text,
               style: TextStyle(
                 color: colors,
-                fontSize: AutoSizeUtil.font(20),
+                fontSize: AutoSize.font(20),
               ),
             ),
           )

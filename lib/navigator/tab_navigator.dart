@@ -3,7 +3,6 @@ import 'package:baas_study/pages/home_page.dart';
 import 'package:baas_study/pages/profile_page.dart';
 import 'package:baas_study/pages/search_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TabNavigator extends StatefulWidget {

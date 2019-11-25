@@ -1,6 +1,6 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AutoSizeUtil {
+class AutoSize {
   static double size(double size) {
     return ScreenUtil.getInstance().setWidth(size * 2);
   }

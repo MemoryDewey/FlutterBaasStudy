@@ -1,4 +1,6 @@
 import 'package:baas_study/icons/font_icon.dart';
+import 'package:baas_study/pages/passport_page.dart';
+import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/dark_mode.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/widget/list_tail_custom.dart';
@@ -50,11 +52,11 @@ class _ProfilePageState extends State<ProfilePage>
   bool get wantKeepAlive => true;
 
   _size(double size) {
-    return AutoSizeUtil.size(size);
+    return AutoSize.size(size);
   }
 
   _font(double fonSize) {
-    return AutoSizeUtil.font(fonSize);
+    return AutoSize.font(fonSize);
   }
 
   /// appBar
@@ -98,55 +100,58 @@ class _ProfilePageState extends State<ProfilePage>
 
   /// 头像信息
   Widget get _info {
-    return Container(
-      padding: EdgeInsets.only(bottom: _size(16), left: _size(16)),
-      color: _appBarColor,
-      child: Row(
-        children: <Widget>[
-          /// 未登录时占位组件
-          Container(
-            width: _size(64),
-            height: _size(64),
-            decoration: BoxDecoration(
-              color: Color(0xff999999),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Icon(
-                FontIcons.user,
-                size: _size(40),
-                color: Colors.white,
+    return GestureDetector(
+      onTap: _jumpToLogin,
+      child: Container(
+        padding: EdgeInsets.only(bottom: _size(16), left: _size(16)),
+        color: _appBarColor,
+        child: Row(
+          children: <Widget>[
+            /// 未登录时占位组件
+            Container(
+              width: _size(64),
+              height: _size(64),
+              decoration: BoxDecoration(
+                color: Color(0xff999999),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Icon(
+                  FontIcons.user,
+                  size: _size(40),
+                  color: Colors.white,
+                ),
               ),
             ),
-          ),
 
-          /// 成功登录后的头像
-          /*CircleAvatar(
+            /// 成功登录后的头像
+            /*CircleAvatar(
             radius: _size(32),
             child: Container(
 
             ),
           ),*/
-          Expanded(
-            flex: 1,
-            child: Padding(
-                padding: EdgeInsets.only(left: _size(20)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      '点击登录',
-                      style: TextStyle(fontSize: AutoSizeUtil.font(24)),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      '登录同步数据，学习更安心',
-                      style: TextStyle(fontSize: 14, color: Color(0xff999999)),
-                    )
-                  ],
-                )),
-          )
-        ],
+            Expanded(
+              flex: 1,
+              child: Padding(
+                  padding: EdgeInsets.only(left: _size(20)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '点击登录',
+                        style: TextStyle(fontSize: AutoSize.font(24)),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        '登录同步数据，学习更安心',
+                        style: TextStyle(fontSize: 14, color: Color(0xff999999)),
+                      )
+                    ],
+                  )),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -274,5 +279,10 @@ class _ProfilePageState extends State<ProfilePage>
         )
       ],
     );
+  }
+
+  /// 跳转到登录页
+  _jumpToLogin(){
+    Navigator.push(context, SlideRoute(LoginPage()));
   }
 }

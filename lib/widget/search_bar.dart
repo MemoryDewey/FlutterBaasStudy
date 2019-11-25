@@ -43,7 +43,7 @@ class _SearchBarState extends State<SearchBar> {
   Color _primaryColor;
   Color _fillColor;
   Color _searchBarColor;
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -69,11 +69,11 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   _size(double size) {
-    return AutoSizeUtil.size(size);
+    return AutoSize.size(size);
   }
 
   _font(double fontSize) {
-    return AutoSizeUtil.font(fontSize);
+    return AutoSize.font(fontSize);
   }
 
   /// 搜索页搜索框
@@ -219,12 +219,8 @@ class _SearchBarState extends State<SearchBar> {
                       fontWeight: FontWeight.w300,
                     ),
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(
-                        _size(5),
-                        0,
-                        _size(5),
-                        0,
-                      ),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(_size(5), 0, _size(5), 0),
                       border: InputBorder.none,
                       hintText: widget.hint ?? '',
                       hintStyle: TextStyle(fontSize: _font(15)),
