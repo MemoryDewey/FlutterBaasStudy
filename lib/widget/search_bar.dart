@@ -17,7 +17,6 @@ class SearchBar extends StatefulWidget {
   final void Function() inputBoxClick;
   final ValueChanged<String> onChanged;
   final ValueChanged<String> onSubmitted;
-  final TextEditingController controller;
 
   const SearchBar({
     Key key,
@@ -31,7 +30,6 @@ class SearchBar extends StatefulWidget {
     this.speakClick,
     this.inputBoxClick,
     this.onChanged,
-    this.controller,
     this.onSubmitted,
   }) : super(key: key);
 
@@ -45,14 +43,13 @@ class _SearchBarState extends State<SearchBar> {
   Color _primaryColor;
   Color _fillColor;
   Color _searchBarColor;
-  TextEditingController _controller;
+  TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     if (widget.defaultText != null) {
       setState(() {
-        _controller = widget.controller ?? TextEditingController();
         _controller.text = widget.defaultText;
       });
     }
@@ -94,7 +91,7 @@ class _SearchBarState extends State<SearchBar> {
                   : Icon(
                       Icons.arrow_back_ios,
                       color: Colors.grey,
-                      size: _size(16),
+                      size: _size(24),
                     ),
             ),
             widget.leftButtonClick,
@@ -216,7 +213,7 @@ class _SearchBarState extends State<SearchBar> {
                     controller: _controller,
                     onChanged: _onChanged,
                     onSubmitted: _onSubmitted,
-                    autofocus: false,
+                    autofocus: true,
                     style: TextStyle(
                       fontSize: _font(15),
                       fontWeight: FontWeight.w300,
@@ -265,6 +262,7 @@ class _SearchBarState extends State<SearchBar> {
                   ), () {
                   setState(() {
                     _controller.clear();
+                    _onChanged('');
                   });
                 }),
         ],

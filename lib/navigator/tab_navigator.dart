@@ -15,7 +15,7 @@ class _TabNavigatorState extends State<TabNavigator> {
   final _defaultColor = Colors.grey;
   final _activeColor = Colors.blue;
   int _currentIndex = 0;
-  Brightness homeBrightness = Brightness.light;
+  DateTime _lastPopTime;
 
   final PageController _controller = PageController(
     initialPage: 0,
@@ -27,42 +27,54 @@ class _TabNavigatorState extends State<TabNavigator> {
       width: 785.4,
       height: 1635,
     )..init(context);
-    /*print(MediaQuery.of(context).size);*/
-    return Scaffold(
-      // 页面
-      body: PageView(
-        controller: _controller,
-        physics: NeverScrollableScrollPhysics(),
-        children: <Widget>[
-          HomePage(), // 首页
-          SearchPage(hideLeft: true), //搜索页
-          CourseListPage(), // 课程列表页
-          ProfilePage(), // 个人信息页
-        ],
+
+    /// 设置点击两次退出程序
+    return WillPopScope(
+      child: Scaffold(
+        // 页面
+        body: PageView(
+          controller: _controller,
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            HomePage(), // 首页
+            SearchPage(hideLeft: true), //搜索页
+            CourseListPage(), // 课程列表页
+            ProfilePage(), // 个人信息页
+          ],
+        ),
+        // 底部导航栏
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          // 点击改变页面
+          onTap: (index) {
+            _controller.jumpToPage(index);
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          type: BottomNavigationBarType.fixed,
+          items: [
+            // 首页
+            _barItem(iconData: Icons.home, text: '首页', index: 0),
+            // 搜索页
+            _barItem(iconData: Icons.search, text: '找课', index: 1),
+            // 课程列表
+            _barItem(iconData: Icons.library_books, text: '课程', index: 2),
+            // 个人信息
+            _barItem(iconData: Icons.account_circle, text: '我的', index: 3),
+          ],
+        ),
       ),
-      // 底部导航栏
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        // 点击改变页面
-        onTap: (index) {
-          _setHomeBrightness(index);
-          _controller.jumpToPage(index);
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        type: BottomNavigationBarType.fixed,
-        items: [
-          // 首页
-          _barItem(iconData: Icons.home, text: '首页', index: 0),
-          // 搜索页
-          _barItem(iconData: Icons.search, text: '找课', index: 1),
-          // 课程列表
-          _barItem(iconData: Icons.library_books, text: '课程', index: 2),
-          // 个人信息
-          _barItem(iconData: Icons.account_circle, text: '我的', index: 3),
-        ],
-      ),
+      onWillPop: () async {
+        /// 点击返回键操作
+        if (_lastPopTime == null ||
+            DateTime.now().difference(_lastPopTime) > Duration(seconds: 2)) {
+          _lastPopTime = DateTime.now();
+          print('再按一次退出');
+          return false;
+        }
+        return true;
+      },
     );
   }
 
@@ -82,14 +94,5 @@ class _TabNavigatorState extends State<TabNavigator> {
         ),
       ),
     );
-  }
-
-  /// 切换至首页时需要根据情况改变statusBar颜色
-  _setHomeBrightness(index) {
-    if (index == 0) {
-      if (HomePage.getBarLight()) {
-        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-      }
-    }
   }
 }

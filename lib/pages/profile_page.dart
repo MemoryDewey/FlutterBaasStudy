@@ -3,7 +3,6 @@ import 'package:baas_study/utils/dark_mode.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/widget/list_tail_custom.dart';
 import 'package:baas_study/widget/list_tile_group.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -128,14 +127,24 @@ class _ProfilePageState extends State<ProfilePage>
 
             ),
           ),*/
-          Container(
-            padding: EdgeInsets.only(left: _size(20)),
-            constraints: BoxConstraints(maxWidth: _size(270)),
-            child: Text(
-              '登录 / 注册',
-              style: TextStyle(fontSize: AutoSizeUtil.font(25)),
-              overflow: TextOverflow.ellipsis,
-            ),
+          Expanded(
+            flex: 1,
+            child: Padding(
+                padding: EdgeInsets.only(left: _size(20)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '点击登录',
+                      style: TextStyle(fontSize: AutoSizeUtil.font(24)),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      '登录同步数据，学习更安心',
+                      style: TextStyle(fontSize: 14, color: Color(0xff999999)),
+                    )
+                  ],
+                )),
           )
         ],
       ),
@@ -187,7 +196,8 @@ class _ProfilePageState extends State<ProfilePage>
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: <Widget>[
-              Text('-----------------最近在学课程（未实现）---------------------'),
+              Text(
+                  '-------------------------最近在学课程（未实现）-------------------------'),
             ],
           ),
         ),

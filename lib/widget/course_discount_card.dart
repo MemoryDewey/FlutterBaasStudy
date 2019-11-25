@@ -1,6 +1,5 @@
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// 限时抢购课程卡片
@@ -25,12 +24,12 @@ class CourseDiscountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: AutoSizeUtil.size(170),
-      margin: EdgeInsets.only(right: AutoSizeUtil.size(10)),
+      width: _size(170),
+      margin: EdgeInsets.only(right: _size(10)),
       child: Card(
-        elevation: AutoSizeUtil.size(2),
+        elevation: _size(2),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(AutoSizeUtil.size(8))),
+          borderRadius: BorderRadius.all(Radius.circular(_size(8))),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,8 +38,8 @@ class CourseDiscountCard extends StatelessWidget {
                 aspectRatio: 16 / 9,
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(AutoSizeUtil.size(8)),
-                    topRight: Radius.circular(AutoSizeUtil.size(8)),
+                    topLeft: Radius.circular(_size(8)),
+                    topRight: Radius.circular(_size(8)),
                   ),
                   child: CachedNetworkImage(
                     imageUrl: imageUrl,
@@ -49,7 +48,7 @@ class CourseDiscountCard extends StatelessWidget {
                   ),
                 )),
             Padding(
-              padding: EdgeInsets.all(AutoSizeUtil.size(10)),
+              padding: EdgeInsets.all(_size(10)),
               child: Text(
                 name,
                 style: TextStyle(fontSize: AutoSizeUtil.font(16)),
@@ -58,9 +57,9 @@ class CourseDiscountCard extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(
-                AutoSizeUtil.size(10),
+                _size(10),
                 0,
-                AutoSizeUtil.size(10),
+                _size(10),
                 0,
               ),
               child: Column(
@@ -80,11 +79,9 @@ class CourseDiscountCard extends StatelessWidget {
                       Container(
                         decoration: BoxDecoration(
                             border: Border.all(color: Color(0xffee0a24))),
-                        padding: EdgeInsets.fromLTRB(
-                          AutoSizeUtil.size(8),
-                          AutoSizeUtil.size(2),
-                          AutoSizeUtil.size(8),
-                          AutoSizeUtil.size(2),
+                        padding: EdgeInsets.symmetric(
+                          vertical: _size(2),
+                          horizontal: _size(8),
                         ),
                         child: Text(
                           '限时抢购',
@@ -111,7 +108,7 @@ class CourseDiscountCard extends StatelessWidget {
                   MaterialButton(
                     color: Color(0xffff976a),
                     textColor: Colors.white,
-                    minWidth: AutoSizeUtil.size(150),
+                    minWidth: _size(150),
                     onPressed: () {
                       print('course:$id');
                     },
@@ -124,5 +121,9 @@ class CourseDiscountCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _size(double size) {
+    return AutoSizeUtil.size(size);
   }
 }

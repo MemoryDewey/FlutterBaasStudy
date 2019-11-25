@@ -5,6 +5,7 @@ import 'package:baas_study/model/banner_model.dart';
 import 'package:baas_study/model/course_model.dart';
 import 'package:baas_study/model/home_course_model.dart';
 import 'package:baas_study/pages/search_page.dart';
+import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/home_course.dart';
@@ -18,15 +19,10 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
 const SEARCH_BAR_DEFAULT_TEXT = '区块链 以太坊 智能合约';
-bool homeStatusBarLight = true;
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
-
-  static bool getBarLight() {
-    return homeStatusBarLight;
-  }
 }
 
 class _HomePageState extends State<HomePage>
@@ -60,62 +56,66 @@ class _HomePageState extends State<HomePage>
     bool isDark = themeData.brightness == Brightness.dark;
     Color appBarColor = themeData.appBarTheme.color;
     //print(MediaQuery.of(context).size);
-    return Scaffold(
-      /// 使用Stack布局固定AppBar位置 - 数组index越大在越上面层
-      body: LoadingContainer(
-        isLoading: _loading,
-        child: Stack(
-          children: <Widget>[
-            /// 移除顶部区域padding
-            MediaQuery.removePadding(
-              removeTop: true,
-              context: context,
-              child: NotificationListener(
-                /// 监听滚动事件
-                onNotification: (scrollNotification) {
-                  if (scrollNotification is ScrollNotification &&
-                      scrollNotification.depth == 0) {
-                    /// 滚动且是列表滚动的时候
-                    _onScroll(scrollNotification.metrics.pixels, isDark);
-                  }
-                  return null;
-                },
-                child: ListView(
-                  children: <Widget>[
-                    /// Banner轮播图
-                    _banner,
+    /// 使用AnnotatedRegion来控制AppBar状态栏颜色
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: _getAppBarBrightness(isDark),
+      child: Scaffold(
+        /// 使用Stack布局固定AppBar位置 - 数组index越大在越上面层
+        body: LoadingContainer(
+          isLoading: _loading,
+          child: Stack(
+            children: <Widget>[
+              /// 移除顶部区域padding
+              MediaQuery.removePadding(
+                removeTop: true,
+                context: context,
+                child: NotificationListener(
+                  /// 监听滚动事件
+                  onNotification: (scrollNotification) {
+                    if (scrollNotification is ScrollNotification &&
+                        scrollNotification.depth == 0) {
+                      /// 滚动且是列表滚动的时候
+                      _onScroll(scrollNotification.metrics.pixels, isDark);
+                    }
+                    return null;
+                  },
+                  child: ListView(
+                    children: <Widget>[
+                      /// Banner轮播图
+                      _banner,
 
-                    /// 限时抢购课程
-                    _course(
-                      text: '限时优惠',
-                      icon: Icons.access_time,
-                      color: Color(0xffff976a),
-                      course: HomeCourseWidget().rowCard(_listDiscount),
-                    ),
+                      /// 限时抢购课程
+                      _course(
+                        text: '限时优惠',
+                        icon: Icons.access_time,
+                        color: Color(0xffff976a),
+                        course: HomeCourseWidget().rowCard(_listDiscount),
+                      ),
 
-                    /// 最新课程
-                    _course(
-                      text: '最新课程',
-                      icon: Icons.fiber_new,
-                      color: Color(0xff07c160),
-                      course: HomeCourseWidget().columnCard(_listNewest),
-                    ),
+                      /// 最新课程
+                      _course(
+                        text: '最新课程',
+                        icon: Icons.fiber_new,
+                        color: Color(0xff07c160),
+                        course: HomeCourseWidget().columnCard(_listNewest),
+                      ),
 
-                    /// 热门课程
-                    _course(
-                      text: '热门课程',
-                      icon: Icons.whatshot,
-                      color: Color(0xffee0a24),
-                      course: HomeCourseWidget().columnCard(_listRecommend),
-                    ),
-                  ],
+                      /// 热门课程
+                      _course(
+                        text: '热门课程',
+                        icon: Icons.whatshot,
+                        color: Color(0xffee0a24),
+                        course: HomeCourseWidget().columnCard(_listRecommend),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            /// 自定义AppBar
-            _appBar(appBarColor, isDark),
-          ],
+              /// 自定义AppBar
+              _appBar(appBarColor, isDark),
+            ],
+          ),
         ),
       ),
     );
@@ -129,22 +129,43 @@ class _HomePageState extends State<HomePage>
     double alpha = offset / APPBAR_SCROLL_OFFSET;
     if (alpha < 0)
       alpha = 0;
-    else if (alpha > 0) {
-      if (alpha > 1) alpha = 1;
-
-      if (!_statusBarDark && !isDark) {
-        _statusBarDark = true;
-        homeStatusBarLight = false;
-        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-      }
-    } else if (alpha == 0 && _statusBarDark && !isDark) {
-      _statusBarDark = false;
-      homeStatusBarLight = true;
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-    }
+    else if (alpha > 1) alpha = 1;
     setState(() {
       _appBarAlpha = alpha;
     });
+  }
+
+  /// 课程
+  _course({String text, IconData icon, Color color, Widget course}) {
+    return Padding(
+      padding: _padding,
+      child: Column(
+        children: <Widget>[
+          HomeTitleWidget(
+            text: text,
+            icon: icon,
+            colors: color,
+          ),
+          course,
+        ],
+      ),
+    );
+  }
+
+  /// 跳转到搜索页
+  _jumpToSearch() async {
+    await Navigator.push(
+      context,
+      SlideRoute(SearchPage(hint: SEARCH_BAR_DEFAULT_TEXT)),
+    );
+  }
+
+  /// 获取AppBar图标主题（Dark / Light）
+  SystemUiOverlayStyle _getAppBarBrightness(bool isDark) {
+    if (isDark) return SystemUiOverlayStyle.light;
+    return _appBarAlpha > 0.2
+        ? SystemUiOverlayStyle.dark
+        : SystemUiOverlayStyle.light;
   }
 
   /// 刷新
@@ -195,6 +216,7 @@ class _HomePageState extends State<HomePage>
                   : SearchBarType.home,
               defaultText: SEARCH_BAR_DEFAULT_TEXT,
               inputBoxClick: _jumpToSearch,
+              leftButtonClick: _jumpToSearch,
             ),
           ),
         ),
@@ -237,29 +259,5 @@ class _HomePageState extends State<HomePage>
             )),
           ),
         ));
-  }
-
-  /// 课程
-  _course({String text, IconData icon, Color color, Widget course}) {
-    return Padding(
-      padding: _padding,
-      child: Column(
-        children: <Widget>[
-          HomeTitleWidget(
-            text: text,
-            icon: icon,
-            colors: color,
-          ),
-          course,
-        ],
-      ),
-    );
-  }
-
-  /// 跳转到搜索页
-  _jumpToSearch() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return SearchPage(hint: SEARCH_BAR_DEFAULT_TEXT);
-    }));
   }
 }

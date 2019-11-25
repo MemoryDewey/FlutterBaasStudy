@@ -23,7 +23,6 @@ class DarkMode with ChangeNotifier {
   }
 
   void _init() async {
-    print(DarkModel.off.index);
     this._preferences = await SharedPreferences.getInstance();
     int localMode = this._preferences.get(STORE_KEY);
 

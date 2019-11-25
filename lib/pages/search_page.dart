@@ -1,5 +1,4 @@
 import 'package:baas_study/widget/search_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,7 +24,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   SharedPreferences _sharedPreferences;
   Set<String> _searchHistory;
-  final TextEditingController _controller = TextEditingController();
+  String _searchContent;
 
   @override
   void initState() {
@@ -49,13 +48,21 @@ class _SearchPageState extends State<SearchPage> {
               ),
               child: SearchBar(
                 hideLeft: widget.hideLeft,
-                controller: _controller,
                 defaultText: widget.keyWord,
                 hint: widget.hint ?? SEARCH_BAR_DEFAULT_TEXT,
                 leftButtonClick: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
                   Navigator.pop(context);
                 },
-                rightButtonClick: _search(_controller.text),
+                rightButtonClick: (){
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  _search(_searchContent);
+                },
+                onChanged: (text) {
+                  setState(() {
+                    _searchContent = text;
+                  });
+                },
                 onSubmitted: (text) {
                   _search(text);
                 },
@@ -114,6 +121,7 @@ class _SearchPageState extends State<SearchPage> {
 
   /// 搜索
   _search(String searchContent) {
+    searchContent ??= '';
     if (searchContent.length > 0) _addHistory(searchContent);
   }
 
@@ -144,11 +152,11 @@ class _SearchPageState extends State<SearchPage> {
         _searchHistory.clear();
       });
     } else {
-      await _sharedPreferences.setStringList(
-          SEARCH_HISTORY_KEY, _searchHistory.toList());
       setState(() {
         _searchHistory.remove(search);
       });
+      await _sharedPreferences.setStringList(
+          SEARCH_HISTORY_KEY, _searchHistory.toList());
     }
   }
 }
