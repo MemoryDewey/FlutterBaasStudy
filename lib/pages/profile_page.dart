@@ -3,8 +3,7 @@ import 'package:baas_study/pages/passport_page.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/dark_mode.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
-import 'package:baas_study/widget/list_tail_custom.dart';
-import 'package:baas_study/widget/list_tile_group.dart';
+import 'package:baas_study/widget/list_tail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

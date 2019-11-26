@@ -189,7 +189,7 @@ class _SearchBarState extends State<SearchBar> {
       inputBoxColor = _fillColor;
     return Container(
       height: _size(30),
-      padding: EdgeInsets.symmetric(vertical: 0, horizontal: _size(10)),
+      padding: EdgeInsets.symmetric(horizontal: _size(10)),
       decoration: BoxDecoration(
         color: inputBoxColor,
         borderRadius: BorderRadius.circular(_size(15)),
@@ -220,7 +220,7 @@ class _SearchBarState extends State<SearchBar> {
                     ),
                     decoration: InputDecoration(
                       contentPadding:
-                          EdgeInsets.fromLTRB(_size(5), 0, _size(5), 0),
+                          EdgeInsets.symmetric(horizontal: _size(5)),
                       border: InputBorder.none,
                       hintText: widget.hint ?? '',
                       hintStyle: TextStyle(fontSize: _font(15)),
