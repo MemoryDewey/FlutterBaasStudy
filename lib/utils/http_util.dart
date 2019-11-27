@@ -24,7 +24,7 @@ class HttpUtil {
   static Future<dynamic> request(String url, {data, method}) async {
     data = data ?? {};
     method = method ?? 'GET';
-    _token = await TokenUtil.getToken('token');
+    _token = await TokenUtil.getToken();
 
     /// 请求处理
     data.forEach((key, value) {
@@ -63,7 +63,7 @@ class HttpUtil {
         baseUrl: _API_PREFIX,
         connectTimeout: _CONNECT_TIMEOUT,
         receiveTimeout: _RECEIVE_TIMEOUT,
-        headers: {"user-agent": "dio", "authorization": _token},
+        headers: {"authorization": _token},
 
         /// [responseType] 表示期望以那种格式(方式)接受响应数据。
         /// [ResponseType] 接受三种类型 `JSON`, `STREAM`, `PLAIN`

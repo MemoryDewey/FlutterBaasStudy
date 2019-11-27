@@ -1,13 +1,15 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenUtil {
+  static const TOKEN_KEY = 'token';
+
   static setToken(String token) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setString('token', token);
+    preferences.setString(TOKEN_KEY, token);
   }
 
-  static getToken(String token) async {
+  static getToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    return preferences.getString('token');
+    return preferences.getString(TOKEN_KEY);
   }
 }

@@ -34,7 +34,7 @@ class DarkMode with ChangeNotifier {
     _darkModel = darkModel;
     notifyListeners();
     SharedPreferences preferences =
-        this._preferences ?? SharedPreferences.getInstance();
-    await preferences.setInt(STORE_KEY, darkModel.index);
+        this._preferences ?? await SharedPreferences.getInstance();
+   preferences.setInt(STORE_KEY, darkModel.index);
   }
 }

@@ -1,3 +1,5 @@
+import 'package:baas_study/dao/passport_dao.dart';
+import 'package:baas_study/model/passport_model.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/widget/passport.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +56,9 @@ class _LoginPageState extends State<LoginPage> {
               padding: EdgeInsets.only(bottom: _size(10)),
               child: PassBtn(
                 text: '登录',
-                onPressed: null,
+                onPressed: () {
+                  _login();
+                },
               ),
             ),
             _bottomText,
@@ -152,6 +156,7 @@ class _LoginPageState extends State<LoginPage> {
       controller: _pswController,
       focusNode: _secondFocusNode,
       obscureText: !_showPsw,
+      keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
         hintText: '密码',
         suffixIcon: GestureDetector(
@@ -269,5 +274,18 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _showClear = false;
       });
+  }
+
+  Future<bool> _login() async {
+    try {
+      PswLoginModel pswLoginModel = await PassportDao.pswLogin(
+        account: _accountController.text,
+        psw: _pswController.text,
+      );
+      print(pswLoginModel.token);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

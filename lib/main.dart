@@ -7,6 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  /// 强制竖屏
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(MultiProvider(
     providers: [ChangeNotifierProvider(builder: (_) => DarkMode())],
     child: Consumer<DarkMode>(
