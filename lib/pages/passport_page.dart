@@ -5,7 +5,7 @@ import 'package:baas_study/pages/profile_page.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/token_util.dart';
-import 'package:baas_study/widget/passport/login.dart';
+import 'package:baas_study/widgets/passport/login.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -288,7 +288,11 @@ class _LoginPageState extends State<LoginPage> {
       );
       String token = pswLoginModel.token ?? null;
       TokenUtil.setToken(token);
-      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+        context,
+        SlideRoute(TabNavigator(index: 3)),
+        (predicate) => predicate == null,
+      );
     } catch (e) {}
   }
 }

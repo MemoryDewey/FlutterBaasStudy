@@ -1,4 +1,4 @@
-import 'package:baas_study/widget/search_bar.dart';
+import 'package:baas_study/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 
 class CourseListPage extends StatefulWidget {

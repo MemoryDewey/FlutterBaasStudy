@@ -6,7 +6,7 @@ import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/dark_mode.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
-import 'package:baas_study/widget/list_tail.dart';
+import 'package:baas_study/widgets/list_tail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
