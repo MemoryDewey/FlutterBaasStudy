@@ -1,9 +1,13 @@
+import 'package:baas_study/dao/profile_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
+import 'package:baas_study/model/profile_model.dart';
 import 'package:baas_study/pages/passport_page.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/dark_mode.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
+import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/list_tail.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,9 +21,12 @@ class _ProfilePageState extends State<ProfilePage>
   Color _cardColor;
   Color _appBarColor;
   DarkMode _darkModeModel;
+  bool _isLogin = false;
+  UserModel _userModel;
 
   @override
   void initState() {
+    _getInfo();
     super.initState();
   }
 
@@ -30,7 +37,6 @@ class _ProfilePageState extends State<ProfilePage>
     ThemeData themeData = Theme.of(context);
     _cardColor = themeData.cardColor;
     _appBarColor = themeData.appBarTheme.color;
-
     return Scaffold(
         appBar: _appBar,
         body: Container(
@@ -106,30 +112,32 @@ class _ProfilePageState extends State<ProfilePage>
         color: _appBarColor,
         child: Row(
           children: <Widget>[
-            /// 未登录时占位组件
-            Container(
-              width: _size(64),
-              height: _size(64),
-              decoration: BoxDecoration(
-                color: Color(0xff999999),
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Icon(
-                  FontIcons.user,
-                  size: _size(40),
-                  color: Colors.white,
-                ),
-              ),
-            ),
-
-            /// 成功登录后的头像
-            /*CircleAvatar(
-            radius: _size(32),
-            child: Container(
-
-            ),
-          ),*/
+            _isLogin
+                ? ClipOval(
+                    child: CachedNetworkImage(
+                      width: 64,
+                      height: 64,
+                      imageUrl:
+                          '${HttpUtil.URL_PREFIX}${_userModel?.avatarUrl}',
+                      errorWidget: (context, url, error) =>
+                          Icon(FontIcons.user),
+                    ),
+                  )
+                : Container(
+                    width: _size(64),
+                    height: _size(64),
+                    decoration: BoxDecoration(
+                      color: Color(0xff999999),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Icon(
+                        FontIcons.user,
+                        size: _size(40),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
             Expanded(
               flex: 1,
               child: Padding(
@@ -138,13 +146,16 @@ class _ProfilePageState extends State<ProfilePage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '点击登录',
+                        _isLogin ? _userModel?.nickname : '点击登录',
                         style: TextStyle(fontSize: AutoSize.font(24)),
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        '登录同步数据，学习更安心',
-                        style: TextStyle(fontSize: 14, color: Color(0xff999999)),
+                        _isLogin ? '点击查看个人主页' : '登录同步数据，学习更安心',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xff999999),
+                        ),
                       )
                     ],
                   )),
@@ -281,7 +292,18 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   /// 跳转到登录页
-  _jumpToLogin(){
+  _jumpToLogin() {
     Navigator.push(context, SlideRoute(LoginPage()));
+  }
+
+  /// 获取个人信息
+  Future<Null> _getInfo() async {
+    try {
+      ProfileModel model = await ProfileDao.checkLogin();
+      setState(() {
+        _isLogin = model.code == 1000;
+        _userModel = model.data;
+      });
+    } catch (e) {}
   }
 }

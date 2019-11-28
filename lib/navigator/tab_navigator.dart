@@ -2,10 +2,15 @@ import 'package:baas_study/pages/course_list_page.dart';
 import 'package:baas_study/pages/home_page.dart';
 import 'package:baas_study/pages/profile_page.dart';
 import 'package:baas_study/pages/search_page.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TabNavigator extends StatefulWidget {
+  final int index;
+
+  const TabNavigator({Key key, this.index = 0}) : super(key: key);
+
   @override
   _TabNavigatorState createState() => _TabNavigatorState();
 }
@@ -19,6 +24,17 @@ class _TabNavigatorState extends State<TabNavigator> {
   final PageController _controller = PageController(
     initialPage: 0,
   );
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.index;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +59,7 @@ class _TabNavigatorState extends State<TabNavigator> {
         ),
         // 底部导航栏
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
+          currentIndex: _currentIndex ?? widget.index,
           // 点击改变页面
           onTap: (index) {
             _controller.jumpToPage(index);
@@ -69,7 +85,7 @@ class _TabNavigatorState extends State<TabNavigator> {
         if (_lastPopTime == null ||
             DateTime.now().difference(_lastPopTime) > Duration(seconds: 2)) {
           _lastPopTime = DateTime.now();
-          print('再按一次退出');
+          BotToast.showText(text: '再按一次退出');
           return false;
         }
         return true;

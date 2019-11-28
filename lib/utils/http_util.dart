@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'package:baas_study/model/request_error_model.dart';
 import 'package:baas_study/utils/token_util.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
 /// 封装Http请求
 class HttpUtil {
@@ -48,8 +51,27 @@ class HttpUtil {
       print('$url 响应数据成功！');
     } on DioError catch (e) {
       /// 打印请求失败相关信息
-      print(e.response);
-      print('请求出错：' + e.toString());
+      String errorMsg;
+      switch (e.type) {
+        case DioErrorType.CONNECT_TIMEOUT:
+          errorMsg = '请求服务器超时';
+          break;
+        case DioErrorType.RECEIVE_TIMEOUT:
+          errorMsg = '服务器未响应';
+          break;
+        case DioErrorType.RESPONSE:
+          {
+            if (e.response.statusCode == 404)
+              errorMsg = '请求的资源不存在';
+            else
+              errorMsg = RequestErrorModel.fromJson(e.response.data).msg;
+          }
+          break;
+        default:
+          errorMsg = '发生了未知的错误';
+          break;
+      }
+      BotToast.showText(text: errorMsg, align: Alignment(0, 0));
     }
 
     return result;

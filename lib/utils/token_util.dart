@@ -12,4 +12,9 @@ class TokenUtil {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(TOKEN_KEY);
   }
+
+  static remToken() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.remove(TOKEN_KEY);
+  }
 }

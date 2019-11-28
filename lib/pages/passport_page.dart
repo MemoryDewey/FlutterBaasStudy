@@ -1,7 +1,11 @@
 import 'package:baas_study/dao/passport_dao.dart';
 import 'package:baas_study/model/passport_model.dart';
+import 'package:baas_study/navigator/tab_navigator.dart';
+import 'package:baas_study/pages/profile_page.dart';
+import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
-import 'package:baas_study/widget/passport.dart';
+import 'package:baas_study/utils/token_util.dart';
+import 'package:baas_study/widget/passport/login.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -276,16 +280,15 @@ class _LoginPageState extends State<LoginPage> {
       });
   }
 
-  Future<bool> _login() async {
+  Future<Null> _login() async {
     try {
       PswLoginModel pswLoginModel = await PassportDao.pswLogin(
         account: _accountController.text,
         psw: _pswController.text,
       );
-      print(pswLoginModel.token);
-      return true;
-    } catch (e) {
-      return false;
-    }
+      String token = pswLoginModel.token ?? null;
+      TokenUtil.setToken(token);
+      Navigator.pop(context);
+    } catch (e) {}
   }
 }
