@@ -25,22 +25,49 @@ class ProfileModel {
 }
 
 class UserModel {
+  String mobile;
+  String email;
+  String birthday;
+  String sex;
   String nickname;
+  String realName;
   String avatarUrl;
+  String bstAddress;
 
-  UserModel({this.nickname, this.avatarUrl});
+  UserModel({
+    this.mobile,
+    this.email,
+    this.birthday,
+    this.sex,
+    this.nickname,
+    this.realName,
+    this.avatarUrl,
+    this.bstAddress,
+  });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
+      mobile: json['mobile'],
+      email: json['email'],
+      birthday: json['birthday'],
+      sex: json['sex'],
       nickname: json['nickname'],
+      realName: json['realName'],
       avatarUrl: json['avatarUrl'],
+      bstAddress: json['bstAddress'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['mobile'] = this.mobile;
+    data['email'] = this.email;
+    data['birthday'] = this.birthday;
+    data['sex'] = this.sex;
     data['nickname'] = this.nickname;
+    data['realName'] = this.realName;
     data['avatarUrl'] = this.avatarUrl;
+    data['bstAddress'] = this.bstAddress;
     return data;
   }
 }

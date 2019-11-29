@@ -27,7 +27,7 @@ class HttpUtil {
   static Future<dynamic> request(String url, {data, method}) async {
     data = data ?? {};
     method = method ?? 'GET';
-    _token = await TokenUtil.getToken();
+    _token = await TokenUtil.get();
 
     /// 请求处理
     data.forEach((key, value) {

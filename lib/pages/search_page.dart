@@ -1,6 +1,6 @@
+import 'package:baas_study/utils/storage_util.dart';
 import 'package:baas_study/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 const SEARCH_BAR_DEFAULT_TEXT = '区块链 以太坊 智能合约';
 const SEARCH_HISTORY_KEY = 'searchHistory';
@@ -22,7 +22,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  SharedPreferences _sharedPreferences;
   Set<String> _searchHistory;
   String _searchContent;
 
@@ -54,7 +53,7 @@ class _SearchPageState extends State<SearchPage> {
                   FocusScope.of(context).requestFocus(FocusNode());
                   Navigator.pop(context);
                 },
-                rightButtonClick: (){
+                rightButtonClick: () {
                   FocusScope.of(context).requestFocus(FocusNode());
                   _search(_searchContent);
                 },
@@ -127,10 +126,9 @@ class _SearchPageState extends State<SearchPage> {
 
   /// 获取本地搜索记录
   _getHistory() async {
-    _sharedPreferences = await SharedPreferences.getInstance();
+    List<String> listStr = await StorageUtil.getStringList(SEARCH_HISTORY_KEY);
     setState(() {
-      _searchHistory =
-          _sharedPreferences.getStringList(SEARCH_HISTORY_KEY)?.toSet();
+      _searchHistory = listStr?.toSet();
       _searchHistory ??= <String>[].toSet();
     });
   }
@@ -140,14 +138,13 @@ class _SearchPageState extends State<SearchPage> {
     setState(() {
       _searchHistory.add(search);
     });
-    await _sharedPreferences.setStringList(
-        SEARCH_HISTORY_KEY, _searchHistory.toList());
+    StorageUtil.set(SEARCH_HISTORY_KEY, _searchHistory.toList());
   }
 
   /// 清除本地搜索记录
   _removeHistory({bool all = false, String search}) async {
     if (all) {
-      await _sharedPreferences.remove(SEARCH_HISTORY_KEY);
+      StorageUtil.remove(SEARCH_HISTORY_KEY);
       setState(() {
         _searchHistory.clear();
       });
@@ -155,8 +152,7 @@ class _SearchPageState extends State<SearchPage> {
       setState(() {
         _searchHistory.remove(search);
       });
-      await _sharedPreferences.setStringList(
-          SEARCH_HISTORY_KEY, _searchHistory.toList());
+      StorageUtil.set(SEARCH_HISTORY_KEY, _searchHistory.toList());
     }
   }
 }

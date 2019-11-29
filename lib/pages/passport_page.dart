@@ -1,12 +1,13 @@
 import 'package:baas_study/dao/passport_dao.dart';
 import 'package:baas_study/model/passport_model.dart';
 import 'package:baas_study/navigator/tab_navigator.dart';
-import 'package:baas_study/pages/profile_page.dart';
+import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/token_util.dart';
 import 'package:baas_study/widgets/passport/login.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -29,10 +30,12 @@ class _LoginPageState extends State<LoginPage> {
 
   /// 第二个输入框焦点
   FocusNode _secondFocusNode = FocusNode();
+  UserProvider _userProvider;
 
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    _userProvider = Provider.of<UserProvider>(context);
     setState(() {
       _textColor = themeData.brightness == Brightness.light
           ? Colors.black87
@@ -287,12 +290,9 @@ class _LoginPageState extends State<LoginPage> {
         psw: _pswController.text,
       );
       String token = pswLoginModel.token ?? null;
-      TokenUtil.setToken(token);
-      Navigator.pushAndRemoveUntil(
-        context,
-        SlideRoute(TabNavigator(index: 3)),
-        (predicate) => predicate == null,
-      );
+      TokenUtil.set(token);
+      _userProvider.saveUser(pswLoginModel.info);
+      Navigator.pop(context);
     } catch (e) {}
   }
 }

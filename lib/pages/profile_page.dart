@@ -2,8 +2,9 @@ import 'package:baas_study/dao/profile_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
 import 'package:baas_study/pages/passport_page.dart';
+import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/routes/router.dart';
-import 'package:baas_study/utils/dark_mode.dart';
+import 'package:baas_study/providers/dark_mode_provider.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widgets/list_tail.dart';
@@ -20,9 +21,8 @@ class _ProfilePageState extends State<ProfilePage>
     with AutomaticKeepAliveClientMixin {
   Color _cardColor;
   Color _appBarColor;
-  DarkMode _darkModeModel;
+  DarkModeProvider _darkModeModel;
   bool _isLogin = false;
-  UserModel _userModel;
 
   @override
   void initState() {
@@ -33,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    _darkModeModel = Provider.of<DarkMode>(context);
+    _darkModeModel = Provider.of<DarkModeProvider>(context);
     ThemeData themeData = Theme.of(context);
     _cardColor = themeData.cardColor;
     _appBarColor = themeData.appBarTheme.color;
@@ -42,7 +42,16 @@ class _ProfilePageState extends State<ProfilePage>
         body: Container(
           child: ListView(
             children: <Widget>[
-              _info,
+              Consumer<UserProvider>(
+                builder: (context, userInfo, child) => _UserInfo(
+                  backgroundColor: _appBarColor,
+                  isLogin: userInfo.hasUser,
+                  onTab: _jumpToLogin,
+                  nickname: userInfo.user?.nickname,
+                  avatarUrl:
+                      '${HttpUtil.URL_PREFIX}${userInfo.user?.avatarUrl}',
+                ),
+              ),
               Divider(height: 0),
               _gradGroup,
               _studyInfoList,
@@ -99,69 +108,6 @@ class _ProfilePageState extends State<ProfilePage>
             ),
           )
         ],
-      ),
-    );
-  }
-
-  /// 头像信息
-  Widget get _info {
-    return GestureDetector(
-      onTap: _jumpToLogin,
-      child: Container(
-        padding: EdgeInsets.only(bottom: _size(16), left: _size(16)),
-        color: _appBarColor,
-        child: Row(
-          children: <Widget>[
-            _isLogin
-                ? ClipOval(
-                    child: CachedNetworkImage(
-                      width: 64,
-                      height: 64,
-                      imageUrl:
-                          '${HttpUtil.URL_PREFIX}${_userModel?.avatarUrl}',
-                      errorWidget: (context, url, error) =>
-                          Icon(FontIcons.user),
-                    ),
-                  )
-                : Container(
-                    width: _size(64),
-                    height: _size(64),
-                    decoration: BoxDecoration(
-                      color: Color(0xff999999),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Icon(
-                        FontIcons.user,
-                        size: _size(40),
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-            Expanded(
-              flex: 1,
-              child: Padding(
-                  padding: EdgeInsets.only(left: _size(20)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        _isLogin ? _userModel?.nickname : '点击登录',
-                        style: TextStyle(fontSize: AutoSize.font(24)),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        _isLogin ? '点击查看个人主页' : '登录同步数据，学习更安心',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xff999999),
-                        ),
-                      )
-                    ],
-                  )),
-            )
-          ],
-        ),
       ),
     );
   }
@@ -302,8 +248,89 @@ class _ProfilePageState extends State<ProfilePage>
       ProfileModel model = await ProfileDao.checkLogin();
       setState(() {
         _isLogin = model.code == 1000;
-        _userModel = model.data;
       });
     } catch (e) {}
+  }
+}
+
+class _UserInfo extends StatelessWidget {
+  final bool isLogin;
+  final Color backgroundColor;
+  final String nickname;
+  final String avatarUrl;
+  final void Function() onTab;
+
+  const _UserInfo({
+    Key key,
+    @required this.backgroundColor,
+    @required this.isLogin,
+    this.nickname,
+    this.avatarUrl,
+    @required this.onTab,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTab,
+      child: Container(
+        padding: EdgeInsets.only(
+          bottom: AutoSize.size(16),
+          left: AutoSize.size(16),
+        ),
+        color: backgroundColor,
+        child: Row(
+          children: <Widget>[
+            isLogin
+                ? ClipOval(
+                    child: CachedNetworkImage(
+                      width: AutoSize.size(64),
+                      height: AutoSize.size(64),
+                      imageUrl: avatarUrl,
+                      errorWidget: (context, url, error) =>
+                          Icon(FontIcons.user),
+                    ),
+                  )
+                : Container(
+                    width: AutoSize.size(64),
+                    height: AutoSize.size(64),
+                    decoration: BoxDecoration(
+                      color: Color(0xff999999),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Icon(
+                        FontIcons.user,
+                        size: AutoSize.size(40),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                  padding: EdgeInsets.only(left: AutoSize.size(20)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        isLogin ? nickname : '点击登录',
+                        style: TextStyle(fontSize: AutoSize.font(24)),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        isLogin ? '点击查看个人主页' : '登录同步数据，学习更安心',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xff999999),
+                        ),
+                      )
+                    ],
+                  )),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

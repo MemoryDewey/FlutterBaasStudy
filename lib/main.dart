@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:baas_study/utils/dark_mode.dart';
+import 'package:baas_study/providers/dark_mode_provider.dart';
 import 'package:baas_study/navigator/tab_navigator.dart';
+import 'package:baas_study/providers/provider_manage.dart';
 import 'package:baas_study/theme/app_theme.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +15,10 @@ void main() {
     DeviceOrientation.portraitDown,
   ]);
   runApp(MultiProvider(
-      providers: [ChangeNotifierProvider(builder: (_) => DarkMode())],
+      providers: providers,
       child: BotToastInit(
-        child: Consumer<DarkMode>(
-          builder: (context, darkModeModel, _) {
+        child: Consumer<DarkModeProvider>(
+          builder: (context, darkModeModel, child) {
             return darkModeModel.darkMode == DarkModel.auto
                 ? autoMode
                 : manualMode(darkModeModel.darkMode);
@@ -25,9 +26,7 @@ void main() {
         ),
       )));
   if (Platform.isAndroid) {
-    /// 以下两行 设置android状态栏为透明的沉浸。
-    /// 写在组件渲染之后，是为了在渲染后进行set赋值
-    /// 覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。
+    /// 设置android状态栏为透明的沉浸。
     SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
       statusBarColor: Color(0x00),
     );
