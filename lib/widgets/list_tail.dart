@@ -34,6 +34,7 @@ class ListTileCustom extends StatelessWidget {
   final String leadingTitle;
   final Color color;
   final String trailingTitle;
+  final void Function() onTab;
 
   const ListTileCustom({
     Key key,
@@ -41,6 +42,7 @@ class ListTileCustom extends StatelessWidget {
     this.leadingTitle,
     this.color,
     this.trailingTitle,
+    this.onTab,
   }) : super(key: key);
 
   @override
@@ -64,29 +66,30 @@ class ListTileCustom extends StatelessWidget {
       ),
       trailing: trailingTitle == null
           ? Icon(
-        Icons.arrow_forward_ios,
-        size: AutoSize.size(18),
-        color: Color(0xff969799),
-      )
-          : Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            trailingTitle,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: AutoSize.font(14),
+              Icons.arrow_forward_ios,
+              size: AutoSize.size(18),
               color: Color(0xff969799),
+            )
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  trailingTitle,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: AutoSize.font(14),
+                    color: Color(0xff969799),
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: AutoSize.size(18),
+                  color: Color(0xff969799),
+                ),
+              ],
             ),
-          ),
-          Icon(
-            Icons.arrow_forward_ios,
-            size: AutoSize.size(18),
-            color: Color(0xff969799),
-          ),
-        ],
-      ),
+      onTap: onTab,
     );
   }
 }

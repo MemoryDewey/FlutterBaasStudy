@@ -1,7 +1,7 @@
 import 'package:baas_study/dao/profile_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
-import 'package:baas_study/pages/passport_page.dart';
+import 'package:baas_study/pages/login_page.dart';
 import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/providers/dark_mode_provider.dart';
@@ -152,17 +152,19 @@ class _ProfilePageState extends State<ProfilePage>
           leadingTitle: '最近在学',
           color: Color(0xff3f98eb),
         ),
-        Container(
-          height: _size(75),
-          padding: EdgeInsets.symmetric(horizontal: _size(16)),
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: <Widget>[
-              Text(
-                  '-------------------------最近在学课程（未实现）-------------------------'),
-            ],
-          ),
-        ),
+        _userProvider.hasUser
+            ? Container(
+                height: _size(75),
+                padding: EdgeInsets.symmetric(horizontal: _size(16)),
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: <Widget>[
+                    Text(
+                        '-------------------------最近在学课程（未实现）-------------------------'),
+                  ],
+                ),
+              )
+            : Divider(height: 0),
         ListTileCustom(
           leading: FontIcons.paper,
           leadingTitle: '我的考试',
@@ -199,30 +201,28 @@ class _ProfilePageState extends State<ProfilePage>
           color: Color(0xffff2121),
         ),
         Divider(height: 0, indent: _size(16)),
-        GestureDetector(
-          onTap: () {
+        ListTileCustom(
+          leading: FontIcons.feedback,
+          leadingTitle: '反馈建议',
+          color: Color(0xff00f6d0),
+          onTab: (){
             _userProvider.clearUser();
             TokenUtil.remove();
           },
-          child: ListTileCustom(
-            leading: FontIcons.feedback,
-            leadingTitle: '反馈建议',
-            color: Color(0xff00f6d0),
-          ),
         ),
         Divider(height: 0, indent: _size(16)),
-        GestureDetector(
-          onTap: () {
-            _darkModeModel.changeMode(_darkModeModel.darkMode == DarkModel.auto
-                ? DarkModel.off
-                : DarkModel.auto);
+        ListTileCustom(
+          leading: Icons.settings,
+          leadingTitle: '系统设置',
+          color: Color(0xff3f98eb),
+          onTab: () {
+            _darkModeModel.changeMode(
+              _darkModeModel.darkMode == DarkModel.auto
+                  ? DarkModel.off
+                  : DarkModel.auto,
+            );
           },
-          child: ListTileCustom(
-            leading: Icons.settings,
-            leadingTitle: '系统设置',
-            color: Color(0xff3f98eb),
-          ),
-        )
+        ),
       ],
     );
   }

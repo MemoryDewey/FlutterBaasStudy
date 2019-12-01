@@ -154,6 +154,16 @@ class _LoginPageState extends State<LoginPage> {
       onEditingComplete: () {
         FocusScope.of(context).requestFocus(_secondFocusNode);
       },
+      validator: (value) {
+        RegExp mailExp = new RegExp(
+          r"(\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14})",
+        );
+        RegExp phoneExp = new RegExp(
+          r"0?(13|14|15|17|18|19)[0-9]{9}",
+        );
+        bool isValid = mailExp.hasMatch(value) || phoneExp.hasMatch(value);
+        return isValid ? null : '请输入正确的账号';
+      },
     );
   }
 
@@ -175,6 +185,10 @@ class _LoginPageState extends State<LoginPage> {
           child: _showPsw ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
         ),
       ),
+      validator: (value) {
+        return value.isEmpty ? '请输入密码' : null;
+      },
+      onEditingComplete: _login,
     );
   }
 
@@ -245,8 +259,8 @@ class _LoginPageState extends State<LoginPage> {
               PassBottomText(
                 text: '手机短信登录',
                 onTab: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
                   setState(() {
-                    FocusScope.of(context).requestFocus(FocusNode());
                     _accountLogin = false;
                   });
                 },
@@ -260,8 +274,8 @@ class _LoginPageState extends State<LoginPage> {
         : PassBottomText(
             text: '用户名密码登录',
             onTab: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               setState(() {
-                FocusScope.of(context).requestFocus(FocusNode());
                 _accountLogin = true;
               });
             },
@@ -285,14 +299,17 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<Null> _login() async {
     try {
-      PswLoginModel pswLoginModel = await PassportDao.pswLogin(
-        account: _accountController.text,
-        psw: _pswController.text,
-      );
-      String token = pswLoginModel.token ?? null;
-      TokenUtil.set(token);
-      _userProvider.saveUser(pswLoginModel.info);
-      Navigator.pop(context);
+      if(_formKey.currentState.validate()){
+        FocusScope.of(context).requestFocus(FocusNode());
+        PswLoginModel pswLoginModel = await PassportDao.pswLogin(
+          account: _accountController.text,
+          psw: _pswController.text,
+        );
+        String token = pswLoginModel.token ?? null;
+        TokenUtil.set(token);
+        _userProvider.saveUser(pswLoginModel.info);
+        Navigator.pop(context);
+      }
     } catch (e) {}
   }
 }
