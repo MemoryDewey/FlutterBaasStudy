@@ -101,4 +101,7 @@ class HttpUtil {
   static clear() {
     dio = null;
   }
+
+  /// 获取图片URL
+  static String getImage(String url) => URL_PREFIX + url;
 }

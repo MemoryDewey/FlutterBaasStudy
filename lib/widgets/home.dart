@@ -14,7 +14,7 @@ class HomeCourseWidget {
         itemCount: course.length,
         itemBuilder: (BuildContext context, int index) => CourseDiscountCard(
           id: course[index].id,
-          imageUrl: '${HttpUtil.URL_PREFIX}${course[index].imageUrl}',
+          imageUrl: HttpUtil.getImage(course[index].imageUrl),
           name: course[index].name,
           price: course[index].price,
           discount: course[index].discount / 100,
@@ -31,7 +31,7 @@ class HomeCourseWidget {
       result.add(
         CourseCard(
           id: item.id,
-          imageUrl: '${HttpUtil.URL_PREFIX}${item.imageUrl}',
+          imageUrl: HttpUtil.getImage(item.imageUrl),
           name: item.name,
           description: item.description,
           price: item.price,

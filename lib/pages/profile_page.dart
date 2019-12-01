@@ -7,6 +7,7 @@ import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/providers/dark_mode_provider.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
+import 'package:baas_study/utils/token_util.dart';
 import 'package:baas_study/widgets/list_tail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +21,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage>
     with AutomaticKeepAliveClientMixin {
   Color _cardColor;
-  Color _appBarColor;
   DarkModeProvider _darkModeModel;
-  bool _isLogin = false;
+  UserProvider _userProvider;
 
   @override
   void initState() {
@@ -34,9 +34,9 @@ class _ProfilePageState extends State<ProfilePage>
   Widget build(BuildContext context) {
     super.build(context);
     _darkModeModel = Provider.of<DarkModeProvider>(context);
+    _userProvider = Provider.of<UserProvider>(context);
     ThemeData themeData = Theme.of(context);
     _cardColor = themeData.cardColor;
-    _appBarColor = themeData.appBarTheme.color;
     return Scaffold(
         appBar: _appBar,
         body: Container(
@@ -44,12 +44,13 @@ class _ProfilePageState extends State<ProfilePage>
             children: <Widget>[
               Consumer<UserProvider>(
                 builder: (context, userInfo, child) => _UserInfo(
-                  backgroundColor: _appBarColor,
+                  backgroundColor: themeData.appBarTheme.color,
                   isLogin: userInfo.hasUser,
-                  onTab: _jumpToLogin,
+                  onTab: _jumpToLoginOrInfo,
                   nickname: userInfo.user?.nickname,
-                  avatarUrl:
-                      '${HttpUtil.URL_PREFIX}${userInfo.user?.avatarUrl}',
+                  avatarUrl: userInfo.hasUser
+                      ? HttpUtil.getImage(userInfo.user.avatarUrl)
+                      : null,
                 ),
               ),
               Divider(height: 0),
@@ -198,10 +199,17 @@ class _ProfilePageState extends State<ProfilePage>
           color: Color(0xffff2121),
         ),
         Divider(height: 0, indent: _size(16)),
-        ListTileCustom(
+        GestureDetector(
+          onTap: () {
+            _userProvider.clearUser();
+            TokenUtil.remove();
+          },
+          child: ListTileCustom(
             leading: FontIcons.feedback,
             leadingTitle: '反馈建议',
-            color: Color(0xff00f6d0)),
+            color: Color(0xff00f6d0),
+          ),
+        ),
         Divider(height: 0, indent: _size(16)),
         GestureDetector(
           onTap: () {
@@ -237,18 +245,20 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  /// 跳转到登录页
-  _jumpToLogin() {
-    Navigator.push(context, SlideRoute(LoginPage()));
+  /// 跳转到登录页或个人信息页
+  _jumpToLoginOrInfo() {
+    _userProvider.hasUser
+        ? print('go to info!')
+        : Navigator.push(context, SlideRoute(LoginPage()));
+    /*Navigator.push(context, route)*/
   }
 
   /// 获取个人信息
   Future<Null> _getInfo() async {
     try {
       ProfileModel model = await ProfileDao.checkLogin();
-      setState(() {
-        _isLogin = model.code == 1000;
-      });
+      if (model.code != 1000 && _userProvider.hasUser)
+        _userProvider.clearUser();
     } catch (e) {}
   }
 }

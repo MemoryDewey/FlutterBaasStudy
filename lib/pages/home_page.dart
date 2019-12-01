@@ -244,7 +244,7 @@ class _HomePageState extends State<HomePage>
             autoplay: true,
             itemBuilder: (BuildContext context, index) {
               return CachedNetworkImage(
-                imageUrl: '${HttpUtil.URL_PREFIX}${_listBanner[index].image}',
+                imageUrl: HttpUtil.getImage(_listBanner[index].image),
                 errorWidget: (context, url, error) => Icon(Icons.image),
                 fit: BoxFit.cover,
               );
