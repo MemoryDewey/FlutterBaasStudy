@@ -9,7 +9,7 @@ import 'package:baas_study/providers/dark_mode_provider.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/utils/token_util.dart';
-import 'package:baas_study/widgets/list_tail.dart';
+import 'package:baas_study/widgets/custom_list_tile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +54,7 @@ class _ProfilePageState extends State<ProfilePage>
                       : null,
                 ),
               ),
-              Divider(height: 0),
+              Divider(height: 0.5, color: Colors.grey),
               _gradGroup,
               _studyInfoList,
               _balanceInfoList,
@@ -153,19 +153,6 @@ class _ProfilePageState extends State<ProfilePage>
           leadingTitle: '最近在学',
           color: Color(0xff3f98eb),
         ),
-        _userProvider.hasUser
-            ? Container(
-                height: _size(75),
-                padding: EdgeInsets.symmetric(horizontal: _size(16)),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    Text(
-                        '-------------------------最近在学课程（未实现）-------------------------'),
-                  ],
-                ),
-              )
-            : Divider(height: 0),
         ListTileCustom(
           leading: FontIcons.paper,
           leadingTitle: '我的考试',
@@ -185,6 +172,7 @@ class _ProfilePageState extends State<ProfilePage>
         ListTileCustom(
           leading: FontIcons.coin,
           leadingTitle: '账户余额',
+          trailingTitle: '10045.6',
           color: Color(0xffffdf0c),
         ),
       ],
@@ -201,7 +189,6 @@ class _ProfilePageState extends State<ProfilePage>
           leadingTitle: '邀请好友',
           color: Color(0xffff2121),
         ),
-        Divider(height: 0, indent: _size(16)),
         ListTileCustom(
           leading: FontIcons.feedback,
           leadingTitle: '反馈建议',
@@ -211,7 +198,6 @@ class _ProfilePageState extends State<ProfilePage>
             TokenUtil.remove();
           },
         ),
-        Divider(height: 0, indent: _size(16)),
         ListTileCustom(
           leading: Icons.settings,
           leadingTitle: '系统设置',
