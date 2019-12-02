@@ -1,6 +1,6 @@
 import 'package:baas_study/pages/course_list_page.dart';
 import 'package:baas_study/pages/home_page.dart';
-import 'package:baas_study/pages/profile_page.dart';
+import 'package:baas_study/pages/profile/profile_page.dart';
 import 'package:baas_study/pages/search_page.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +53,7 @@ class _TabNavigatorState extends State<TabNavigator> {
           children: <Widget>[
             HomePage(), // 首页
             SearchPage(hideLeft: true), //搜索页
-            CourseListPage(), // 课程列表页
+            CourseListPage(hideLeft: true), // 课程列表页
             ProfilePage(), // 个人信息页
           ],
         ),

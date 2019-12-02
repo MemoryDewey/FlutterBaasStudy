@@ -47,49 +47,52 @@ class ListTileCustom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: AutoSize.size(16)),
-      leading: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Icon(leading, color: color),
-          Container(
-            margin: EdgeInsets.only(left: AutoSize.size(16)),
-            child: Text(
-              leadingTitle,
+    return Material(
+      color: Theme.of(context).cardColor,
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: AutoSize.size(16)),
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Icon(leading, color: color),
+            Container(
+              margin: EdgeInsets.only(left: AutoSize.size(16)),
+              child: Text(
+                leadingTitle,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: AutoSize.font(17)),
+              ),
+            )
+          ],
+        ),
+        trailing: trailingTitle == null
+            ? Icon(
+          Icons.arrow_forward_ios,
+          size: AutoSize.size(18),
+          color: Color(0xff969799),
+        )
+            : Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              trailingTitle,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: AutoSize.font(17)),
+              style: TextStyle(
+                fontSize: AutoSize.font(14),
+                color: Color(0xff969799),
+              ),
             ),
-          )
-        ],
-      ),
-      trailing: trailingTitle == null
-          ? Icon(
+            Icon(
               Icons.arrow_forward_ios,
               size: AutoSize.size(18),
               color: Color(0xff969799),
-            )
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  trailingTitle,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: AutoSize.font(14),
-                    color: Color(0xff969799),
-                  ),
-                ),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  size: AutoSize.size(18),
-                  color: Color(0xff969799),
-                ),
-              ],
             ),
-      onTap: onTab,
+          ],
+        ),
+        onTap: onTab,
+      ),
     );
   }
 }

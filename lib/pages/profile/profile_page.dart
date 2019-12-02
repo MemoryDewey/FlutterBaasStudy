@@ -2,6 +2,7 @@ import 'package:baas_study/dao/profile_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
 import 'package:baas_study/pages/login_page.dart';
+import 'package:baas_study/pages/profile/profile_setting.dart';
 import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/providers/dark_mode_provider.dart';
@@ -205,7 +206,7 @@ class _ProfilePageState extends State<ProfilePage>
           leading: FontIcons.feedback,
           leadingTitle: '反馈建议',
           color: Color(0xff00f6d0),
-          onTab: (){
+          onTab: () {
             _userProvider.clearUser();
             TokenUtil.remove();
           },
@@ -248,7 +249,7 @@ class _ProfilePageState extends State<ProfilePage>
   /// 跳转到登录页或个人信息页
   _jumpToLoginOrInfo() {
     _userProvider.hasUser
-        ? print('go to info!')
+        ? Navigator.push(context, SlideRoute(ProfileSetting()))
         : Navigator.push(context, SlideRoute(LoginPage()));
     /*Navigator.push(context, route)*/
   }
