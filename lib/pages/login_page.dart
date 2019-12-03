@@ -1,8 +1,6 @@
 import 'package:baas_study/dao/passport_dao.dart';
 import 'package:baas_study/model/passport_model.dart';
-import 'package:baas_study/navigator/tab_navigator.dart';
 import 'package:baas_study/providers/user_provider.dart';
-import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/theme/passport_theme.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/token_util.dart';

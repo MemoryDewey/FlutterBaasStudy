@@ -1,6 +1,7 @@
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/utils/http_util.dart';
+import 'package:baas_study/widgets/border_dialog.dart';
 import 'package:baas_study/widgets/custom_app_bar.dart';
 import 'package:baas_study/widgets/custom_list_tile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -27,9 +28,20 @@ class _ProfileSettingState extends State<ProfileSetting> {
               top: 15,
               bottom: 15,
               children: <Widget>[
-                avatarListTile(
-                  avatarUrl: HttpUtil.getImage(userInfo.user.avatarUrl),
-                ),
+                _avatarListTile(
+                    avatarUrl: HttpUtil.getImage(userInfo.user.avatarUrl),
+                    onTab: () {
+                      showDialog<void>(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (BuildContext dialogContext) {
+                          return BorderDialog(
+                            title: '头像选择',
+                            content: _avatarGrid,
+                          );
+                        },
+                      );
+                    }),
                 ListTileCustom(
                   leadingTitle: '昵称',
                   trailingTitle: userInfo.user.nickname,
@@ -63,7 +75,8 @@ class _ProfileSettingState extends State<ProfileSetting> {
     );
   }
 
-  Widget avatarListTile({String avatarUrl, void Function() onTab}) {
+  /// 头像 ListTile
+  Widget _avatarListTile({String avatarUrl, void Function() onTab}) {
     return Material(
       color: Colors.transparent,
       child: ListTile(
@@ -93,6 +106,13 @@ class _ProfileSettingState extends State<ProfileSetting> {
           ],
         ),
       ),
+    );
+  }
+
+  /// 头像 Dialog Grid
+  Widget get _avatarGrid {
+    return Column(
+
     );
   }
 }

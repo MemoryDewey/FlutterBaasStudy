@@ -11,6 +11,7 @@ import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/utils/token_util.dart';
 import 'package:baas_study/widgets/custom_list_tile.dart';
+import 'package:baas_study/widgets/grid_group.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage>
     with AutomaticKeepAliveClientMixin {
-  Color _cardColor;
   DarkModeProvider _darkModeModel;
   UserProvider _userProvider;
 
@@ -39,7 +39,6 @@ class _ProfilePageState extends State<ProfilePage>
     _darkModeModel = Provider.of<DarkModeProvider>(context);
     _userProvider = Provider.of<UserProvider>(context);
     ThemeData themeData = Theme.of(context);
-    _cardColor = themeData.cardColor;
     return Scaffold(
         appBar: _appBar,
         body: Container(
@@ -69,25 +68,17 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   bool get wantKeepAlive => true;
 
-  _size(double size) {
-    return AutoSize.size(size);
-  }
-
-  _font(double fonSize) {
-    return AutoSize.font(fonSize);
-  }
-
   /// appBar
   Widget get _appBar {
     return PreferredSize(
-      preferredSize: Size.fromHeight(_size(45)),
+      preferredSize: Size.fromHeight(56),
       child: AppBar(
         elevation: 0,
         actions: <Widget>[
           Offstage(
             offstage: _darkModeModel.darkMode == DarkModel.auto,
             child: Padding(
-              padding: EdgeInsets.only(right: _size(16)),
+              padding: EdgeInsets.only(right: 16),
               child: GestureDetector(
                 onTap: () {
                   _darkModeModel.changeMode(
@@ -99,20 +90,20 @@ class _ProfilePageState extends State<ProfilePage>
                   _darkModeModel.darkMode == DarkModel.on
                       ? FontIcons.light_mode
                       : FontIcons.dark_mode,
-                  size: _size(22),
+                  size: 22,
                 ),
               ),
             ),
           ),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.of(context).push(SlideTopRoute(QrCodeScanPage()));
             },
             child: Padding(
-              padding: EdgeInsets.only(right: _size(16)),
+              padding: EdgeInsets.only(right: 16),
               child: Icon(
                 FontIcons.scan,
-                size: _size(22),
+                size: 22,
               ),
             ),
           )
@@ -123,37 +114,34 @@ class _ProfilePageState extends State<ProfilePage>
 
   /// Grad布局导航
   Widget get _gradGroup {
-    return Container(
-      height: _size(90),
-      color: _cardColor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          _gradItem(
-            icon: FontIcons.note,
-            text: '课程',
-            color: Color(0xff3f98eb),
-          ),
-          _gradItem(
-            icon: FontIcons.wallet,
-            text: '钱包',
-            color: Color(0xffff5a00),
-          ),
-          _gradItem(
-            icon: Icons.favorite,
-            text: '收藏',
-            color: Color(0xffff2121),
-          )
-        ],
-      ),
+    return GridNav(
+      height: 90,
+      width: MediaQuery.of(context).size.width,
+      children: <Widget>[
+        _gradItem(
+          icon: FontIcons.note,
+          text: '课程',
+          color: Color(0xff3f98eb),
+        ),
+        _gradItem(
+          icon: FontIcons.wallet,
+          text: '钱包',
+          color: Color(0xffff5a00),
+        ),
+        _gradItem(
+          icon: Icons.favorite,
+          text: '收藏',
+          color: Color(0xffff2121),
+        )
+      ],
     );
   }
 
   /// 最近在学 - 我的考试 ListTile
   Widget get _studyInfoList {
     return ListTileGroup(
-      color: _cardColor,
-      top: _size(10),
+      color: Theme.of(context).cardColor,
+      top: 10,
       children: <Widget>[
         ListTileCustom(
           leading: FontIcons.time,
@@ -172,9 +160,9 @@ class _ProfilePageState extends State<ProfilePage>
   /// 账户余额 ListTile
   Widget get _balanceInfoList {
     return ListTileGroup(
-      color: _cardColor,
-      top: _size(10),
-      bottom: _size(10),
+      color: Theme.of(context).cardColor,
+      top: 10,
+      bottom: 10,
       children: <Widget>[
         ListTileCustom(
           leading: FontIcons.coin,
@@ -189,7 +177,7 @@ class _ProfilePageState extends State<ProfilePage>
   /// 邀请好友 - 反馈建议 - 设置 ListTile
   Widget get _accountInfoList {
     return ListTileGroup(
-      color: _cardColor,
+      color: Theme.of(context).cardColor,
       children: <Widget>[
         ListTileCustom(
           leading: FontIcons.invite,
@@ -223,19 +211,29 @@ class _ProfilePageState extends State<ProfilePage>
 
   /// GradItem
   _gradItem({IconData icon, String text, Color color}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Icon(
-          icon,
-          size: _size(32),
-          color: color,
+    return InkWell(
+      onTap: () {
+        print('tab me!');
+      },
+      child: Container(
+        height: double.infinity,
+        width: double.infinity,
+        color: Colors.transparent,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              icon,
+              size: 32,
+              color: color,
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 5),
+              child: Text(text, style: TextStyle(fontSize: 14)),
+            )
+          ],
         ),
-        Container(
-          margin: EdgeInsets.only(top: _size(5)),
-          child: Text(text, style: TextStyle(fontSize: _font(14))),
-        )
-      ],
+      ),
     );
   }
 
