@@ -3,6 +3,7 @@ import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
 import 'package:baas_study/pages/login_page.dart';
 import 'package:baas_study/pages/profile/profile_setting.dart';
+import 'package:baas_study/pages/qr_code_scan_page.dart';
 import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/providers/dark_mode_provider.dart';
@@ -11,6 +12,7 @@ import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/utils/token_util.dart';
 import 'package:baas_study/widgets/custom_list_tile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -102,11 +104,16 @@ class _ProfilePageState extends State<ProfilePage>
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(right: _size(16)),
-            child: Icon(
-              FontIcons.scan,
-              size: _size(22),
+          GestureDetector(
+            onTap: (){
+              Navigator.of(context).push(SlideTopRoute(QrCodeScanPage()));
+            },
+            child: Padding(
+              padding: EdgeInsets.only(right: _size(16)),
+              child: Icon(
+                FontIcons.scan,
+                size: _size(22),
+              ),
             ),
           )
         ],
@@ -236,7 +243,7 @@ class _ProfilePageState extends State<ProfilePage>
   _jumpToLoginOrInfo() {
     _userProvider.hasUser
         ? Navigator.push(context, SlideRoute(ProfileSetting()))
-        : Navigator.push(context, SlideRoute(LoginPage()));
+        : Navigator.push(context, SlideTopRoute(LoginPage()));
     /*Navigator.push(context, route)*/
   }
 

@@ -1,6 +1,5 @@
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/providers/user_provider.dart';
-import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widgets/custom_app_bar.dart';
 import 'package:baas_study/widgets/custom_list_tile.dart';
@@ -25,8 +24,8 @@ class _ProfileSettingState extends State<ProfileSetting> {
           children: <Widget>[
             ListTileGroup(
               color: Theme.of(context).cardColor,
-              top: AutoSize.size(15),
-              bottom: AutoSize.size(15),
+              top: 15,
+              bottom: 15,
               children: <Widget>[
                 avatarListTile(
                   avatarUrl: HttpUtil.getImage(userInfo.user.avatarUrl),
@@ -68,6 +67,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
     return Material(
       color: Colors.transparent,
       child: ListTile(
+        contentPadding: EdgeInsets.all(16),
         leading: Text('头像'),
         onTap: onTab,
         trailing: Row(
@@ -76,20 +76,20 @@ class _ProfileSettingState extends State<ProfileSetting> {
           children: <Widget>[
             ClipOval(
               child: CachedNetworkImage(
-                width: AutoSize.size(45),
-                height: AutoSize.size(45),
+                width: 56,
+                height: 56,
                 imageUrl: avatarUrl,
                 errorWidget: (context, url, error) => Icon(FontIcons.user),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: AutoSize.size(15)),
+              padding: EdgeInsets.only(left: 16),
               child: Icon(
                 Icons.arrow_forward_ios,
-                size: AutoSize.size(18),
+                size: 18,
                 color: Color(0xff969799),
               ),
-            )
+            ),
           ],
         ),
       ),

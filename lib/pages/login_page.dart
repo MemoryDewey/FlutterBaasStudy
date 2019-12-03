@@ -3,9 +3,10 @@ import 'package:baas_study/model/passport_model.dart';
 import 'package:baas_study/navigator/tab_navigator.dart';
 import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/routes/router.dart';
+import 'package:baas_study/theme/passport_theme.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/token_util.dart';
-import 'package:baas_study/widgets/passport/login.dart';
+import 'package:baas_study/widgets/passport_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -41,43 +42,64 @@ class _LoginPageState extends State<LoginPage> {
           ? Colors.black87
           : Colors.white;
     });
+    PassportTheme pstTheme = PassportTheme(themeData.brightness);
     return Scaffold(
-      appBar: _appBar,
-      backgroundColor: themeData.appBarTheme.color,
-      body: Padding(
-        padding: EdgeInsets.only(
-          left: _size(36),
-          right: _size(36),
-        ),
-        child: Column(
-          children: <Widget>[
-            Text(
-              _accountLogin ? '账号登录' : '短信登录',
-              style: TextStyle(
-                color: _textColor,
-                fontSize: AutoSize.font(24),
-              ),
+      appBar: _appBar(pstTheme.topColor),
+      backgroundColor: pstTheme.backgroundColor,
+      body: CustomScrollView(
+        physics: ClampingScrollPhysics(),
+        slivers: <Widget>[
+          SliverToBoxAdapter(
+            child: Stack(
+              children: <Widget>[
+                PassportTopPanel(color: pstTheme.topColor),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: _size(20)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      PassportLogo(),
+                      PassportFormContainer(
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              _accountLogin ? '账号登录' : '短信登录',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: AutoSize.font(24),
+                              ),
+                            ),
+                            _accountLoginForm,
+                            Padding(
+                              padding: EdgeInsets.only(bottom: _size(10)),
+                              child: PassportBtn(
+                                text: '登录',
+                                onPressed: () {
+                                  _login();
+                                },
+                              ),
+                            ),
+                            _bottomText,
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
             ),
-            _accountLoginForm,
-            Padding(
-              padding: EdgeInsets.only(bottom: _size(10)),
-              child: PassBtn(
-                text: '登录',
-                onPressed: () {
-                  _login();
-                },
-              ),
-            ),
-            _bottomText,
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
 
   /// 自定义appBar
-  Widget get _appBar {
+  Widget _appBar(Color backgroundColor) {
     return AppBar(
+      brightness: Brightness.dark,
+      backgroundColor: backgroundColor,
+      iconTheme: IconThemeData(color: Colors.white),
       elevation: 0,
       leading: IconButton(
         icon: Icon(Icons.close),
@@ -86,20 +108,6 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pop(context);
         },
       ),
-      actions: <Widget>[
-        Container(
-          margin: EdgeInsets.only(right: _size(16)),
-          child: Center(
-            child: Text(
-              '注册',
-              style: TextStyle(
-                color: _textColor,
-                fontSize: AutoSize.font(16),
-              ),
-            ),
-          ),
-        )
-      ],
     );
   }
 
@@ -254,9 +262,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget get _bottomText {
     return _accountLogin
         ? Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              PassBottomText(
+              Text('没有账号? ',style: TextStyle(fontSize: 16)),
+              PassportBottomText(
                 text: '手机短信登录',
                 onTab: () {
                   FocusScope.of(context).requestFocus(FocusNode());
@@ -265,13 +274,9 @@ class _LoginPageState extends State<LoginPage> {
                   });
                 },
               ),
-              PassBottomText(
-                text: '忘记密码',
-                onTab: () {},
-              )
             ],
           )
-        : PassBottomText(
+        : PassportBottomText(
             text: '用户名密码登录',
             onTab: () {
               FocusScope.of(context).requestFocus(FocusNode());
@@ -299,7 +304,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<Null> _login() async {
     try {
-      if(_formKey.currentState.validate()){
+      if (_formKey.currentState.validate()) {
         FocusScope.of(context).requestFocus(FocusNode());
         PswLoginModel pswLoginModel = await PassportDao.pswLogin(
           account: _accountController.text,

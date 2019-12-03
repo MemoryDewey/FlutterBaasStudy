@@ -1,4 +1,3 @@
-import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:flutter/material.dart';
 
 /// 自定义封装ListGroup
@@ -71,11 +70,11 @@ class ListTileCustom extends StatelessWidget {
                 children: <Widget>[
                   Icon(leading, color: color),
                   Container(
-                    margin: EdgeInsets.only(left: AutoSize.size(16)),
+                    margin: EdgeInsets.only(left: 16),
                     child: Text(
                       leadingTitle,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: AutoSize.font(17)),
+                      style: TextStyle(fontSize: 17),
                     ),
                   )
                 ],
@@ -84,7 +83,7 @@ class ListTileCustom extends StatelessWidget {
         trailing: trailingTitle == null
             ? Icon(
                 Icons.arrow_forward_ios,
-                size: AutoSize.size(18),
+                size: 18,
                 color: Color(0xff969799),
               )
             : Row(
@@ -92,19 +91,19 @@ class ListTileCustom extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(right: AutoSize.size(15)),
+                    padding: EdgeInsets.only(right: 16),
                     child: Text(
                       trailingTitle,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: AutoSize.font(14),
+                        fontSize: 14,
                         color: Color(0xff969799),
                       ),
                     ),
                   ),
                   Icon(
                     Icons.arrow_forward_ios,
-                    size: AutoSize.size(18),
+                    size: 18,
                     color: Color(0xff969799),
                   ),
                 ],
