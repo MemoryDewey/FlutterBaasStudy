@@ -20,7 +20,7 @@ class ListTileGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     /// 自定义分割线
     final Divider divider = Divider(
-      height: 0.5,
+      height: 0,
       indent: 16,
       color: Colors.grey,
     );

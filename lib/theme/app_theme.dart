@@ -13,6 +13,7 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         fillColor: Color(0xffededed),
       ),
+      splashColor: Colors.white,
     );
   }
 
@@ -28,6 +29,7 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         fillColor: Color(0xff2b2b2b),
       ),
+      splashColor: Color(0xff373737),
     );
   }
 }

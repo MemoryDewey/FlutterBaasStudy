@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage>
                         text: '限时优惠',
                         icon: Icons.access_time,
                         color: Color(0xffff976a),
-                        course: HomeCourseWidget().rowCard(_listDiscount),
+                        course: HomeCourseWidget.rowCard(_listDiscount),
                       ),
 
                       /// 最新课程
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage>
                         text: '最新课程',
                         icon: Icons.fiber_new,
                         color: Color(0xff07c160),
-                        course: HomeCourseWidget().columnCard(_listNewest),
+                        course: HomeCourseWidget.columnCard(_listNewest),
                       ),
 
                       /// 热门课程
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage>
                         text: '热门课程',
                         icon: Icons.whatshot,
                         color: Color(0xffee0a24),
-                        course: HomeCourseWidget().columnCard(_listRecommend),
+                        course: HomeCourseWidget.columnCard(_listRecommend),
                       ),
                     ],
                   ),

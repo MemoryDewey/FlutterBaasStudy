@@ -13,7 +13,6 @@ import 'package:baas_study/utils/token_util.dart';
 import 'package:baas_study/widgets/custom_list_tile.dart';
 import 'package:baas_study/widgets/grid_group.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,8 +54,8 @@ class _ProfilePageState extends State<ProfilePage>
                       : null,
                 ),
               ),
-              Divider(height: 0.5, color: Colors.grey),
-              _gradGroup,
+              Divider(height: 0, color: Colors.grey),
+              _gridGroup,
               _studyInfoList,
               _balanceInfoList,
               _accountInfoList,
@@ -77,30 +76,29 @@ class _ProfilePageState extends State<ProfilePage>
         actions: <Widget>[
           Offstage(
             offstage: _darkModeModel.darkMode == DarkModel.auto,
-            child: Padding(
-              padding: EdgeInsets.only(right: 16),
-              child: GestureDetector(
+            child: InkWell(
                 onTap: () {
                   _darkModeModel.changeMode(
                       _darkModeModel.darkMode == DarkModel.on
                           ? DarkModel.off
                           : DarkModel.on);
                 },
-                child: Icon(
-                  _darkModeModel.darkMode == DarkModel.on
-                      ? FontIcons.light_mode
-                      : FontIcons.dark_mode,
-                  size: 22,
-                ),
-              ),
-            ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Icon(
+                    _darkModeModel.darkMode == DarkModel.on
+                        ? FontIcons.light_mode
+                        : FontIcons.dark_mode,
+                    size: 22,
+                  ),
+                )),
           ),
-          GestureDetector(
+          InkWell(
             onTap: () {
               Navigator.of(context).push(SlideTopRoute(QrCodeScanPage()));
             },
             child: Padding(
-              padding: EdgeInsets.only(right: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Icon(
                 FontIcons.scan,
                 size: 22,
@@ -112,26 +110,34 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  /// Grad布局导航
-  Widget get _gradGroup {
+  /// Grid布局导航
+  Widget get _gridGroup {
     return GridNav(
       height: 90,
-      width: MediaQuery.of(context).size.width,
       children: <Widget>[
-        _gradItem(
+        GridItem(
           icon: FontIcons.note,
           text: '课程',
-          color: Color(0xff3f98eb),
+          iconColor: Color(0xff3f98eb),
+          onTab: (){
+            print('课程');
+          },
         ),
-        _gradItem(
+        GridItem(
           icon: FontIcons.wallet,
           text: '钱包',
-          color: Color(0xffff5a00),
+          iconColor: Color(0xffff5a00),
+          onTab: (){
+            print('钱包');
+          },
         ),
-        _gradItem(
+        GridItem(
           icon: Icons.favorite,
           text: '收藏',
-          color: Color(0xffff2121),
+          iconColor: Color(0xffff2121),
+          onTab: (){
+            print('收藏');
+          },
         )
       ],
     );
@@ -141,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage>
   Widget get _studyInfoList {
     return ListTileGroup(
       color: Theme.of(context).cardColor,
-      top: 10,
+      top: 20,
       children: <Widget>[
         ListTileCustom(
           leading: FontIcons.time,
@@ -161,8 +167,8 @@ class _ProfilePageState extends State<ProfilePage>
   Widget get _balanceInfoList {
     return ListTileGroup(
       color: Theme.of(context).cardColor,
-      top: 10,
-      bottom: 10,
+      top: 20,
+      bottom: 20,
       children: <Widget>[
         ListTileCustom(
           leading: FontIcons.coin,
@@ -206,34 +212,6 @@ class _ProfilePageState extends State<ProfilePage>
           },
         ),
       ],
-    );
-  }
-
-  /// GradItem
-  _gradItem({IconData icon, String text, Color color}) {
-    return InkWell(
-      onTap: () {
-        print('tab me!');
-      },
-      child: Container(
-        height: double.infinity,
-        width: double.infinity,
-        color: Colors.transparent,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(
-              icon,
-              size: 32,
-              color: color,
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 5),
-              child: Text(text, style: TextStyle(fontSize: 14)),
-            )
-          ],
-        ),
-      ),
     );
   }
 

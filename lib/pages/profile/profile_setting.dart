@@ -4,6 +4,7 @@ import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widgets/border_dialog.dart';
 import 'package:baas_study/widgets/custom_app_bar.dart';
 import 'package:baas_study/widgets/custom_list_tile.dart';
+import 'package:baas_study/widgets/grid_group.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,8 @@ class ProfileSetting extends StatefulWidget {
 }
 
 class _ProfileSettingState extends State<ProfileSetting> {
-  static const Map<String, String> _sex = {'M': '男', 'F': '女', 'S': '保密'};
+  static const Map<String, String> _sexMap = {'M': '男', 'F': '女', 'S': '保密'};
+  String _sex;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,39 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 ),
                 ListTileCustom(
                   leadingTitle: '性别',
-                  trailingTitle: _sex[userInfo.user.sex],
+                  trailingTitle: _sexMap[userInfo.user.sex],
+                  onTab: () {
+                    setState(() {
+                      _sex = userInfo.user.sex;
+                    });
+                    showDialog<void>(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (BuildContext dialogContext) {
+                        return BorderDialog(
+                          title: '性别选择',
+                          content: _sexGrid,
+                          cancel: false,
+                          confirmPress: () {},
+                        );
+                      },
+                    );
+                  },
+                ),
+                ListTileCustom(
+                  leadingTitle: '生日',
+                  trailingTitle: userInfo.user.birthday,
+                  onTab: () {
+                    DateTime birthday = userInfo.user.birthday == null
+                        ? DateTime.now()
+                        : DateTime.parse(userInfo.user.birthday);
+                    showDatePicker(
+                      context: context,
+                      initialDate: birthday,
+                      firstDate: DateTime(1950),
+                      lastDate: DateTime.now(),
+                    );
+                  },
                 )
               ],
             ),
@@ -109,10 +143,79 @@ class _ProfileSettingState extends State<ProfileSetting> {
     );
   }
 
-  /// 头像 Dialog Grid
+  /// 头像 DialogGrid
   Widget get _avatarGrid {
-    return Column(
+    return GridNav(
+      height: 90,
+      children: <Widget>[
+        GridItem(
+          icon: Icons.camera_alt,
+          text: '拍照',
+          iconColor: Color(0xfffa7298),
+          iconSize: 40,
+          onTab: () {},
+        ),
+        GridItem(
+          icon: Icons.photo,
+          text: '相册',
+          iconColor: Color(0xff8bc24a),
+          iconSize: 40,
+          onTab: () {},
+        ),
+        GridItem(
+          icon: Icons.account_box,
+          text: '默认',
+          iconColor: Color(0xff3f98eb),
+          iconSize: 40,
+          onTab: () {},
+        )
+      ],
+    );
+  }
 
+  /// 性别 DialogGrid
+  Widget get _sexGrid {
+    return GridNav(
+      height: 90,
+      children: <Widget>[
+        GridItem(
+          icon: FontIcons.male,
+          text: '男',
+          iconColor: Color(0xff3f98eb),
+          iconSize: 40,
+          selected: _sex == 'M',
+          onTab: () {
+            setState(() {
+              _sex = 'M';
+            });
+          },
+        ),
+        GridItem(
+          icon: FontIcons.question,
+          text: '保密',
+          iconColor: Color(0xff8bc24a),
+          iconSize: 40,
+          selected: _sex == 'S',
+          onTab: () {
+            setState(() {
+              _sex = 'S';
+            });
+          },
+        ),
+        GridItem(
+          icon: FontIcons.female,
+          text: '女',
+          iconColor: Color(0xfffa7298),
+          iconSize: 40,
+          selected: _sex == 'F',
+          onTab: () {
+            setState(() {
+              _sex = 'F';
+            });
+            print(_sex);
+          },
+        )
+      ],
     );
   }
 }

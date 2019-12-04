@@ -6,9 +6,9 @@ import 'course_card.dart';
 
 class HomeCourseWidget {
   /// 横排
-  Widget rowCard(List<CourseModel> course) {
+  static Widget rowCard(List<CourseModel> course) {
     return Container(
-      height: AutoSize.size(240),
+      height: AutoSize.size(250),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: course.length,
@@ -25,7 +25,7 @@ class HomeCourseWidget {
   }
 
   /// 竖排
-  Widget columnCard(List<CourseModel> course) {
+  static Widget columnCard(List<CourseModel> course) {
     List<Widget> result = [];
     course.forEach((item) {
       result.add(

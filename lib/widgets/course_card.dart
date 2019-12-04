@@ -118,12 +118,12 @@ class CourseDiscountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: _size(170),
-      margin: EdgeInsets.only(right: _size(10)),
+      width: 170,
+      margin: EdgeInsets.only(right: 10),
       child: Card(
-        elevation: _size(2),
+        elevation: 2,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(_size(8))),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,8 +132,8 @@ class CourseDiscountCard extends StatelessWidget {
                 aspectRatio: 16 / 9,
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(_size(8)),
-                    topRight: Radius.circular(_size(8)),
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
                   ),
                   child: CachedNetworkImage(
                     imageUrl: imageUrl,
@@ -142,7 +142,7 @@ class CourseDiscountCard extends StatelessWidget {
                   ),
                 )),
             Padding(
-              padding: EdgeInsets.all(_size(10)),
+              padding: EdgeInsets.all(10),
               child: Text(
                 name,
                 style: TextStyle(fontSize: AutoSize.font(16)),
@@ -150,12 +150,7 @@ class CourseDiscountCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(
-                _size(10),
-                0,
-                _size(10),
-                0,
-              ),
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -173,10 +168,8 @@ class CourseDiscountCard extends StatelessWidget {
                       Container(
                         decoration: BoxDecoration(
                             border: Border.all(color: Color(0xffee0a24))),
-                        padding: EdgeInsets.symmetric(
-                          vertical: _size(2),
-                          horizontal: _size(8),
-                        ),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                         child: Text(
                           '限时抢购',
                           style: TextStyle(color: Color(0xffee0a24)),
@@ -202,7 +195,7 @@ class CourseDiscountCard extends StatelessWidget {
                   MaterialButton(
                     color: Color(0xffff976a),
                     textColor: Colors.white,
-                    minWidth: _size(150),
+                    minWidth: 150,
                     onPressed: () {
                       print('course:$id');
                     },
@@ -215,9 +208,5 @@ class CourseDiscountCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  _size(double size) {
-    return AutoSize.size(size);
   }
 }

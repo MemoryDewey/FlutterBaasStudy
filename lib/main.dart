@@ -7,6 +7,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   /// 强制竖屏
@@ -41,6 +42,15 @@ Widget get autoMode {
     darkTheme: AppTheme.themeDark(),
     navigatorObservers: [BotToastNavigatorObserver()],
     home: TabNavigator(),
+    /// 添加中文语言包
+    localizationsDelegates: [
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+    ],
+    supportedLocales: [
+      const Locale('zh','CH'),
+      const Locale('en','US'),
+    ],
   );
 }
 
@@ -52,5 +62,14 @@ Widget manualMode(DarkModel darkModel) {
         : AppTheme.themeDark(),
     navigatorObservers: [BotToastNavigatorObserver()],
     home: TabNavigator(),
+    /// 添加中文语言包
+    localizationsDelegates: [
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+    ],
+    supportedLocales: [
+      const Locale('zh','CH'),
+      const Locale('en','US'),
+    ],
   );
 }
