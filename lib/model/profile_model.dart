@@ -1,15 +1,15 @@
 class ProfileModel {
   int code;
   int level;
-  UserModel data;
+  UserModel info;
 
-  ProfileModel({this.code, this.level, this.data});
+  ProfileModel({this.code, this.level, this.info});
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     return ProfileModel(
       code: json['code'],
       level: json['level'],
-      data: json['data'] != null ? new UserModel.fromJson(json['data']) : null,
+      info: json['info'] != null ? new UserModel.fromJson(json['info']) : null,
     );
   }
 
@@ -17,8 +17,8 @@ class ProfileModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['code'] = this.code;
     data['level'] = this.level;
-    if (this.data != null) {
-      data['data'] = this.data.toJson();
+    if (this.info != null) {
+      data['info'] = this.info.toJson();
     }
     return data;
   }

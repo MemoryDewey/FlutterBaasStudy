@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:baas_study/model/profile_model.dart';
 import 'package:baas_study/model/reponse_normal_model.dart';
 import 'package:baas_study/utils/http_util.dart';
@@ -14,6 +15,12 @@ class ProfileDao {
   /// 设置默认头像
   static Future<AvatarModel> setDefaultAvatar() async {
     final response = await HttpUtil.request('/profile/personal/default-avatar');
+    return AvatarModel.fromJson(response);
+  }
+
+  /// 上传头像
+  static Future<AvatarModel> uploadAvatar(File file) async {
+    final response = await HttpUtil.upload('/profile/personal/avatar', file);
     return AvatarModel.fromJson(response);
   }
 }

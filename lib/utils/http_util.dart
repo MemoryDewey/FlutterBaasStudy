@@ -5,6 +5,7 @@ import 'package:baas_study/utils/token_util.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
 
 /// 封装Http请求
 class HttpUtil {
@@ -24,6 +25,22 @@ class HttpUtil {
 
   /// token
   static String _token;
+
+  /// 请求错误信息
+  static String _errorMsg(DioError error) {
+    switch (error.type) {
+      case DioErrorType.CONNECT_TIMEOUT:
+        return '请求服务器超时';
+      case DioErrorType.RECEIVE_TIMEOUT:
+        return '服务器未响应';
+      case DioErrorType.RESPONSE:
+        return error.response.statusCode == 404
+            ? '请求的资源不存在'
+            : ResponseNormalModel.fromJson(error.response.data).msg;
+      default:
+        return '发生了未知的错误';
+    }
+  }
 
   /// POST与GET请求
   static Future<dynamic> request(String url, {data, method}) async {
@@ -53,26 +70,7 @@ class HttpUtil {
       print('$url 响应数据成功！');
     } on DioError catch (e) {
       /// 打印请求失败相关信息
-      String errorMsg;
-      switch (e.type) {
-        case DioErrorType.CONNECT_TIMEOUT:
-          errorMsg = '请求服务器超时';
-          break;
-        case DioErrorType.RECEIVE_TIMEOUT:
-          errorMsg = '服务器未响应';
-          break;
-        case DioErrorType.RESPONSE:
-          {
-            if (e.response.statusCode == 404)
-              errorMsg = '请求的资源不存在';
-            else
-              errorMsg = ResponseNormalModel.fromJson(e.response.data).msg;
-          }
-          break;
-        default:
-          errorMsg = '发生了未知的错误';
-          break;
-      }
+      String errorMsg = _errorMsg(e);
       BotToast.showText(text: errorMsg, align: Alignment(0, 0));
     }
 
@@ -80,45 +78,27 @@ class HttpUtil {
   }
 
   /// FormData请求，用于上传文件
-  static Future<dynamic> upload(String url, File file) async{
+  static Future<dynamic> upload(String url, File file) async {
     Dio dio = createInstance();
     String path = file.path;
     String filename = path.substring(path.lastIndexOf('/') + 1, path.length);
     FormData formData = FormData.fromMap({
-      "avatar": await MultipartFile.fromFile(file.path,filename: filename)
+      "avatar": await MultipartFile.fromFile(
+        file.path,
+        filename: filename,
+        contentType: MediaType('image', 'jpeg'),
+      )
     });
     var result;
     try {
-      Response response = await dio.post(
-        url,
-        data: formData
-      );
+      Response response = await dio.post(url, data: formData);
       result = response.data;
 
       /// 打印响应相关信息
       print('$url (上传文件)响应数据成功！');
     } on DioError catch (e) {
       /// 打印请求失败相关信息
-      String errorMsg;
-      switch (e.type) {
-        case DioErrorType.CONNECT_TIMEOUT:
-          errorMsg = '请求服务器超时';
-          break;
-        case DioErrorType.RECEIVE_TIMEOUT:
-          errorMsg = '服务器未响应';
-          break;
-        case DioErrorType.RESPONSE:
-          {
-            if (e.response.statusCode == 404)
-              errorMsg = '请求的资源不存在';
-            else
-              errorMsg = ResponseNormalModel.fromJson(e.response.data).msg;
-          }
-          break;
-        default:
-          errorMsg = '发生了未知的错误';
-          break;
-      }
+      String errorMsg = _errorMsg(e);
       BotToast.showText(text: errorMsg, align: Alignment(0, 0));
     }
 

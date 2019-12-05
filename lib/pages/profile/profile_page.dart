@@ -3,7 +3,8 @@ import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
 import 'package:baas_study/pages/login_page.dart';
 import 'package:baas_study/pages/profile/profile_setting.dart';
-import 'package:baas_study/pages/qr_code_scan_page.dart';
+import 'package:baas_study/pages/profile/qr_code_scan_page.dart';
+import 'package:baas_study/pages/system_setting_page.dart';
 import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/providers/dark_mode_provider.dart';
@@ -194,21 +195,13 @@ class _ProfilePageState extends State<ProfilePage>
           leading: FontIcons.feedback,
           leadingTitle: '反馈建议',
           color: Color(0xff00f6d0),
-          onTab: () {
-            _userProvider.clearUser();
-            TokenUtil.remove();
-          },
         ),
         ListTileCustom(
           leading: Icons.settings,
           leadingTitle: '系统设置',
           color: Color(0xff3f98eb),
           onTab: () {
-            _darkModeModel.changeMode(
-              _darkModeModel.darkMode == DarkModel.auto
-                  ? DarkModel.off
-                  : DarkModel.auto,
-            );
+            Navigator.push(context, SlideRoute(SystemSettingPage()));
           },
         ),
       ],
@@ -229,6 +222,9 @@ class _ProfilePageState extends State<ProfilePage>
       ProfileModel model = await PassportDao.checkLogin();
       if (model.code != 1000 && _userProvider.hasUser)
         _userProvider.clearUser();
+      else{
+        _userProvider.saveUser(model.info);
+      }
     } catch (e) {}
   }
 }

@@ -32,7 +32,7 @@ class ListTileGroup extends StatelessWidget {
       }
     }
     return Container(
-      color: color,
+      color: color ?? Theme.of(context).cardColor,
       margin: EdgeInsets.only(top: top, bottom: bottom),
       child: Column(
         children: dividerTile,

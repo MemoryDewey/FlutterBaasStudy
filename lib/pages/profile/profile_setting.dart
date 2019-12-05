@@ -3,9 +3,7 @@ import 'package:baas_study/dao/profile_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
 import 'package:baas_study/model/reponse_normal_model.dart';
-import 'package:baas_study/pages/crop_image_page.dart';
 import 'package:baas_study/providers/user_provider.dart';
-import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widgets/border_dialog.dart';
 import 'package:baas_study/widgets/custom_app_bar.dart';
@@ -13,8 +11,9 @@ import 'package:baas_study/widgets/custom_list_tile.dart';
 import 'package:baas_study/widgets/grid_group.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:extended_image/extended_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -26,9 +25,11 @@ class ProfileSetting extends StatefulWidget {
 class _ProfileSettingState extends State<ProfileSetting> {
   static const Map<String, String> _sexMap = {'M': '男', 'F': '女', 'S': '保密'};
   String _sex;
+  UserProvider _userProvider;
 
   @override
   Widget build(BuildContext context) {
+    _userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(title: '个人中心'),
       body: Consumer<UserProvider>(
@@ -72,9 +73,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                       context: context,
                       barrierDismissible: true,
                       builder: (dialogContext) {
-                        return _SexGrid(
-                          sex: _sex,
-                        );
+                        return _SexGrid(sex: _sex);
                       },
                     );
                   },
@@ -91,26 +90,11 @@ class _ProfileSettingState extends State<ProfileSetting> {
                       initialDate: birthday,
                       firstDate: DateTime(1950),
                       lastDate: DateTime.now(),
-                    );
+                    ).then((time) {
+                      if (time != null) _setBirthday(time);
+                    });
                   },
                 )
-              ],
-            ),
-            ListTileGroup(
-              color: Theme.of(context).cardColor,
-              children: <Widget>[
-                ListTileCustom(
-                  leadingTitle: '手机',
-                  trailingTitle: '更换手机',
-                ),
-                ListTileCustom(
-                  leadingTitle: '邮箱',
-                  trailingTitle: '去绑定',
-                ),
-                ListTileCustom(
-                  leadingTitle: '密码',
-                  trailingTitle: '去修改',
-                ),
               ],
             ),
           ],
@@ -166,7 +150,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
           onTab: () async {
             File image =
                 await ImagePicker.pickImage(source: ImageSource.camera);
-            print(image.path);
+            _cropImage(image);
           },
         ),
         GridItem(
@@ -177,14 +161,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
           onTab: () async {
             File image =
                 await ImagePicker.pickImage(source: ImageSource.gallery);
-            Navigator.push(
-              context,
-              SlideRoute(
-                CropImagePage(
-                  imageFile: image,
-                ),
-              ),
-            );
+            _cropImage(image);
           },
         ),
         GridItem(
@@ -202,17 +179,68 @@ class _ProfileSettingState extends State<ProfileSetting> {
 
   /// 更换头像为默认头像
   Future<Null> _setDefaultAvatar() async {
+    Navigator.of(context).pop();
     try {
+      BotToast.showLoading();
       AvatarModel avatarModel = await ProfileDao.setDefaultAvatar();
       if (avatarModel.code == 1000) {
         UserProvider userProvider = Provider.of<UserProvider>(context);
         userProvider.user.avatarUrl = avatarModel.avatarUrl;
         userProvider.saveUser(userProvider.user);
       }
+    } catch (e) {}
+    BotToast.closeAllLoading();
+  }
+
+  /// 裁剪头像并上传
+  Future<Null> _cropImage(File file) async {
+    File cropFile = await ImageCropper.cropImage(
+      sourcePath: file.path,
+      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+      androidUiSettings: AndroidUiSettings(
+        toolbarTitle: '裁剪',
+        toolbarColor: Colors.deepOrange,
+        toolbarWidgetColor: Colors.white,
+        initAspectRatio: CropAspectRatioPreset.square,
+        lockAspectRatio: true,
+      ),
+    );
+    if (cropFile != null) {
       Navigator.of(context).pop();
-    } catch (e) {
-      Navigator.of(context).pop();
+      try {
+        BotToast.showLoading();
+        AvatarModel avatarModel = await ProfileDao.uploadAvatar(cropFile);
+        if (avatarModel.code == 1000) {
+          _userProvider.user.avatarUrl = avatarModel.avatarUrl;
+          _userProvider.saveUser(_userProvider.user);
+        }
+      } catch (e) {
+        //print(e);
+      }
+      BotToast.closeAllLoading();
     }
+  }
+
+  /// 修改生日
+  Future<Null> _setBirthday(DateTime dateTime) async {
+    try {
+      BotToast.showLoading();
+      ResponseNormalModel model = await ProfileDao.changeProfile({
+        'birthday': dateTime.toIso8601String(),
+      });
+      if (model.code == 1000) {
+        String month = dateTime.month > 9
+            ? dateTime.month.toString()
+            : '0${dateTime.month}';
+        String day =
+            dateTime.day > 9 ? dateTime.day.toString() : '0${dateTime.day}';
+        _userProvider.user.birthday = '${dateTime.year}-$month-$day';
+        _userProvider.saveUser(_userProvider.user);
+      }
+    } catch (e) {
+      //print(e);
+    }
+    BotToast.closeAllLoading();
   }
 }
 
@@ -228,6 +256,7 @@ class _SexGrid extends StatefulWidget {
 
 class __SexGridState extends State<_SexGrid> {
   String sex;
+  UserProvider _userProvider;
 
   @override
   void initState() {
@@ -237,6 +266,7 @@ class __SexGridState extends State<_SexGrid> {
 
   @override
   Widget build(BuildContext context) {
+    _userProvider = Provider.of<UserProvider>(context);
     return BorderDialog(
       title: '性别选择',
       content: GridNav(
@@ -288,19 +318,17 @@ class __SexGridState extends State<_SexGrid> {
   }
 
   Future<Null> _setSex() async {
+    Navigator.of(context).pop();
     try {
       BotToast.showLoading();
       ResponseNormalModel model = await ProfileDao.changeProfile({'sex': sex});
       if (model.code == 1000) {
-        UserProvider userProvider = Provider.of<UserProvider>(context);
-        userProvider.user.sex = sex;
-        userProvider.saveUser(userProvider.user);
+        _userProvider.user.sex = sex;
+        _userProvider.saveUser(_userProvider.user);
       }
-      BotToast.closeAllLoading();
-      Navigator.of(context).pop();
     } catch (e) {
-      BotToast.closeAllLoading();
-      Navigator.of(context).pop();
+      //print(e);
     }
+    BotToast.closeAllLoading();
   }
 }
