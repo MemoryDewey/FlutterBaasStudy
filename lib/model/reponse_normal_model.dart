@@ -1,11 +1,12 @@
-class RequestErrorModel {
+/// response只包含code和msg的model
+class ResponseNormalModel {
   String msg;
   int code;
 
-  RequestErrorModel({this.msg, this.code});
+  ResponseNormalModel({this.msg, this.code});
 
-  factory RequestErrorModel.fromJson(Map<String, dynamic> json) {
-    return RequestErrorModel(
+  factory ResponseNormalModel.fromJson(Map<String, dynamic> json) {
+    return ResponseNormalModel(
       msg: json['msg'],
       code: json['code'],
     );

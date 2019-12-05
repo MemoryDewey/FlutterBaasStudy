@@ -71,3 +71,27 @@ class UserModel {
     return data;
   }
 }
+
+class AvatarModel {
+  int code;
+  String avatarUrl;
+  String msg;
+
+  AvatarModel({this.code, this.avatarUrl, this.msg});
+
+  factory AvatarModel.fromJson(Map<String, dynamic> json) {
+    return AvatarModel(
+      code: json['code'],
+      avatarUrl: json['avatarUrl'],
+      msg: json['msg'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['avatarUrl'] = this.avatarUrl;
+    data['msg'] = this.msg;
+    return data;
+  }
+}

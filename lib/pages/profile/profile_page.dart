@@ -1,4 +1,4 @@
-import 'package:baas_study/dao/profile_dao.dart';
+import 'package:baas_study/dao/passport_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
 import 'package:baas_study/pages/login_page.dart';
@@ -226,7 +226,7 @@ class _ProfilePageState extends State<ProfilePage>
   /// 获取个人信息
   Future<Null> _getInfo() async {
     try {
-      ProfileModel model = await ProfileDao.checkLogin();
+      ProfileModel model = await PassportDao.checkLogin();
       if (model.code != 1000 && _userProvider.hasUser)
         _userProvider.clearUser();
     } catch (e) {}

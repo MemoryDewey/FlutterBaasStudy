@@ -1,12 +1,21 @@
+import 'dart:io';
+import 'package:baas_study/dao/profile_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
+import 'package:baas_study/model/profile_model.dart';
+import 'package:baas_study/model/reponse_normal_model.dart';
+import 'package:baas_study/pages/crop_image_page.dart';
 import 'package:baas_study/providers/user_provider.dart';
+import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widgets/border_dialog.dart';
 import 'package:baas_study/widgets/custom_app_bar.dart';
 import 'package:baas_study/widgets/custom_list_tile.dart';
 import 'package:baas_study/widgets/grid_group.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfileSetting extends StatefulWidget {
@@ -62,12 +71,9 @@ class _ProfileSettingState extends State<ProfileSetting> {
                     showDialog<void>(
                       context: context,
                       barrierDismissible: true,
-                      builder: (BuildContext dialogContext) {
-                        return BorderDialog(
-                          title: '性别选择',
-                          content: _sexGrid,
-                          cancel: false,
-                          confirmPress: () {},
+                      builder: (dialogContext) {
+                        return _SexGrid(
+                          sex: _sex,
                         );
                       },
                     );
@@ -100,7 +106,11 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 ListTileCustom(
                   leadingTitle: '邮箱',
                   trailingTitle: '去绑定',
-                )
+                ),
+                ListTileCustom(
+                  leadingTitle: '密码',
+                  trailingTitle: '去修改',
+                ),
               ],
             ),
           ],
@@ -153,69 +163,144 @@ class _ProfileSettingState extends State<ProfileSetting> {
           text: '拍照',
           iconColor: Color(0xfffa7298),
           iconSize: 40,
-          onTab: () {},
+          onTab: () async {
+            File image =
+                await ImagePicker.pickImage(source: ImageSource.camera);
+            print(image.path);
+          },
         ),
         GridItem(
           icon: Icons.photo,
           text: '相册',
           iconColor: Color(0xff8bc24a),
           iconSize: 40,
-          onTab: () {},
+          onTab: () async {
+            File image =
+                await ImagePicker.pickImage(source: ImageSource.gallery);
+            Navigator.push(
+              context,
+              SlideRoute(
+                CropImagePage(
+                  imageFile: image,
+                ),
+              ),
+            );
+          },
         ),
         GridItem(
           icon: Icons.account_box,
           text: '默认',
           iconColor: Color(0xff3f98eb),
           iconSize: 40,
-          onTab: () {},
+          onTab: () {
+            _setDefaultAvatar();
+          },
         )
       ],
     );
   }
 
-  /// 性别 DialogGrid
-  Widget get _sexGrid {
-    return GridNav(
-      height: 90,
-      children: <Widget>[
-        GridItem(
-          icon: FontIcons.male,
-          text: '男',
-          iconColor: Color(0xff3f98eb),
-          iconSize: 40,
-          selected: _sex == 'M',
-          onTab: () {
-            setState(() {
-              _sex = 'M';
-            });
-          },
-        ),
-        GridItem(
-          icon: FontIcons.question,
-          text: '保密',
-          iconColor: Color(0xff8bc24a),
-          iconSize: 40,
-          selected: _sex == 'S',
-          onTab: () {
-            setState(() {
-              _sex = 'S';
-            });
-          },
-        ),
-        GridItem(
-          icon: FontIcons.female,
-          text: '女',
-          iconColor: Color(0xfffa7298),
-          iconSize: 40,
-          selected: _sex == 'F',
-          onTab: () {
-            setState(() {
-              _sex = 'F';
-            });
-            print(_sex);
-          },
-        )
-      ],
+  /// 更换头像为默认头像
+  Future<Null> _setDefaultAvatar() async {
+    try {
+      AvatarModel avatarModel = await ProfileDao.setDefaultAvatar();
+      if (avatarModel.code == 1000) {
+        UserProvider userProvider = Provider.of<UserProvider>(context);
+        userProvider.user.avatarUrl = avatarModel.avatarUrl;
+        userProvider.saveUser(userProvider.user);
+      }
+      Navigator.of(context).pop();
+    } catch (e) {
+      Navigator.of(context).pop();
+    }
+  }
+}
+
+/// 性别选择Dialog需使用StatefulWidget来改变选择状态
+class _SexGrid extends StatefulWidget {
+  final String sex;
+
+  const _SexGrid({Key key, this.sex}) : super(key: key);
+
+  @override
+  __SexGridState createState() => __SexGridState();
+}
+
+class __SexGridState extends State<_SexGrid> {
+  String sex;
+
+  @override
+  void initState() {
+    super.initState();
+    sex = widget.sex;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BorderDialog(
+      title: '性别选择',
+      content: GridNav(
+        height: 90,
+        children: <Widget>[
+          GridItem(
+            icon: FontIcons.male,
+            text: '男',
+            iconColor: Color(0xff3f98eb),
+            iconSize: 40,
+            selected: sex == 'M',
+            onTab: () {
+              setState(() {
+                sex = 'M';
+              });
+            },
+          ),
+          GridItem(
+            icon: FontIcons.question,
+            text: '保密',
+            iconColor: Color(0xff8bc24a),
+            iconSize: 40,
+            selected: sex == 'S',
+            onTab: () {
+              setState(() {
+                sex = 'S';
+              });
+            },
+          ),
+          GridItem(
+            icon: FontIcons.female,
+            text: '女',
+            iconColor: Color(0xfffa7298),
+            iconSize: 40,
+            selected: sex == 'F',
+            onTab: () {
+              setState(() {
+                sex = 'F';
+              });
+            },
+          )
+        ],
+      ),
+      cancel: false,
+      confirmPress: () {
+        _setSex();
+      },
     );
+  }
+
+  Future<Null> _setSex() async {
+    try {
+      BotToast.showLoading();
+      ResponseNormalModel model = await ProfileDao.changeProfile({'sex': sex});
+      if (model.code == 1000) {
+        UserProvider userProvider = Provider.of<UserProvider>(context);
+        userProvider.user.sex = sex;
+        userProvider.saveUser(userProvider.user);
+      }
+      BotToast.closeAllLoading();
+      Navigator.of(context).pop();
+    } catch (e) {
+      BotToast.closeAllLoading();
+      Navigator.of(context).pop();
+    }
   }
 }

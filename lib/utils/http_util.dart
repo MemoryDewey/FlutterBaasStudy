@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'package:baas_study/model/request_error_model.dart';
+import 'dart:io';
+import 'package:baas_study/model/reponse_normal_model.dart';
 import 'package:baas_study/utils/token_util.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 /// 封装Http请求
 class HttpUtil {
@@ -24,6 +25,7 @@ class HttpUtil {
   /// token
   static String _token;
 
+  /// POST与GET请求
   static Future<dynamic> request(String url, {data, method}) async {
     data = data ?? {};
     method = method ?? 'GET';
@@ -64,7 +66,53 @@ class HttpUtil {
             if (e.response.statusCode == 404)
               errorMsg = '请求的资源不存在';
             else
-              errorMsg = RequestErrorModel.fromJson(e.response.data).msg;
+              errorMsg = ResponseNormalModel.fromJson(e.response.data).msg;
+          }
+          break;
+        default:
+          errorMsg = '发生了未知的错误';
+          break;
+      }
+      BotToast.showText(text: errorMsg, align: Alignment(0, 0));
+    }
+
+    return result;
+  }
+
+  /// FormData请求，用于上传文件
+  static Future<dynamic> upload(String url, File file) async{
+    Dio dio = createInstance();
+    String path = file.path;
+    String filename = path.substring(path.lastIndexOf('/') + 1, path.length);
+    FormData formData = FormData.fromMap({
+      "avatar": await MultipartFile.fromFile(file.path,filename: filename)
+    });
+    var result;
+    try {
+      Response response = await dio.post(
+        url,
+        data: formData
+      );
+      result = response.data;
+
+      /// 打印响应相关信息
+      print('$url (上传文件)响应数据成功！');
+    } on DioError catch (e) {
+      /// 打印请求失败相关信息
+      String errorMsg;
+      switch (e.type) {
+        case DioErrorType.CONNECT_TIMEOUT:
+          errorMsg = '请求服务器超时';
+          break;
+        case DioErrorType.RECEIVE_TIMEOUT:
+          errorMsg = '服务器未响应';
+          break;
+        case DioErrorType.RESPONSE:
+          {
+            if (e.response.statusCode == 404)
+              errorMsg = '请求的资源不存在';
+            else
+              errorMsg = ResponseNormalModel.fromJson(e.response.data).msg;
           }
           break;
         default:
