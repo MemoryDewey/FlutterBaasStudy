@@ -158,7 +158,7 @@ class CourseDiscountCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        '￥ $price',
+                        '￥$price',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Color(0xff7d7e80),
@@ -181,7 +181,7 @@ class CourseDiscountCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        '￥ ${(price * discount).toStringAsFixed(2)}',
+                        '￥${(price * discount).toStringAsFixed(2)}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(color: Color(0xffee0a24)),
                       ),

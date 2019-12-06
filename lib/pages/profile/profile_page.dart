@@ -4,15 +4,13 @@ import 'package:baas_study/model/profile_model.dart';
 import 'package:baas_study/pages/login_page.dart';
 import 'package:baas_study/pages/profile/profile_setting_page.dart';
 import 'package:baas_study/pages/profile/qr_code_scan_page.dart';
-import 'package:baas_study/pages/system_setting_page.dart';
 import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/providers/dark_mode_provider.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/utils/token_util.dart';
-import 'package:baas_study/widgets/custom_list_tile.dart';
-import 'package:baas_study/widgets/grid_group.dart';
+import 'package:baas_study/widgets/profile_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -69,10 +67,10 @@ class _ProfilePageState extends State<ProfilePage>
               ),
             ),
             Divider(height: 0, color: Colors.grey),
-            _gridGroup,
-            _studyInfoList,
-            _balanceInfoList,
-            _accountInfoList,
+            ProfileGridGroup(),
+            ProfileStudyList(),
+            ProfileBalanceInfo(),
+            ProfileAccountInfo(),
           ],
         ),
         onRefresh: _onRefresh,
@@ -126,106 +124,11 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  /// Grid布局导航
-  Widget get _gridGroup {
-    return GridNav(
-      height: 90,
-      children: <Widget>[
-        GridItem(
-          icon: FontIcons.note,
-          text: '课程',
-          iconColor: Color(0xff3f98eb),
-          onTab: () {
-            print('课程');
-          },
-        ),
-        GridItem(
-          icon: FontIcons.wallet,
-          text: '钱包',
-          iconColor: Color(0xffff5a00),
-          onTab: () {
-            print('钱包');
-          },
-        ),
-        GridItem(
-          icon: Icons.favorite,
-          text: '收藏',
-          iconColor: Color(0xffff2121),
-          onTab: () {
-            print('收藏');
-          },
-        )
-      ],
-    );
-  }
-
-  /// 最近在学 - 我的考试 ListTile
-  Widget get _studyInfoList {
-    return ListTileGroup(
-      top: 20,
-      children: <Widget>[
-        ListTileCustom(
-          leading: FontIcons.time,
-          leadingTitle: '最近在学',
-          color: Color(0xff3f98eb),
-        ),
-        ListTileCustom(
-          leading: FontIcons.paper,
-          leadingTitle: '我的考试',
-          color: Color(0xffff2121),
-        ),
-      ],
-    );
-  }
-
-  /// 账户余额 ListTile
-  Widget get _balanceInfoList {
-    return ListTileGroup(
-      top: 20,
-      bottom: 20,
-      children: <Widget>[
-        ListTileCustom(
-          leading: FontIcons.coin,
-          leadingTitle: '账户余额',
-          trailingTitle: '10045.6',
-          color: Color(0xffffdf0c),
-        ),
-      ],
-    );
-  }
-
-  /// 邀请好友 - 反馈建议 - 设置 ListTile
-  Widget get _accountInfoList {
-    return ListTileGroup(
-      children: <Widget>[
-        ListTileCustom(
-          leading: FontIcons.invite,
-          leadingTitle: '邀请好友',
-          color: Color(0xffff2121),
-        ),
-        ListTileCustom(
-          leading: FontIcons.feedback,
-          leadingTitle: '反馈建议',
-          color: Color(0xff00f6d0),
-        ),
-        ListTileCustom(
-          leading: Icons.settings,
-          leadingTitle: '系统设置',
-          color: Color(0xff3f98eb),
-          onTab: () {
-            Navigator.push(context, SlideRoute(SystemSettingPage()));
-          },
-        ),
-      ],
-    );
-  }
-
   /// 跳转到登录页或个人信息页
   void _jumpToLoginOrInfo() {
     _userProvider.hasUser
         ? Navigator.push(context, SlideRoute(ProfileSetting()))
         : Navigator.push(context, SlideTopRoute(LoginPage()));
-    /*Navigator.push(context, route)*/
   }
 
   void _onRefresh() async {

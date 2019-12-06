@@ -1,3 +1,4 @@
+import 'package:baas_study/pages/login_page.dart';
 import 'package:baas_study/pages/profile/profile_setting_page.dart';
 import 'package:baas_study/providers/dark_mode_provider.dart';
 import 'package:baas_study/providers/user_provider.dart';
@@ -29,30 +30,33 @@ class _SystemSettingPageState extends State<SystemSettingPage> {
       appBar: CustomAppBar(title: '设置'),
       body: ListView(
         children: <Widget>[
-          ListTileGroup(
-            top: 15,
-            bottom: 15,
-            children: <Widget>[
-              ListTileCustom(
-                leadingTitle: '账号资料',
-                onTab: () {
-                  Navigator.push(context, SlideRoute(ProfileSetting()));
-                },
-              ),
-              ListTileCustom(
-                leadingTitle: '手机',
-                trailingTitle: '更换手机',
-              ),
-              ListTileCustom(
-                leadingTitle: '邮箱',
-                trailingTitle: '去绑定',
-              ),
-              ListTileCustom(
-                leadingTitle: '修改账户密码',
-              ),
-            ],
+          Offstage(
+            offstage: !_userProvider.hasUser,
+            child: ListTileGroup(
+              top: 15,
+              children: <Widget>[
+                ListTileCustom(
+                  leadingTitle: '账号资料',
+                  onTab: () {
+                    Navigator.push(context, SlideRoute(ProfileSetting()));
+                  },
+                ),
+                ListTileCustom(
+                  leadingTitle: '手机',
+                  trailingTitle: '更换手机',
+                ),
+                ListTileCustom(
+                  leadingTitle: '邮箱',
+                  trailingTitle: '去绑定',
+                ),
+                ListTileCustom(
+                  leadingTitle: '修改账户密码',
+                ),
+              ],
+            ),
           ),
           ListTileGroup(
+            top: 15,
             bottom: 15,
             children: <Widget>[
               ListTileCustom(
@@ -79,14 +83,18 @@ class _SystemSettingPageState extends State<SystemSettingPage> {
             color: Theme.of(context).cardColor,
             child: ListTile(
               title: Text(
-                '退出登录',
+                _userProvider.hasUser ? '退出登录' : '登录',
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.blue),
               ),
               onTap: () async {
-                _userProvider.clearUser();
-                TokenUtil.remove();
-                HttpUtil.clear();
-                Navigator.pop(context);
+                if (_userProvider.hasUser) {
+                  _userProvider.clearUser();
+                  TokenUtil.remove();
+                  HttpUtil.clear();
+                  Navigator.pop(context);
+                } else
+                  Navigator.push(context, SlideTopRoute(LoginPage()));
               },
             ),
           ),
