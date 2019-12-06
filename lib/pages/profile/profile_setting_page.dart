@@ -3,7 +3,9 @@ import 'package:baas_study/dao/profile_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
 import 'package:baas_study/model/reponse_normal_model.dart';
+import 'package:baas_study/pages/profile/change_name_page.dart';
 import 'package:baas_study/providers/user_provider.dart';
+import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widgets/border_dialog.dart';
 import 'package:baas_study/widgets/custom_app_bar.dart';
@@ -57,10 +59,30 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 ListTileCustom(
                   leadingTitle: '昵称',
                   trailingTitle: userInfo.user.nickname,
+                  onTab: () {
+                    Navigator.push(
+                      context,
+                      SlideRoute(
+                        ChangeNamePage(
+                          isNickname: true,
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 ListTileCustom(
                   leadingTitle: '姓名',
                   trailingTitle: userInfo.user.realName,
+                  onTab: () {
+                    Navigator.push(
+                      context,
+                      SlideRoute(
+                        ChangeNamePage(
+                          isNickname: false,
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 ListTileCustom(
                   leadingTitle: '性别',
@@ -213,6 +235,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
         if (avatarModel.code == 1000) {
           _userProvider.user.avatarUrl = avatarModel.avatarUrl;
           _userProvider.saveUser(_userProvider.user);
+          BotToast.showText(text: '修改成功');
         }
       } catch (e) {
         //print(e);
@@ -224,18 +247,21 @@ class _ProfileSettingState extends State<ProfileSetting> {
   /// 修改生日
   Future<Null> _setBirthday(DateTime dateTime) async {
     try {
-      BotToast.showLoading();
-      ResponseNormalModel model = await ProfileDao.changeProfile({
-        'birthday': dateTime.toIso8601String(),
-      });
-      if (model.code == 1000) {
-        String month = dateTime.month > 9
-            ? dateTime.month.toString()
-            : '0${dateTime.month}';
-        String day =
-            dateTime.day > 9 ? dateTime.day.toString() : '0${dateTime.day}';
-        _userProvider.user.birthday = '${dateTime.year}-$month-$day';
-        _userProvider.saveUser(_userProvider.user);
+      String month = dateTime.month > 9
+          ? dateTime.month.toString()
+          : '0${dateTime.month}';
+      String day =
+      dateTime.day > 9 ? dateTime.day.toString() : '0${dateTime.day}';
+      if(_userProvider.user.birthday != '${dateTime.year}-$month-$day'){
+        BotToast.showLoading();
+        ResponseNormalModel model = await ProfileDao.changeProfile({
+          'birthday': dateTime.toIso8601String(),
+        });
+        if (model.code == 1000) {
+          _userProvider.user.birthday = '${dateTime.year}-$month-$day';
+          _userProvider.saveUser(_userProvider.user);
+          BotToast.showText(text: '修改成功');
+        }
       }
     } catch (e) {
       //print(e);
@@ -320,11 +346,14 @@ class __SexGridState extends State<_SexGrid> {
   Future<Null> _setSex() async {
     Navigator.of(context).pop();
     try {
-      BotToast.showLoading();
-      ResponseNormalModel model = await ProfileDao.changeProfile({'sex': sex});
-      if (model.code == 1000) {
-        _userProvider.user.sex = sex;
-        _userProvider.saveUser(_userProvider.user);
+      if(_userProvider.user.sex != sex){
+        BotToast.showLoading();
+        ResponseNormalModel model = await ProfileDao.changeProfile({'sex': sex});
+        if (model.code == 1000) {
+          _userProvider.user.sex = sex;
+          _userProvider.saveUser(_userProvider.user);
+        }
+        BotToast.showText(text: '修改成功');
       }
     } catch (e) {
       //print(e);

@@ -22,6 +22,7 @@ class PassportDao {
       },
       method: 'post',
     );
+    HttpUtil.clear();
     return PswLoginModel.fromJson(response);
   }
 }

@@ -1,10 +1,12 @@
-import 'package:baas_study/pages/profile/profile_setting.dart';
+import 'package:baas_study/pages/profile/profile_setting_page.dart';
 import 'package:baas_study/providers/dark_mode_provider.dart';
 import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/routes/router.dart';
+import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/utils/token_util.dart';
 import 'package:baas_study/widgets/custom_app_bar.dart';
 import 'package:baas_study/widgets/custom_list_tile.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,10 +18,13 @@ class SystemSettingPage extends StatefulWidget {
 class _SystemSettingPageState extends State<SystemSettingPage> {
   UserProvider _userProvider;
   DarkModeProvider _darkModeModel;
+  bool darkValue;
+
   @override
   Widget build(BuildContext context) {
     _userProvider = Provider.of<UserProvider>(context);
     _darkModeModel = Provider.of<DarkModeProvider>(context);
+    darkValue = _darkModeModel.darkMode == DarkModel.auto;
     return Scaffold(
       appBar: CustomAppBar(title: '设置'),
       body: ListView(
@@ -54,15 +59,19 @@ class _SystemSettingPageState extends State<SystemSettingPage> {
                 leadingTitle: '清除缓存',
                 trailingTitle: '20MB',
               ),
-              ListTileCustom(
-                leadingTitle: '夜间模式',
-                onTab: (){
-                  _darkModeModel.changeMode(
-                    _darkModeModel.darkMode == DarkModel.auto
-                        ? DarkModel.off
-                        : DarkModel.auto,
-                  );
-                },
+              Material(
+                color: Theme.of(context).cardColor,
+                child: ListTile(
+                  leading: Text('夜间模式跟随系统'),
+                  trailing: CupertinoSwitch(
+                    value: darkValue,
+                    activeColor: Colors.lightBlue,
+                    onChanged: (value) {
+                      changeDarkMode();
+                    },
+                  ),
+                  onTap: changeDarkMode,
+                ),
               ),
             ],
           ),
@@ -73,9 +82,10 @@ class _SystemSettingPageState extends State<SystemSettingPage> {
                 '退出登录',
                 textAlign: TextAlign.center,
               ),
-              onTap: (){
+              onTap: () async {
                 _userProvider.clearUser();
                 TokenUtil.remove();
+                HttpUtil.clear();
                 Navigator.pop(context);
               },
             ),
@@ -83,5 +93,11 @@ class _SystemSettingPageState extends State<SystemSettingPage> {
         ],
       ),
     );
+  }
+
+  void changeDarkMode() {
+    /// 夜间模式是否跟随系统
+    bool auto = _darkModeModel.darkMode == DarkModel.auto;
+    _darkModeModel.changeMode(auto ? DarkModel.off : DarkModel.auto);
   }
 }

@@ -23,9 +23,6 @@ class HttpUtil {
   /// 接收数据的最长时间
   static const int _RECEIVE_TIMEOUT = 5000;
 
-  /// token
-  static String _token;
-
   /// 请求错误信息
   static String _errorMsg(DioError error) {
     switch (error.type) {
@@ -46,7 +43,6 @@ class HttpUtil {
   static Future<dynamic> request(String url, {data, method}) async {
     data = data ?? {};
     method = method ?? 'GET';
-    _token = await TokenUtil.get();
 
     /// 请求处理
     data.forEach((key, value) {
@@ -55,14 +51,14 @@ class HttpUtil {
       }
     });
 
-    Dio dio = createInstance();
+    Dio dio = await createInstance();
     var result;
 
     try {
       Response response = await dio.request(
         url,
         data: data,
-        options: new Options(method: method),
+        options: Options(method: method),
       );
       result = response.data;
 
@@ -79,7 +75,7 @@ class HttpUtil {
 
   /// FormData请求，用于上传文件
   static Future<dynamic> upload(String url, File file) async {
-    Dio dio = createInstance();
+    Dio dio = await createInstance();
     String path = file.path;
     String filename = path.substring(path.lastIndexOf('/') + 1, path.length);
     FormData formData = FormData.fromMap({
@@ -106,10 +102,12 @@ class HttpUtil {
   }
 
   /// 创建 dio 实例对象
-  static Dio createInstance() {
+  static Future<Dio> createInstance() async{
     if (dio == null) {
+      /// 获取Token
+      String _token = await TokenUtil.get();
       /// 全局属性：请求前缀、连接超时时间、响应超时时间
-      BaseOptions option = new BaseOptions(
+      BaseOptions option = BaseOptions(
         baseUrl: _API_PREFIX,
         connectTimeout: _CONNECT_TIMEOUT,
         receiveTimeout: _RECEIVE_TIMEOUT,
@@ -119,7 +117,7 @@ class HttpUtil {
         /// [ResponseType] 接受三种类型 `JSON`, `STREAM`, `PLAIN`
         responseType: ResponseType.json,
       );
-      dio = new Dio(option);
+      dio =  Dio(option);
     }
 
     return dio;

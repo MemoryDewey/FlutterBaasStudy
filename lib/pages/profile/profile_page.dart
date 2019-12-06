@@ -2,7 +2,7 @@ import 'package:baas_study/dao/passport_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
 import 'package:baas_study/pages/login_page.dart';
-import 'package:baas_study/pages/profile/profile_setting.dart';
+import 'package:baas_study/pages/profile/profile_setting_page.dart';
 import 'package:baas_study/pages/profile/qr_code_scan_page.dart';
 import 'package:baas_study/pages/system_setting_page.dart';
 import 'package:baas_study/providers/user_provider.dart';
@@ -14,8 +14,10 @@ import 'package:baas_study/utils/token_util.dart';
 import 'package:baas_study/widgets/custom_list_tile.dart';
 import 'package:baas_study/widgets/grid_group.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -26,10 +28,11 @@ class _ProfilePageState extends State<ProfilePage>
     with AutomaticKeepAliveClientMixin {
   DarkModeProvider _darkModeModel;
   UserProvider _userProvider;
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: true);
 
   @override
   void initState() {
-    _getInfo();
     super.initState();
   }
 
@@ -40,29 +43,41 @@ class _ProfilePageState extends State<ProfilePage>
     _userProvider = Provider.of<UserProvider>(context);
     ThemeData themeData = Theme.of(context);
     return Scaffold(
-        appBar: _appBar,
-        body: Container(
-          child: ListView(
-            children: <Widget>[
-              Consumer<UserProvider>(
-                builder: (context, userInfo, child) => _UserInfo(
-                  backgroundColor: themeData.appBarTheme.color,
-                  isLogin: userInfo.hasUser,
-                  onTab: _jumpToLoginOrInfo,
-                  nickname: userInfo.user?.nickname,
-                  avatarUrl: userInfo.hasUser
-                      ? HttpUtil.getImage(userInfo.user.avatarUrl)
-                      : null,
-                ),
+      appBar: _appBar,
+      body: SmartRefresher(
+        controller: _refreshController,
+        enablePullDown: true,
+        enablePullUp: false,
+        header: ClassicHeader(
+          idleText: '下拉刷新',
+          idleIcon: Icon(Icons.expand_more),
+          releaseText: '放开刷新 •••',
+          refreshingText: '加载中',
+          completeText: '已刷新',
+        ),
+        child: ListView(
+          children: <Widget>[
+            Consumer<UserProvider>(
+              builder: (context, userInfo, child) => _UserInfo(
+                backgroundColor: themeData.appBarTheme.color,
+                isLogin: userInfo.hasUser,
+                onTab: _jumpToLoginOrInfo,
+                nickname: userInfo.user?.nickname,
+                avatarUrl: userInfo.hasUser
+                    ? HttpUtil.getImage(userInfo.user.avatarUrl)
+                    : null,
               ),
-              Divider(height: 0, color: Colors.grey),
-              _gridGroup,
-              _studyInfoList,
-              _balanceInfoList,
-              _accountInfoList,
-            ],
-          ),
-        ));
+            ),
+            Divider(height: 0, color: Colors.grey),
+            _gridGroup,
+            _studyInfoList,
+            _balanceInfoList,
+            _accountInfoList,
+          ],
+        ),
+        onRefresh: _onRefresh,
+      ),
+    );
   }
 
   @override
@@ -71,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage>
   /// appBar
   Widget get _appBar {
     return PreferredSize(
-      preferredSize: Size.fromHeight(56),
+      preferredSize: Size.fromHeight(40),
       child: AppBar(
         elevation: 0,
         actions: <Widget>[
@@ -120,7 +135,7 @@ class _ProfilePageState extends State<ProfilePage>
           icon: FontIcons.note,
           text: '课程',
           iconColor: Color(0xff3f98eb),
-          onTab: (){
+          onTab: () {
             print('课程');
           },
         ),
@@ -128,7 +143,7 @@ class _ProfilePageState extends State<ProfilePage>
           icon: FontIcons.wallet,
           text: '钱包',
           iconColor: Color(0xffff5a00),
-          onTab: (){
+          onTab: () {
             print('钱包');
           },
         ),
@@ -136,7 +151,7 @@ class _ProfilePageState extends State<ProfilePage>
           icon: Icons.favorite,
           text: '收藏',
           iconColor: Color(0xffff2121),
-          onTab: (){
+          onTab: () {
             print('收藏');
           },
         )
@@ -147,7 +162,6 @@ class _ProfilePageState extends State<ProfilePage>
   /// 最近在学 - 我的考试 ListTile
   Widget get _studyInfoList {
     return ListTileGroup(
-      color: Theme.of(context).cardColor,
       top: 20,
       children: <Widget>[
         ListTileCustom(
@@ -167,7 +181,6 @@ class _ProfilePageState extends State<ProfilePage>
   /// 账户余额 ListTile
   Widget get _balanceInfoList {
     return ListTileGroup(
-      color: Theme.of(context).cardColor,
       top: 20,
       bottom: 20,
       children: <Widget>[
@@ -184,7 +197,6 @@ class _ProfilePageState extends State<ProfilePage>
   /// 邀请好友 - 反馈建议 - 设置 ListTile
   Widget get _accountInfoList {
     return ListTileGroup(
-      color: Theme.of(context).cardColor,
       children: <Widget>[
         ListTileCustom(
           leading: FontIcons.invite,
@@ -209,20 +221,27 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   /// 跳转到登录页或个人信息页
-  _jumpToLoginOrInfo() {
+  void _jumpToLoginOrInfo() {
     _userProvider.hasUser
         ? Navigator.push(context, SlideRoute(ProfileSetting()))
         : Navigator.push(context, SlideTopRoute(LoginPage()));
     /*Navigator.push(context, route)*/
   }
 
+  void _onRefresh() async {
+    await _getInfo();
+    _refreshController.refreshCompleted();
+  }
+
   /// 获取个人信息
   Future<Null> _getInfo() async {
     try {
       ProfileModel model = await PassportDao.checkLogin();
-      if (model.code != 1000 && _userProvider.hasUser)
+      if (model.code != 1000 && _userProvider.hasUser) {
         _userProvider.clearUser();
-      else{
+        TokenUtil.remove();
+        HttpUtil.clear();
+      } else {
         _userProvider.saveUser(model.info);
       }
     } catch (e) {}
@@ -250,10 +269,7 @@ class _UserInfo extends StatelessWidget {
     return GestureDetector(
       onTap: onTab,
       child: Container(
-        padding: EdgeInsets.only(
-          bottom: AutoSize.size(16),
-          left: AutoSize.size(16),
-        ),
+        padding: EdgeInsets.all(16),
         color: backgroundColor,
         child: Row(
           children: <Widget>[
