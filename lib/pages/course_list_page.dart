@@ -1,6 +1,9 @@
+import 'package:baas_study/dao/course_dao.dart';
+import 'package:baas_study/model/course_model.dart';
 import 'package:baas_study/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SortCondition {
   String name;
@@ -24,30 +27,36 @@ class CourseListPage extends StatefulWidget {
 }
 
 class _CourseListPageState extends State<CourseListPage> {
-  List<String> _dropdownHeaderItems = ['课程类型', '默认排序', '全部分类'];
+  List<String> _dropdownHeaderItems = ['筛选', '综合排序', '全部类型'];
   List<SortCondition> _filterConditions = [];
   List<SortCondition> _sortConditions = [];
   SortCondition _selectFilterCondition;
   SortCondition _selectSortCondition;
+  List<CourseSystemModel> _systemModel = [
+    CourseSystemModel(systemID: -1, systemName: '全部课程'),
+  ];
   GZXDropdownMenuController _controller = GZXDropdownMenuController();
   GlobalKey _stackKey = GlobalKey();
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: true);
 
   @override
   void initState() {
     super.initState();
+
     /// 课程类型
-    _filterConditions.add(SortCondition(name: '课程类型', isSelected: true));
+    _filterConditions.add(SortCondition(name: '筛选', isSelected: true));
     _filterConditions.add(SortCondition(name: '免费课程', isSelected: false));
     _filterConditions.add(SortCondition(name: '付费课程', isSelected: false));
     _filterConditions.add(SortCondition(name: '直播课程', isSelected: false));
     _filterConditions.add(SortCondition(name: '录播课程', isSelected: false));
 
     /// 课程排序
-    _sortConditions.add(SortCondition(name: '默认排序',isSelected: true));
-    _sortConditions.add(SortCondition(name: '好评最高',isSelected: false));
-    _sortConditions.add(SortCondition(name: '人气最高',isSelected: false));
-    _sortConditions.add(SortCondition(name: '价格最高',isSelected: false));
-    _sortConditions.add(SortCondition(name: '价格最低',isSelected: false));
+    _sortConditions.add(SortCondition(name: '综合排序', isSelected: true));
+    _sortConditions.add(SortCondition(name: '好评最高', isSelected: false));
+    _sortConditions.add(SortCondition(name: '人气最高', isSelected: false));
+    _sortConditions.add(SortCondition(name: '价格最高', isSelected: false));
+    _sortConditions.add(SortCondition(name: '价格最低', isSelected: false));
   }
 
   @override
@@ -96,6 +105,24 @@ class _CourseListPageState extends State<CourseListPage> {
                 controller: _controller,
                 stackKey: _stackKey,
               ),
+              Expanded(
+                flex: 1,
+                child: SmartRefresher(
+                  controller: _refreshController,
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  header: ClassicHeader(
+                    idleText: '下拉刷新',
+                    idleIcon: Icon(Icons.expand_more),
+                    releaseText: '放开刷新 •••',
+                    refreshingText: '加载中',
+                    completeText: '已刷新',
+                  ),
+                  child: ListView(
+                    children: <Widget>[],
+                  ),
+                ),
+              )
             ],
           ),
           GZXDropDownMenu(
@@ -115,7 +142,7 @@ class _CourseListPageState extends State<CourseListPage> {
               GZXDropdownMenuBuilder(
                 dropDownHeight: 40.0 * _sortConditions.length,
                 dropDownWidget:
-                _buildConditionListWidget(_sortConditions, (value) {
+                    _buildConditionListWidget(_sortConditions, (value) {
                   _selectSortCondition = value;
                   _dropdownHeaderItems[1] = _selectSortCondition.name;
                   _controller.hide();
@@ -129,30 +156,10 @@ class _CourseListPageState extends State<CourseListPage> {
     );
   }
 
-  Widget _dropdownMenu({
-    @required String dropdownValue,
-    @required List<String> dropdownItems,
-    @required void Function(String) onChanged,
-  }) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: DropdownButton<String>(
-        value: dropdownValue,
-        icon: Icon(Icons.arrow_drop_down),
-        underline: Container(),
-        items: dropdownItems.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: onChanged,
-      ),
-    );
-  }
-
   Widget _buildConditionListWidget(
-      items, void itemOnTap(SortCondition sortCondition)) {
+    items,
+    void itemOnTap(SortCondition sortCondition),
+  ) {
     return ListView.separated(
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
@@ -208,5 +215,18 @@ class _CourseListPageState extends State<CourseListPage> {
     );
   }
 
-  _onTextChange(text) {}
+  /*Widget _buildSystemTypeWidget(void itemOnTap(String selectValue)) {
+    return Container();
+  }*/
+
+  void _onTextChange(text) {}
+
+  Future<Null> getSystemType() async {
+    try {
+      List<CourseSystemModel> model = await CourseDao.getSystemType();
+      setState(() {
+        _systemModel.addAll(model);
+      });
+    } catch (e) {}
+  }
 }

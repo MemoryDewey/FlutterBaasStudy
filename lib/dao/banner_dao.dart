@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/model/banner_model.dart';
 
