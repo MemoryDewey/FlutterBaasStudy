@@ -39,18 +39,29 @@ class HttpUtil {
     }
   }
 
-  /// POST与GET请求
+  /// get请求
+  static Future<dynamic> get(String url, {Map<String, dynamic> data}) async {
+    if (data != null && data.isNotEmpty) {
+      StringBuffer options = StringBuffer('?');
+      data.forEach((key, value) {
+        options.write('$key=$value&');
+      });
+      String optionStr = options.toString();
+      optionStr = optionStr.substring(0, optionStr.length - 1);
+      url += optionStr;
+    }
+    return await request(url, method: "GET");
+  }
+
+  /// post请求
+  static Future<dynamic> post(String url, {Map<String, dynamic> data}) async {
+    return await request(url, data: data, method: 'POST');
+  }
+
+  /// 封装所有请求
   static Future<dynamic> request(String url, {data, method}) async {
     data = data ?? {};
     method = method ?? 'GET';
-
-    /// 请求处理
-    data.forEach((key, value) {
-      if (url.indexOf(key) != -1) {
-        url = url.replaceAll(':$key', value.toString());
-      }
-    });
-
     Dio dio = await createInstance();
     var result;
 
@@ -63,7 +74,7 @@ class HttpUtil {
       result = response.data;
 
       /// 打印响应相关信息
-      print('$url 响应数据成功！');
+      print('--> $method $url 200');
     } on DioError catch (e) {
       /// 打印请求失败相关信息
       String errorMsg = _errorMsg(e);
@@ -91,7 +102,7 @@ class HttpUtil {
       result = response.data;
 
       /// 打印响应相关信息
-      print('$url (上传文件)响应数据成功！');
+      print('--> upload $url 200');
     } on DioError catch (e) {
       /// 打印请求失败相关信息
       String errorMsg = _errorMsg(e);
@@ -102,10 +113,11 @@ class HttpUtil {
   }
 
   /// 创建 dio 实例对象
-  static Future<Dio> createInstance() async{
+  static Future<Dio> createInstance() async {
     if (dio == null) {
       /// 获取Token
       String _token = await TokenUtil.get();
+
       /// 全局属性：请求前缀、连接超时时间、响应超时时间
       BaseOptions option = BaseOptions(
         baseUrl: _API_PREFIX,
@@ -117,7 +129,7 @@ class HttpUtil {
         /// [ResponseType] 接受三种类型 `JSON`, `STREAM`, `PLAIN`
         responseType: ResponseType.json,
       );
-      dio =  Dio(option);
+      dio = Dio(option);
     }
 
     return dio;

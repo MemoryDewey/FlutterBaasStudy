@@ -3,12 +3,21 @@ import 'package:baas_study/utils/http_util.dart';
 
 class CourseDao {
   static Future<List<CourseSystemModel>> getSystemType() async {
-    final response = await HttpUtil.request('/course/list/system-type');
+    final response = await HttpUtil.get('/course/list/system-type');
     return CourseSystemTypeModel.fromJson(response).data;
   }
 
-  static Future<List<CourseModel>> getCourse() async {
-    final response = await HttpUtil.request('/course/list');
+  static Future<List<CourseModel>> getCourse(
+      {Map<String, dynamic> data}) async {
+    final response = await HttpUtil.get('/course/list', data: data);
     return CourseListModel.fromJson(response).course;
+  }
+
+  static Future<int> getCoursePage({Map<String, dynamic> data}) async {
+    final response = await HttpUtil.post(
+      '/course/list/page',
+      data: data,
+    );
+    return CoursePageModel.fromJson(response).page;
   }
 }

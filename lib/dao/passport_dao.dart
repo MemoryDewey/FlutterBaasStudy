@@ -5,7 +5,7 @@ import 'package:baas_study/utils/http_util.dart';
 class PassportDao {
   /// 检查用户是否登录
   static Future<ProfileModel> checkLogin() async {
-    final response = await HttpUtil.request('/passport/mobile-check-login');
+    final response = await HttpUtil.get('/passport/mobile-check-login');
     return ProfileModel.fromJson(response);
   }
 
@@ -14,13 +14,12 @@ class PassportDao {
     String account,
     String psw,
   }) async {
-    final response = await HttpUtil.request(
+    final response = await HttpUtil.post(
       '/passport/m-login-psw',
       data: {
         "account": account,
         "password": psw,
       },
-      method: 'post',
     );
     HttpUtil.clear();
     return PswLoginModel.fromJson(response);

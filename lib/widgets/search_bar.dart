@@ -8,6 +8,7 @@ enum SearchBarType { home, normal, homeLight }
 class SearchBar extends StatefulWidget {
   final bool enable;
   final bool hideLeft;
+  final bool autofocus;
   final SearchBarType searchBarType;
   final String hint;
   final String defaultText;
@@ -23,6 +24,7 @@ class SearchBar extends StatefulWidget {
     this.defaultText = '',
     this.enable = true,
     this.hideLeft,
+    this.autofocus = true,
     this.searchBarType = SearchBarType.normal,
     this.hint,
     this.leftButtonClick,
@@ -213,7 +215,7 @@ class _SearchBarState extends State<SearchBar> {
                     controller: _controller,
                     onChanged: _onChanged,
                     onSubmitted: _onSubmitted,
-                    autofocus: true,
+                    autofocus: widget.autofocus,
                     style: TextStyle(
                       fontSize: _font(15),
                       fontWeight: FontWeight.w300,

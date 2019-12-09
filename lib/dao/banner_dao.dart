@@ -3,7 +3,7 @@ import 'package:baas_study/model/banner_model.dart';
 
 class BannerDao {
   static Future<BannerModel> fetch() async {
-    final response = await HttpUtil.request('/course/list/banner');
+    final response = await HttpUtil.get('/course/list/banner');
     return BannerModel.fromJson(response);
   }
 }

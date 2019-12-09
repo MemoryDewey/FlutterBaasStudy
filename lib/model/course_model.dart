@@ -76,6 +76,30 @@ class CourseListModel {
   }
 }
 
+class CoursePageModel {
+  int code;
+  int page;
+  int count;
+
+  CoursePageModel({this.code, this.page, this.count});
+
+  factory CoursePageModel.fromJson(Map<String, dynamic> json) {
+    return CoursePageModel(
+        code : json['code'],
+        page : json['page'],
+        count : json['count'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['page'] = this.page;
+    data['count'] = this.count;
+    return data;
+  }
+}
+
 class CourseSystemTypeModel {
   int code;
   List<CourseSystemModel> data;

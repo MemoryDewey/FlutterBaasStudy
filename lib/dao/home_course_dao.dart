@@ -4,7 +4,7 @@ import 'package:baas_study/utils/http_util.dart';
 
 class HomeCourseDao {
   static Future<HomeCourseModel> fetch() async {
-    final response = await HttpUtil.request('/course/list/m/home');
+    final response = await HttpUtil.get('/course/list/m/home');
     return HomeCourseModel.fromJson(response);
   }
 }

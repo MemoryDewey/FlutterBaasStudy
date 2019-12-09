@@ -7,14 +7,14 @@ class ProfileDao {
   /// 更改个人信息
   static Future<ResponseNormalModel> changeProfile(
       Map<String, dynamic> data) async {
-    final response = await HttpUtil.request('/profile/personal/update',
-        data: data, method: 'post');
+    final response =
+        await HttpUtil.post('/profile/personal/update', data: data);
     return ResponseNormalModel.fromJson(response);
   }
 
   /// 设置默认头像
   static Future<AvatarModel> setDefaultAvatar() async {
-    final response = await HttpUtil.request('/profile/personal/default-avatar');
+    final response = await HttpUtil.get('/profile/personal/default-avatar');
     return AvatarModel.fromJson(response);
   }
 
