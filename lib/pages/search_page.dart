@@ -1,3 +1,5 @@
+import 'package:baas_study/pages/course_list_page.dart';
+import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/storage_util.dart';
 import 'package:baas_study/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
@@ -103,6 +105,10 @@ class _SearchPageState extends State<SearchPage> {
               },
               child: Icon(Icons.close),
             ),
+            onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+              _searchResult(item);
+            },
           ),
         );
       });
@@ -119,13 +125,27 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   /// 搜索
-  _search(String searchContent) {
+  void _search(String searchContent) {
     searchContent ??= '';
-    if (searchContent.length > 0) _addHistory(searchContent);
+    if (searchContent.isNotEmpty) _searchResult(searchContent);
+    _addHistory(searchContent);
+  }
+
+  /// 跳转到搜索结果页
+  void _searchResult(String searchContent) {
+    Navigator.push(
+      context,
+      SlideRoute(
+        CourseListPage(
+          hideLeft: false,
+          keyWord: searchContent,
+        ),
+      ),
+    );
   }
 
   /// 获取本地搜索记录
-  _getHistory() async {
+  void _getHistory() async {
     List<String> listStr = await StorageUtil.getStringList(SEARCH_HISTORY_KEY);
     setState(() {
       _searchHistory = listStr?.toSet();
@@ -134,7 +154,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   /// 添加本地搜索记录
-  _addHistory(String search) async {
+  void _addHistory(String search) async {
     setState(() {
       _searchHistory.add(search);
     });
@@ -142,7 +162,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   /// 清除本地搜索记录
-  _removeHistory({bool all = false, String search}) async {
+  void _removeHistory({bool all = false, String search}) async {
     if (all) {
       StorageUtil.remove(SEARCH_HISTORY_KEY);
       setState(() {

@@ -9,6 +9,7 @@ class SearchBar extends StatefulWidget {
   final bool enable;
   final bool hideLeft;
   final bool autofocus;
+  final bool showMic;
   final SearchBarType searchBarType;
   final String hint;
   final String defaultText;
@@ -25,6 +26,7 @@ class SearchBar extends StatefulWidget {
     this.enable = true,
     this.hideLeft,
     this.autofocus = true,
+    this.showMic = true,
     this.searchBarType = SearchBarType.normal,
     this.hint,
     this.leftButtonClick,
@@ -217,15 +219,15 @@ class _SearchBarState extends State<SearchBar> {
                     onSubmitted: _onSubmitted,
                     autofocus: widget.autofocus,
                     style: TextStyle(
-                      fontSize: _font(15),
+                      fontSize: 15,
                       fontWeight: FontWeight.w300,
+                      textBaseline: TextBaseline.alphabetic,
                     ),
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: _size(5)),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 5),
                       border: InputBorder.none,
                       hintText: widget.hint ?? '',
-                      hintStyle: TextStyle(fontSize: _font(15)),
+                      hintStyle: TextStyle(fontSize: 15),
                     ),
                     textInputAction: TextInputAction.search,
                   )
@@ -243,15 +245,18 @@ class _SearchBarState extends State<SearchBar> {
                   ),
           ),
           !showClear
-              ? _wrapTap(
-                  Icon(
-                    Icons.mic_none,
-                    size: _size(22),
-                    color: widget.searchBarType == SearchBarType.normal
-                        ? Colors.blue
-                        : Colors.grey,
-                  ),
-                  widget.speakClick)
+              ? Offstage(
+                  offstage: !widget.showMic,
+                  child: _wrapTap(
+                      Icon(
+                        Icons.mic_none,
+                        size: _size(22),
+                        color: widget.searchBarType == SearchBarType.normal
+                            ? Colors.blue
+                            : Colors.grey,
+                      ),
+                      widget.speakClick),
+                )
               : _wrapTap(
                   Icon(
                     Icons.clear,

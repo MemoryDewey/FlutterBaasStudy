@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 void main() {
   /// 强制竖屏
@@ -42,15 +43,21 @@ Widget get autoMode {
     darkTheme: AppTheme.themeDark(),
     navigatorObservers: [BotToastNavigatorObserver()],
     home: TabNavigator(),
+
     /// 添加中文语言包
     localizationsDelegates: [
       GlobalMaterialLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
+      RefreshLocalizations.delegate,
     ],
     supportedLocales: [
-      const Locale('zh','CH'),
-      const Locale('en','US'),
+      const Locale('zh', 'CH'),
+      const Locale('en', 'US'),
     ],
+    localeResolutionCallback:
+        (Locale locale, Iterable<Locale> supportedLocales) {
+      return locale;
+    },
   );
 }
 
@@ -62,14 +69,20 @@ Widget manualMode(DarkModel darkModel) {
         : AppTheme.themeDark(),
     navigatorObservers: [BotToastNavigatorObserver()],
     home: TabNavigator(),
+
     /// 添加中文语言包
     localizationsDelegates: [
       GlobalMaterialLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
+      RefreshLocalizations.delegate,
     ],
     supportedLocales: [
-      const Locale('zh','CH'),
-      const Locale('en','US'),
+      const Locale('zh', 'CH'),
+      const Locale('en', 'US'),
     ],
+    localeResolutionCallback:
+        (Locale locale, Iterable<Locale> supportedLocales) {
+      return locale;
+    },
   );
 }

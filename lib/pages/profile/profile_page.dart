@@ -26,12 +26,12 @@ class _ProfilePageState extends State<ProfilePage>
     with AutomaticKeepAliveClientMixin {
   DarkModeProvider _darkModeModel;
   UserProvider _userProvider;
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+  RefreshController _refreshController = RefreshController();
 
   @override
   void initState() {
     super.initState();
+    _onRefresh();
   }
 
   @override
@@ -49,9 +49,9 @@ class _ProfilePageState extends State<ProfilePage>
         header: ClassicHeader(
           idleText: '下拉刷新',
           idleIcon: Icon(Icons.expand_more),
-          releaseText: '放开刷新 •••',
-          refreshingText: '加载中',
-          completeText: '已刷新',
+          releaseText: '放开刷新',
+          refreshingText: '加载中 •••',
+          completeText: '加载完成',
         ),
         child: ListView(
           children: <Widget>[

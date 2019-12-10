@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+/// 课程页
 class CourseListPage extends StatefulWidget {
   final bool hideLeft;
   final String keyWord;
@@ -16,7 +17,7 @@ class CourseListPage extends StatefulWidget {
   const CourseListPage({
     Key key,
     this.hideLeft,
-    this.keyWord,
+    this.keyWord = '',
   }) : super(key: key);
 
   @override
@@ -24,21 +25,18 @@ class CourseListPage extends StatefulWidget {
 }
 
 class _CourseListPageState extends State<CourseListPage> {
-  /// 下拉列表相关
-  List<String> _dropdownHeaderItems = ['筛选', '综合排序', '全部类型'];
+  /// DropdownMenu下拉列表相关
+  List<String> _dropdownHeaderItems = ['全部类型', '综合排序', '筛选'];
   List<SortCondition> _filterConditions = [];
   List<SortCondition> _sortConditions = [];
   SortCondition _selectFilterCondition;
   SortCondition _selectSortCondition;
-  List<CourseSystemModel> _systemModel = [
-    CourseSystemModel(systemID: -1, systemName: '全部课程')
-  ];
+
   GZXDropdownMenuController _controller = GZXDropdownMenuController();
   GlobalKey _stackKey = GlobalKey();
 
   /// 下拉刷新
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+  RefreshController _refreshController = RefreshController();
 
   /// 课程
   List<CourseModel> _courses = [];
@@ -46,11 +44,20 @@ class _CourseListPageState extends State<CourseListPage> {
   int _pageSum = 1;
   int _sort = 0;
   int _filter = 0;
+  String _search = '';
+  String _courseSearch = '';
+  bool _searchResultShow = true;
+  int _searchCount = 0;
 
   @override
   void initState() {
+    setState(() {
+      _search = widget.keyWord;
+      _searchResultShow = widget.keyWord.isNotEmpty;
+    });
     super.initState();
     initFilterSort();
+    _onRefresh();
   }
 
   @override
@@ -65,6 +72,7 @@ class _CourseListPageState extends State<CourseListPage> {
         children: <Widget>[
           Column(
             children: <Widget>[
+              /// 搜索框
               Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -77,14 +85,25 @@ class _CourseListPageState extends State<CourseListPage> {
                   hideLeft: widget.hideLeft,
                   defaultText: widget.keyWord,
                   autofocus: false,
+                  showMic: false,
                   hint: '搜索课程',
                   leftButtonClick: () {
                     Navigator.pop(context);
                   },
-                  onChanged: _onTextChange,
+                  onSubmitted: _onSearchSubmit,
+                  onChanged: (text) {
+                    setState(() {
+                      _courseSearch = text;
+                    });
+                  },
+                  rightButtonClick: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    _onSearchSubmit(_courseSearch);
+                  },
                 ),
               ),
               Divider(height: 0, color: Colors.grey),
+              /// 下拉菜单
               GZXDropDownHeader(
                 height: 45,
                 color: Theme.of(context).cardColor,
@@ -102,25 +121,47 @@ class _CourseListPageState extends State<CourseListPage> {
                 controller: _controller,
                 stackKey: _stackKey,
               ),
+              /// 搜索结果（共找到多少门课）
+              Offstage(
+                offstage: !_searchResultShow,
+                child: Container(
+                  height: 50,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Color(0xff1d212a)
+                      : Color(0xffecf9ff),
+                  child: Center(
+                    child: Text(
+                      '共找到$_searchCount门"$_search"相关课程',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                ),
+              ),
+              /// 课程列表
               Expanded(
                 flex: 1,
                 child: SmartRefresher(
                   controller: _refreshController,
                   enablePullDown: true,
                   enablePullUp: true,
-                  header: WaterDropMaterialHeader(),
+                  header: BezierCircleHeader(
+                    bezierColor: Theme.of(context).cardColor,
+                    circleColor: Theme.of(context).primaryColor,
+                  ),
                   footer: CustomFooter(builder: (context, mode) {
                     Widget body;
+                    Widget getText(String text) =>
+                        Text(text, style: TextStyle(color: Colors.grey));
                     if (mode == LoadStatus.idle) {
-                      body = Text("上拉加载");
+                      body = getText('上拉加载');
                     } else if (mode == LoadStatus.loading) {
                       body = CupertinoActivityIndicator();
                     } else if (mode == LoadStatus.failed) {
-                      body = Text("加载失败!点击重试!");
+                      body = getText('加载失败!点击重试!');
                     } else if (mode == LoadStatus.canLoading) {
-                      body = Text("加载更多");
+                      body = getText('加载更多');
                     } else {
-                      body = Text("我也是有底线的");
+                      body = getText('-- 我也是有底线的 --');
                     }
                     return Container(
                       height: 40,
@@ -130,7 +171,7 @@ class _CourseListPageState extends State<CourseListPage> {
                   onRefresh: _onRefresh,
                   onLoading: _onLoading,
                   child: ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: EdgeInsets.all(16),
                     itemCount: _courses.length,
                     itemBuilder: (context, index) => CourseCard(
                       id: _courses[index].id,
@@ -146,27 +187,17 @@ class _CourseListPageState extends State<CourseListPage> {
               )
             ],
           ),
+          /// 下拉菜单列表
           GZXDropDownMenu(
             controller: _controller,
             animationMilliseconds: 250,
             menus: [
               GZXDropdownMenuBuilder(
-                dropDownHeight: 40.0 * _filterConditions.length,
-                dropDownWidget: CourseConditionList(
-                  items: _filterConditions,
-                  itemOnTap: (value) {
-                    _selectFilterCondition = value;
-                    _dropdownHeaderItems[0] = _selectFilterCondition.name;
-                    _controller.hide();
-                    setState(() {
-                      _filter = _selectFilterCondition.value;
-                    });
-                    _onRefresh();
-                  },
-                ),
+                dropDownHeight: 45.0 * _sortConditions.length,
+                dropDownWidget: CourseTypeConditionList(),
               ),
               GZXDropdownMenuBuilder(
-                dropDownHeight: 40.0 * _sortConditions.length,
+                dropDownHeight: 45.0 * _sortConditions.length,
                 dropDownWidget: CourseConditionList(
                   items: _sortConditions,
                   itemOnTap: (value) {
@@ -175,6 +206,21 @@ class _CourseListPageState extends State<CourseListPage> {
                     _controller.hide();
                     setState(() {
                       _sort = _selectSortCondition.value;
+                    });
+                    _onRefresh();
+                  },
+                ),
+              ),
+              GZXDropdownMenuBuilder(
+                dropDownHeight: 45.0 * _filterConditions.length,
+                dropDownWidget: CourseConditionList(
+                  items: _filterConditions,
+                  itemOnTap: (value) {
+                    _selectFilterCondition = value;
+                    _dropdownHeaderItems[2] = _selectFilterCondition.name;
+                    _controller.hide();
+                    setState(() {
+                      _filter = _selectFilterCondition.value;
                     });
                     _onRefresh();
                   },
@@ -248,17 +294,24 @@ class _CourseListPageState extends State<CourseListPage> {
     ));
   }
 
-  void _onTextChange(text) {}
+  void _onSearchSubmit(text) {
+    setState(() {
+      _search = text;
+      _searchResultShow = true;
+    });
+    _onRefresh();
+  }
 
   /// 下拉刷新
   void _onRefresh() async {
-    int pageSum = await _getPageSum();
     setState(() {
       _pageCurrent = 1;
-      _pageSum = pageSum;
     });
     List<CourseModel> course = await _getCourses();
+    CoursePageModel coursePage = await _getPage();
     setState(() {
+      _pageSum = coursePage.page;
+      _searchCount = coursePage.count;
       _courses = course;
     });
     _refreshController.refreshCompleted();
@@ -281,37 +334,32 @@ class _CourseListPageState extends State<CourseListPage> {
     }
   }
 
-  Future<Null> _getSystemType() async {
-    try {
-      List<CourseSystemModel> model = await CourseDao.getSystemType();
-      setState(() {
-        _systemModel.addAll(model);
-      });
-    } catch (e) {}
-  }
-
   /// 获取课程
   Future<List<CourseModel>> _getCourses() async {
     try {
-      return await CourseDao.getCourse(data: {
+      Map<String, dynamic> data = {
         'page': _pageCurrent,
         'filter': _filter,
         'sort': _sort,
-      });
+      };
+      if (_search.isNotEmpty) data['search'] = _search;
+      return await CourseDao.getCourse(data: data);
     } catch (e) {
       return [];
     }
   }
 
   /// 获取下拉加载次数
-  Future<int> _getPageSum() async {
+  Future<CoursePageModel> _getPage() async {
     try {
-      return await CourseDao.getCoursePage(data: {
+      Map<String, dynamic> data = {
         'filter': _filter,
         'sort': _sort,
-      });
+      };
+      if (_search.isNotEmpty) data['search'] = _search;
+      return await CourseDao.getCoursePage(data: data);
     } catch (e) {
-      return 1;
+      return CoursePageModel(page: 0, count: 0);
     }
   }
 }

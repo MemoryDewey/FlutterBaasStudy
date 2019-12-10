@@ -139,6 +139,7 @@ class _LoginPageState extends State<LoginPage> {
       controller: _accountController,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
+      style: TextStyle(textBaseline: TextBaseline.alphabetic),
       decoration: InputDecoration(
         hintText: '手机号/邮箱',
         suffixIcon: GestureDetector(
@@ -179,6 +180,7 @@ class _LoginPageState extends State<LoginPage> {
       controller: _pswController,
       focusNode: _secondFocusNode,
       obscureText: !_showPsw,
+      style: TextStyle(textBaseline: TextBaseline.alphabetic),
       keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
         hintText: '密码',
@@ -204,6 +206,7 @@ class _LoginPageState extends State<LoginPage> {
       controller: _phoneController,
       keyboardType: TextInputType.number,
       textInputAction: TextInputAction.next,
+      style: TextStyle(textBaseline: TextBaseline.alphabetic),
       decoration: InputDecoration(
         hintText: '短信登录仅限中国大陆用户',
         prefixIcon: Container(
@@ -233,6 +236,7 @@ class _LoginPageState extends State<LoginPage> {
       controller: _verifyController,
       keyboardType: TextInputType.number,
       focusNode: _secondFocusNode,
+      style: TextStyle(textBaseline: TextBaseline.alphabetic),
       decoration: InputDecoration(
         hintText: '请输入验证码',
         suffixIcon: GestureDetector(
@@ -262,7 +266,7 @@ class _LoginPageState extends State<LoginPage> {
         ? Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('没有账号? ',style: TextStyle(fontSize: 16)),
+              Text('没有账号? ', style: TextStyle(fontSize: 16)),
               PassportBottomText(
                 text: '手机短信登录',
                 onTab: () {

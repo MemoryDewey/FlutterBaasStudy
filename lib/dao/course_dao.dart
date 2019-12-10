@@ -13,11 +13,11 @@ class CourseDao {
     return CourseListModel.fromJson(response).course;
   }
 
-  static Future<int> getCoursePage({Map<String, dynamic> data}) async {
+  static Future<CoursePageModel> getCoursePage({Map<String, dynamic> data}) async {
     final response = await HttpUtil.post(
       '/course/list/page',
       data: data,
     );
-    return CoursePageModel.fromJson(response).page;
+    return CoursePageModel.fromJson(response);
   }
 }
