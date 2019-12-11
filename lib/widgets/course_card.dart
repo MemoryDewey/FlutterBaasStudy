@@ -1,4 +1,3 @@
-import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -26,12 +25,12 @@ class CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: AutoSize.size(90),
-      margin: EdgeInsets.only(bottom: AutoSize.size(16)),
+      height: 90,
+      margin: EdgeInsets.only(bottom: 16),
       child: Row(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(right: AutoSize.size(10)),
+            padding: EdgeInsets.only(right: 10),
             child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: ClipRRect(
@@ -52,7 +51,7 @@ class CourseCard extends StatelessWidget {
                 Container(
                   child: Text(
                     name,
-                    style: TextStyle(fontSize: AutoSize.font(16), height: 1),
+                    style: TextStyle(fontSize: 16, height: 1),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -61,7 +60,7 @@ class CourseCard extends StatelessWidget {
                     description,
                     maxLines: 2,
                     style: TextStyle(
-                      fontSize: AutoSize.font(14),
+                      fontSize: 14,
                       color: Color(0xff666666),
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -73,14 +72,14 @@ class CourseCard extends StatelessWidget {
                     Text(
                       '$applyCount人报名 | 好评${(rate * 100).toStringAsFixed(0)}%',
                       style: TextStyle(
-                        fontSize: AutoSize.font(14),
+                        fontSize: 14,
                         color: Color(0xff999999),
                       ),
                     ),
                     Text(
                       price == 0 ? '免费' : '￥$price',
                       style: TextStyle(
-                        fontSize: AutoSize.font(14),
+                        fontSize: 14,
                         color:
                             price == 0 ? Color(0xff07c160) : Color(0xffee0a24),
                       ),
@@ -145,7 +144,7 @@ class CourseDiscountCard extends StatelessWidget {
               padding: EdgeInsets.all(10),
               child: Text(
                 name,
-                style: TextStyle(fontSize: AutoSize.font(16)),
+                style: TextStyle(fontSize: 16),
                 overflow: TextOverflow.ellipsis,
               ),
             ),

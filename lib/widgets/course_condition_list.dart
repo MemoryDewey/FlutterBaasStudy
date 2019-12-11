@@ -1,4 +1,3 @@
-import 'package:baas_study/dao/course_dao.dart';
 import 'package:baas_study/model/course_model.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +7,14 @@ class SortCondition {
   int value;
 
   SortCondition({this.name, this.isSelected, this.value});
+}
+
+class SystemTypeCondition {
+  String name;
+  int systemId;
+  int typeId;
+
+  SystemTypeCondition(this.name, this.systemId, this.typeId);
 }
 
 class CourseConditionList extends StatelessWidget {
@@ -78,40 +85,145 @@ class CourseConditionList extends StatelessWidget {
   }
 }
 
-class CourseTypeConditionList extends StatelessWidget {
-  final void Function(String selectValue) itemOnTap;
-  static List<CourseSystemModel> _systemModel = [
-    CourseSystemModel(systemID: -1, systemName: '全部课程')
-  ];
+class CourseTypeConditionList extends StatefulWidget {
+  final void Function(SystemTypeCondition condition) itemOnTap;
+  final List<CourseSystemModel> systemModel;
 
-  const CourseTypeConditionList({Key key, this.itemOnTap}) : super(key: key);
+  const CourseTypeConditionList({
+    Key key,
+    this.itemOnTap,
+    this.systemModel,
+  }) : super(key: key);
+
+  @override
+  _CourseTypeConditionListState createState() =>
+      _CourseTypeConditionListState();
+}
+
+class _CourseTypeConditionListState extends State<CourseTypeConditionList> {
+  int _selectFirstLevelIndex = 0;
+  int _selectSecondLevelIndex = -1;
+  int _selectFirstTempIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    _getSystemType();
+    Color firstLevelColor = Theme.of(context).brightness == Brightness.dark
+        ? Color(0xff11161a)
+        : Color(0xffe1e1e1);
     return Row(
       children: <Widget>[
         Container(
-          width: 100,
+          width: 150,
           child: ListView(
-            children: _systemModel.map((item){
-              //int index = _systemModel.indexOf(item);
-              return Container(
-                height: 45,
-                alignment: Alignment.center,
-                child: Text(item.systemName),
+            children: widget.systemModel.map((item) {
+              int index = widget.systemModel.indexOf(item);
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectFirstLevelIndex = index;
+                    if (_selectFirstLevelIndex == 0) {
+                      _selectFirstTempIndex = 0;
+                      widget.itemOnTap(SystemTypeCondition('全部课程', 0, 0));
+                    }
+                  });
+                },
+                child: Container(
+                  height: 45,
+                  alignment: Alignment.center,
+                  color: _selectFirstLevelIndex == index
+                      ? Theme.of(context).cardColor
+                      : firstLevelColor,
+                  child: Text(
+                    item.systemName,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: _selectFirstLevelIndex == index
+                          ? Colors.blue
+                          : IconTheme.of(context).color,
+                    ),
+                  ),
+                ),
               );
             }).toList(),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              border: Border.all(
+                color: Theme.of(context).cardColor,
+                width: 0,
+              ),
+            ),
+            child: _selectFirstLevelIndex == 0
+                ? Container()
+                : ListView(
+                    children: widget
+                        .systemModel[_selectFirstLevelIndex].courseTypes
+                        .map((item) {
+                      int index = widget
+                          .systemModel[_selectFirstLevelIndex].courseTypes
+                          .indexOf(item);
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectSecondLevelIndex = index;
+                            _selectFirstTempIndex = _selectFirstLevelIndex;
+                            widget.itemOnTap(SystemTypeCondition(
+                              item.typeName,
+                              widget
+                                  .systemModel[_selectFirstLevelIndex].systemID,
+                              item.typeID,
+                            ));
+                          });
+                        },
+                        child: Container(
+                          height: 45,
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: <Widget>[
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  item.typeName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: _selectSecondLevelIndex == index &&
+                                            _selectFirstLevelIndex ==
+                                                _selectFirstTempIndex
+                                        ? Colors.blue
+                                        : Theme.of(context)
+                                            .textTheme
+                                            .title
+                                            .color,
+                                  ),
+                                ),
+                              ),
+                              _selectSecondLevelIndex == index &&
+                                      _selectFirstLevelIndex ==
+                                          _selectFirstTempIndex
+                                  ? Icon(
+                                      Icons.check,
+                                      color: Colors.blue,
+                                      size: 16,
+                                    )
+                                  : SizedBox(),
+                              SizedBox(
+                                width: 16,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
           ),
         )
       ],
     );
-  }
-
-  Future<Null> _getSystemType() async {
-    try {
-      List<CourseSystemModel> model = await CourseDao.getSystemType();
-      _systemModel.addAll(model);
-    } catch (e) {}
   }
 }
