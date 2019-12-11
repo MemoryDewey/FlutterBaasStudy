@@ -8,7 +8,7 @@ import 'package:baas_study/pages/search_page.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
-import 'package:baas_study/widgets/home.dart';
+import 'package:baas_study/widgets/home_widget.dart';
 import 'package:baas_study/widgets/loading_container.dart';
 import 'package:baas_study/widgets/search_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
