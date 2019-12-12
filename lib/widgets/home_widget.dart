@@ -1,5 +1,4 @@
 import 'package:baas_study/model/course_model.dart';
-import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:flutter/material.dart';
 import 'course_card.dart';
@@ -8,7 +7,7 @@ class HomeCourseWidget {
   /// 横排
   static Widget rowCard(List<CourseModel> course) {
     return Container(
-      height: AutoSize.size(250),
+      height: 250,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: course.length,
@@ -57,21 +56,21 @@ class HomeTitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, AutoSize.size(10), 0, AutoSize.size(10)),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Row(
         children: <Widget>[
           Icon(
             icon,
-            size: AutoSize.size(25),
+            size: 25,
             color: colors,
           ),
           Padding(
-            padding: EdgeInsets.only(left: AutoSize.size(10)),
+            padding: EdgeInsets.only(left: 10),
             child: Text(
               text,
               style: TextStyle(
                 color: colors,
-                fontSize: AutoSize.font(20),
+                fontSize: 20,
               ),
             ),
           )

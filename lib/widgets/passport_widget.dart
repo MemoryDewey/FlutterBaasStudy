@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 /// Passport模块顶部Panel
@@ -82,6 +84,7 @@ class PassportFormContainer extends StatelessWidget {
   }
 }
 
+/// 登录按钮
 class PassportBtn extends StatelessWidget {
   final String text;
   final void Function() onPressed;
@@ -111,6 +114,7 @@ class PassportBtn extends StatelessWidget {
   }
 }
 
+/// 底部文字链接
 class PassportBottomText extends StatelessWidget {
   final String text;
   final void Function() onTab;
@@ -129,10 +133,102 @@ class PassportBottomText extends StatelessWidget {
         onTap: onTab,
         child: Text(
           text,
-          style: TextStyle(
-              fontSize: 16, color: Colors.blue),
+          style: TextStyle(fontSize: 16, color: Colors.blue),
         ),
       ),
     );
+  }
+}
+
+class CountDownTimer extends StatefulWidget {
+  final int startSeconds;
+  final String verifyStr;
+  final Function onTapCallback;
+  final void Function() onTap;
+  final TextStyle enableTextStyle, disableTextStyle;
+  final bool autoStart;
+
+  const CountDownTimer({
+    Key key,
+    this.startSeconds = 90,
+    this.verifyStr,
+    this.onTapCallback,
+    this.enableTextStyle = const TextStyle(fontSize: 14, color: Colors.blue),
+    this.disableTextStyle = const TextStyle(
+      fontSize: 16,
+      color: const Color(0xff999999),
+    ),
+    this.autoStart = false,
+    this.onTap,
+  }) : super(key: key);
+
+  @override
+  _CountDownTimerState createState() => _CountDownTimerState();
+}
+
+class _CountDownTimerState extends State<CountDownTimer> {
+  Timer _timer;
+  int _seconds;
+  bool _enable = true;
+  TextStyle _inkWellStyle;
+
+  String _verifyStr;
+
+  @override
+  void initState() {
+    super.initState();
+    _verifyStr = '获取验证码';
+    _seconds = widget.startSeconds;
+    _inkWellStyle = widget.enableTextStyle;
+    if (widget.autoStart) _startTimer();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _cancelTimer();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: Text(
+        '$_verifyStr',
+        textAlign: TextAlign.right,
+        style: _inkWellStyle,
+      ),
+      onTap:
+          (_enable && (_seconds == widget.startSeconds)) ? (){
+            _startTimer();
+            widget.onTap();
+          } : null,
+    );
+  }
+
+  /// 开始倒计时
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_seconds == 0) {
+        _cancelTimer();
+        _seconds = widget.startSeconds;
+        _verifyStr = '重新发送';
+        _enable = true;
+        _inkWellStyle = widget.enableTextStyle;
+        setState(() {});
+        return;
+      }
+
+      _enable = false;
+      _inkWellStyle = widget.disableTextStyle;
+      _seconds--;
+      _verifyStr = '$_seconds秒后重新发送';
+      setState(() {});
+      if (widget.onTapCallback != null) widget.onTapCallback(timer);
+    });
+  }
+
+  /// 取消定时器
+  void _cancelTimer() {
+    _timer?.cancel();
   }
 }

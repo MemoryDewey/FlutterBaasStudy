@@ -1,13 +1,13 @@
 import 'package:baas_study/model/profile_model.dart';
 
-class PswLoginModel {
+class LoginModel {
   int code;
   String token;
   String download;
   UserModel info;
   String msg;
 
-  PswLoginModel({
+  LoginModel({
     this.code,
     this.token,
     this.download,
@@ -15,8 +15,8 @@ class PswLoginModel {
     this.msg,
   });
 
-  factory PswLoginModel.fromJson(Map<String, dynamic> json) {
-    return PswLoginModel(
+  factory LoginModel.fromJson(Map<String, dynamic> json) {
+    return LoginModel(
       code: json['code'],
       token: json['token'],
       download: json['download'],

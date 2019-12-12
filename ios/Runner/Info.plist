@@ -28,6 +28,11 @@
     <string>需要录制音频频权限</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>需要读取设备上的照片及文件权限</string>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+      <key>NSAllowsArbitraryLoads</key>
+      <true/>
+    </dict>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

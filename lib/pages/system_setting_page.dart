@@ -1,4 +1,4 @@
-import 'package:baas_study/pages/login_page.dart';
+import 'package:baas_study/pages/passport/login_page.dart';
 import 'package:baas_study/pages/profile/profile_setting_page.dart';
 import 'package:baas_study/providers/dark_mode_provider.dart';
 import 'package:baas_study/providers/user_provider.dart';

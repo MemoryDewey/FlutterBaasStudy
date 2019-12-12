@@ -1,7 +1,7 @@
 import 'package:baas_study/dao/passport_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
-import 'package:baas_study/pages/login_page.dart';
+import 'package:baas_study/pages/passport/login_page.dart';
 import 'package:baas_study/pages/profile/profile_setting_page.dart';
 import 'package:baas_study/pages/profile/qr_code_scan_page.dart';
 import 'package:baas_study/providers/user_provider.dart';

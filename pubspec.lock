@@ -102,6 +102,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.6.1"
+  flutter_spinkit:
+    dependency: transitive
+    description:
+      name: flutter_spinkit
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.1.0"
   flutter_swiper:
     dependency: "direct main"
     description:
@@ -114,6 +121,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_video:
+    dependency: "direct main"
+    description:
+      name: flutter_video
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.14"
   gzx_dropdown_menu:
     dependency: "direct main"
     description:
@@ -170,6 +184,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.7"
+  orientation:
+    dependency: transitive
+    description:
+      name: orientation
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.0"
   path:
     dependency: transitive
     description:
@@ -226,6 +247,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.5"
+  screen:
+    dependency: transitive
+    description:
+      name: screen
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.5"
   shared_preferences:
     dependency: "direct main"
     description:

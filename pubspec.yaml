@@ -53,6 +53,8 @@ dependencies:
   gzx_dropdown_menu: ^1.0.3
   # Shimmer 闪烁（骨架屏使用）
   shimmer: ^1.0.1
+  # Video 视频播放插件
+  flutter_video: ^0.1.14
 
 dev_dependencies:
   flutter_test:

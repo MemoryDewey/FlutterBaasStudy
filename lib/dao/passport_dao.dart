@@ -1,5 +1,6 @@
 import 'package:baas_study/model/passport_model.dart';
 import 'package:baas_study/model/profile_model.dart';
+import 'package:baas_study/model/reponse_normal_model.dart';
 import 'package:baas_study/utils/http_util.dart';
 
 class PassportDao {
@@ -10,7 +11,7 @@ class PassportDao {
   }
 
   /// 使用账号密码登录
-  static Future<PswLoginModel> pswLogin({
+  static Future<LoginModel> pswLogin({
     String account,
     String psw,
   }) async {
@@ -22,6 +23,31 @@ class PassportDao {
       },
     );
     HttpUtil.clear();
-    return PswLoginModel.fromJson(response);
+    return LoginModel.fromJson(response);
+  }
+
+  /// 使用验证码登录
+  static Future<LoginModel> verifyCodeLogin({
+    String phone,
+    String code,
+  }) async {
+    final response = await HttpUtil.post('/passport/m-login', data: {
+      "phone": phone,
+      "code": code,
+    });
+    HttpUtil.clear();
+    return LoginModel.fromJson(response);
+  }
+
+  /// 获取验证码
+  static Future<ResponseNormalModel> sendShortMsgCode({
+    String option,
+    String phone,
+  }) async {
+    final response = await HttpUtil.post(
+      '/passport/short-message-captcha',
+      data: {"account": phone, "option": option},
+    );
+    return ResponseNormalModel.fromJson(response);
   }
 }

@@ -1,4 +1,4 @@
-import 'package:baas_study/pages/course_list_page.dart';
+import 'package:baas_study/pages/course/course_list_page.dart';
 import 'package:baas_study/pages/home_page.dart';
 import 'package:baas_study/pages/profile/profile_page.dart';
 import 'package:baas_study/pages/search_page.dart';
