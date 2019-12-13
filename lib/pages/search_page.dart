@@ -1,7 +1,7 @@
 import 'package:baas_study/pages/course/course_list_page.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/storage_util.dart';
-import 'package:baas_study/widgets/search_bar.dart';
+import 'package:baas_study/widget/search_bar.dart';
 import 'package:flutter/material.dart';
 
 const SEARCH_BAR_DEFAULT_TEXT = '区块链 以太坊 智能合约';

@@ -1,7 +1,7 @@
 import 'package:baas_study/model/course_model.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:flutter/material.dart';
-import 'course_card.dart';
+import '../course/course_card.dart';
 
 class HomeCourseWidget {
   /// 横排

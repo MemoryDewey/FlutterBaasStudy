@@ -1,11 +1,11 @@
 import 'package:baas_study/dao/course_dao.dart';
 import 'package:baas_study/model/course_model.dart';
 import 'package:baas_study/utils/http_util.dart';
-import 'package:baas_study/widgets/course_card_skeleton.dart';
-import 'package:baas_study/widgets/course_card.dart';
-import 'package:baas_study/widgets/course_condition_list.dart';
-import 'package:baas_study/widgets/search_bar.dart';
-import 'package:baas_study/widgets/skeleton.dart';
+import 'package:baas_study/widget/course/course_card_skeleton.dart';
+import 'package:baas_study/widget/course/course_card.dart';
+import 'package:baas_study/widget/course/course_condition_list.dart';
+import 'package:baas_study/widget/search_bar.dart';
+import 'package:baas_study/widget/skeleton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
@@ -86,7 +86,6 @@ class _CourseListPageState extends State<CourseListPage> {
                 hideLeft: widget.hideLeft,
                 defaultText: widget.keyWord,
                 autofocus: false,
-                showMic: false,
                 hint: '搜索课程',
                 leftButtonClick: () {
                   Navigator.pop(context);

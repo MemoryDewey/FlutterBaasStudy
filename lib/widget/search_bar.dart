@@ -9,7 +9,6 @@ class SearchBar extends StatefulWidget {
   final bool enable;
   final bool hideLeft;
   final bool autofocus;
-  final bool showMic;
   final SearchBarType searchBarType;
   final String hint;
   final String defaultText;
@@ -26,7 +25,6 @@ class SearchBar extends StatefulWidget {
     this.enable = true,
     this.hideLeft,
     this.autofocus = true,
-    this.showMic = true,
     this.searchBarType = SearchBarType.normal,
     this.hint,
     this.leftButtonClick,
@@ -244,30 +242,20 @@ class _SearchBarState extends State<SearchBar> {
                     widget.inputBoxClick,
                   ),
           ),
-          !showClear
-              ? Offstage(
-                  offstage: !widget.showMic,
-                  child: _wrapTap(
-                      Icon(
-                        Icons.mic_none,
-                        size: _size(22),
-                        color: widget.searchBarType == SearchBarType.normal
-                            ? Colors.blue
-                            : Colors.grey,
-                      ),
-                      widget.speakClick),
-                )
-              : _wrapTap(
-                  Icon(
-                    Icons.clear,
-                    size: _size(22),
-                    color: Colors.grey,
-                  ), () {
-                  setState(() {
-                    _controller.clear();
-                    _onChanged('');
-                  });
-                }),
+          Offstage(
+            offstage: !showClear,
+            child: _wrapTap(
+                Icon(
+                  Icons.clear,
+                  size: _size(22),
+                  color: Colors.grey,
+                ), () {
+              setState(() {
+                _controller.clear();
+                _onChanged('');
+              });
+            }),
+          ),
         ],
       ),
     );

@@ -2,8 +2,8 @@ import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/pages/system_setting_page.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:flutter/material.dart';
-import 'custom_list_tile.dart';
-import 'grid_group.dart';
+import '../custom_list_tile.dart';
+import '../grid_group.dart';
 
 /// Grid布局导航
 class ProfileGridGroup extends StatelessWidget {

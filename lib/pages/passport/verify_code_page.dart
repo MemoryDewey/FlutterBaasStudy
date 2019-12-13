@@ -3,9 +3,9 @@ import 'package:baas_study/model/passport_model.dart';
 import 'package:baas_study/model/reponse_normal_model.dart';
 import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/utils/token_util.dart';
-import 'package:baas_study/widgets/custom_app_bar.dart';
-import 'package:baas_study/widgets/passport_widget.dart';
-import 'package:baas_study/widgets/verify_code_input.dart';
+import 'package:baas_study/widget/custom_app_bar.dart';
+import 'package:baas_study/widget/passport/passport_widget.dart';
+import 'package:baas_study/widget/passport/verify_code_input.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

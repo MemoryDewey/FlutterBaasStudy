@@ -10,7 +10,7 @@ import 'package:baas_study/providers/dark_mode_provider.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/utils/token_util.dart';
-import 'package:baas_study/widgets/profile_widget.dart';
+import 'package:baas_study/widget/profile/profile_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

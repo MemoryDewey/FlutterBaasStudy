@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'skeleton.dart';
+import '../skeleton.dart';
 
 class CourseCardSkeletonItem extends StatelessWidget {
   final int index;

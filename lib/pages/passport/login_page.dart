@@ -7,7 +7,7 @@ import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/theme/passport_theme.dart';
 import 'package:baas_study/utils/token_util.dart';
-import 'package:baas_study/widgets/passport_widget.dart';
+import 'package:baas_study/widget/passport/passport_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
