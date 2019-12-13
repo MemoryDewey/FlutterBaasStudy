@@ -11,7 +11,7 @@ import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/home/home_widget.dart';
 import 'package:baas_study/widget/loading_container.dart';
 import 'package:baas_study/widget/search_bar.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -243,10 +243,23 @@ class _HomePageState extends State<HomePage>
             itemCount: _listBanner.length,
             autoplay: true,
             itemBuilder: (BuildContext context, index) {
-              return CachedNetworkImage(
-                imageUrl: HttpUtil.getImage(_listBanner[index].image),
-                errorWidget: (context, url, error) => Icon(Icons.image),
+              return ExtendedImage.network(
+                HttpUtil.getImage(_listBanner[index].image),
+                cache: true,
                 fit: BoxFit.cover,
+                loadStateChanged: (ExtendedImageState state) {
+                  if (state.extendedImageLoadState == LoadState.loading) {
+                    return Image.asset(
+                      'assets/images/loading.gif',
+                      fit: BoxFit.cover,
+                    );
+                  }
+                  if (state.extendedImageLoadState == LoadState.failed)
+                    return null;
+                  return ExtendedRawImage(
+                    image: state.extendedImageInfo?.image,
+                  );
+                },
               );
             },
             pagination: SwiperPagination(

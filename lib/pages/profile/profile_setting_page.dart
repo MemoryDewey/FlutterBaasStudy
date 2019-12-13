@@ -12,7 +12,7 @@ import 'package:baas_study/widget/custom_app_bar.dart';
 import 'package:baas_study/widget/custom_list_tile.dart';
 import 'package:baas_study/widget/grid_group.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -138,11 +138,11 @@ class _ProfileSettingState extends State<ProfileSetting> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             ClipOval(
-              child: CachedNetworkImage(
+              child: ExtendedImage.network(
+                avatarUrl,
                 width: 56,
                 height: 56,
-                imageUrl: avatarUrl,
-                errorWidget: (context, url, error) => Icon(FontIcons.user),
+                cache: true,
               ),
             ),
             Padding(
@@ -247,12 +247,11 @@ class _ProfileSettingState extends State<ProfileSetting> {
   /// 修改生日
   Future<Null> _setBirthday(DateTime dateTime) async {
     try {
-      String month = dateTime.month > 9
-          ? dateTime.month.toString()
-          : '0${dateTime.month}';
+      String month =
+          dateTime.month > 9 ? dateTime.month.toString() : '0${dateTime.month}';
       String day =
-      dateTime.day > 9 ? dateTime.day.toString() : '0${dateTime.day}';
-      if(_userProvider.user.birthday != '${dateTime.year}-$month-$day'){
+          dateTime.day > 9 ? dateTime.day.toString() : '0${dateTime.day}';
+      if (_userProvider.user.birthday != '${dateTime.year}-$month-$day') {
         BotToast.showLoading();
         ResponseNormalModel model = await ProfileDao.changeProfile({
           'birthday': dateTime.toIso8601String(),
@@ -346,9 +345,10 @@ class __SexGridState extends State<_SexGrid> {
   Future<Null> _setSex() async {
     Navigator.of(context).pop();
     try {
-      if(_userProvider.user.sex != sex){
+      if (_userProvider.user.sex != sex) {
         BotToast.showLoading();
-        ResponseNormalModel model = await ProfileDao.changeProfile({'sex': sex});
+        ResponseNormalModel model =
+            await ProfileDao.changeProfile({'sex': sex});
         if (model.code == 1000) {
           _userProvider.user.sex = sex;
           _userProvider.saveUser(_userProvider.user);

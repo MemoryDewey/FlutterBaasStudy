@@ -22,13 +22,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.2.0"
-  cached_network_image:
-    dependency: "direct main"
-    description:
-      name: cached_network_image
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.1.3"
   charcode:
     dependency: transitive
     description:
@@ -56,7 +49,7 @@ packages:
       name: crypto
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.3"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -71,18 +64,32 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.7"
+  extended_image:
+    dependency: "direct main"
+    description:
+      name: extended_image
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.6.7"
+  extended_image_library:
+    dependency: "direct main"
+    description:
+      name: extended_image_library
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.8"
   flutter:
     dependency: "direct main"
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_cache_manager:
-    dependency: transitive
+  flutter_ijkplayer:
+    dependency: "direct main"
     description:
-      name: flutter_cache_manager
+      name: flutter_ijkplayer
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.3"
+    version: "0.3.5+1"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -102,13 +109,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.6.1"
-  flutter_spinkit:
-    dependency: transitive
-    description:
-      name: flutter_spinkit
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "4.1.0"
   flutter_swiper:
     dependency: "direct main"
     description:
@@ -121,13 +121,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_video:
-    dependency: "direct main"
-    description:
-      name: flutter_video
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.1.14"
   gzx_dropdown_menu:
     dependency: "direct main"
     description:
@@ -142,6 +135,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.12.0+2"
+  http_client_helper:
+    dependency: transitive
+    description:
+      name: http_client_helper
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.2.1"
   http_parser:
     dependency: transitive
     description:
@@ -184,13 +184,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.7"
-  orientation:
-    dependency: transitive
-    description:
-      name: orientation
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.1.0"
   path:
     dependency: transitive
     description:
@@ -199,7 +192,7 @@ packages:
     source: hosted
     version: "1.6.4"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.flutter-io.cn"
@@ -247,13 +240,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.5"
-  screen:
-    dependency: transitive
-    description:
-      name: screen
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.0.5"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -287,13 +273,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.5.5"
-  sqflite:
-    dependency: transitive
-    description:
-      name: sqflite
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.1.8"
   stack_trace:
     dependency: transitive
     description:
@@ -315,13 +294,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.5"
-  synchronized:
-    dependency: transitive
-    description:
-      name: synchronized
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.1.1"
   term_glyph:
     dependency: transitive
     description:
@@ -350,13 +322,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.6"
-  uuid:
-    dependency: transitive
-    description:
-      name: uuid
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.4"
   vector_math:
     dependency: transitive
     description:
@@ -365,5 +330,5 @@ packages:
     source: hosted
     version: "2.0.8"
 sdks:
-  dart: ">=2.5.0 <3.0.0"
+  dart: ">2.4.0 <3.0.0"
   flutter: ">=1.9.1+hotfix.5 <2.0.0"

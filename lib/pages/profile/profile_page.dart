@@ -1,6 +1,7 @@
 import 'package:baas_study/dao/passport_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
+import 'package:baas_study/pages/course/user_course_page.dart';
 import 'package:baas_study/pages/passport/login_page.dart';
 import 'package:baas_study/pages/profile/profile_setting_page.dart';
 import 'package:baas_study/pages/profile/qr_code_scan_page.dart';
@@ -10,8 +11,9 @@ import 'package:baas_study/providers/dark_mode_provider.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/utils/token_util.dart';
+import 'package:baas_study/widget/grid_group.dart';
 import 'package:baas_study/widget/profile/profile_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage>
     _userProvider = Provider.of<UserProvider>(context);
     ThemeData themeData = Theme.of(context);
     return Scaffold(
-      appBar: _appBar,
+      appBar: _appBar(),
       body: SmartRefresher(
         controller: _refreshController,
         enablePullDown: true,
@@ -59,7 +61,9 @@ class _ProfilePageState extends State<ProfilePage>
               builder: (context, userInfo, child) => _UserInfo(
                 backgroundColor: themeData.appBarTheme.color,
                 isLogin: userInfo.hasUser,
-                onTab: _jumpToLoginOrInfo,
+                onTab: () {
+                  _jumpToLoginOrOther(ProfileSetting());
+                },
                 nickname: userInfo.user?.nickname,
                 avatarUrl: userInfo.hasUser
                     ? HttpUtil.getImage(userInfo.user.avatarUrl)
@@ -67,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage>
               ),
             ),
             Divider(height: 0, color: Colors.grey),
-            ProfileGridGroup(),
+            _gridGroup(),
             ProfileStudyList(),
             ProfileBalanceInfo(),
             ProfileAccountInfo(),
@@ -82,52 +86,81 @@ class _ProfilePageState extends State<ProfilePage>
   bool get wantKeepAlive => true;
 
   /// appBar
-  Widget get _appBar {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(40),
-      child: AppBar(
-        elevation: 0,
-        actions: <Widget>[
-          Offstage(
-            offstage: _darkModeModel.darkMode == DarkModel.auto,
-            child: InkWell(
-                onTap: () {
-                  _darkModeModel.changeMode(
+  Widget _appBar() => PreferredSize(
+        preferredSize: Size.fromHeight(40),
+        child: AppBar(
+          elevation: 0,
+          actions: <Widget>[
+            Offstage(
+              offstage: _darkModeModel.darkMode == DarkModel.auto,
+              child: InkWell(
+                  onTap: () {
+                    _darkModeModel.changeMode(
+                        _darkModeModel.darkMode == DarkModel.on
+                            ? DarkModel.off
+                            : DarkModel.on);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Icon(
                       _darkModeModel.darkMode == DarkModel.on
-                          ? DarkModel.off
-                          : DarkModel.on);
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Icon(
-                    _darkModeModel.darkMode == DarkModel.on
-                        ? FontIcons.light_mode
-                        : FontIcons.dark_mode,
-                    size: 22,
-                  ),
-                )),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.of(context).push(SlideTopRoute(QrCodeScanPage()));
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Icon(
-                FontIcons.scan,
-                size: 22,
-              ),
+                          ? FontIcons.light_mode
+                          : FontIcons.dark_mode,
+                      size: 22,
+                    ),
+                  )),
             ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(SlideTopRoute(QrCodeScanPage()));
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Icon(
+                  FontIcons.scan,
+                  size: 22,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+
+  /// Grid布局导航
+  Widget _gridGroup() => GridNav(
+        height: 90,
+        children: <Widget>[
+          GridItem(
+            icon: FontIcons.note,
+            text: '课程',
+            iconColor: Color(0xff3f98eb),
+            onTab: () {
+              _jumpToLoginOrOther(UserCoursePage());
+            },
+          ),
+          GridItem(
+            icon: FontIcons.wallet,
+            text: '钱包',
+            iconColor: Color(0xffff5a00),
+            onTab: () {
+              print('钱包');
+            },
+          ),
+          GridItem(
+            icon: Icons.favorite,
+            text: '收藏',
+            iconColor: Color(0xffff2121),
+            onTab: () {
+              print('收藏');
+            },
           )
         ],
-      ),
-    );
-  }
+      );
 
-  /// 跳转到登录页或个人信息页
-  void _jumpToLoginOrInfo() {
+  /// 跳转到登录页或其他页
+  void _jumpToLoginOrOther(Widget toPage) {
     _userProvider.hasUser
-        ? Navigator.push(context, SlideRoute(ProfileSetting()))
+        ? Navigator.push(context, SlideRoute(toPage))
         : Navigator.push(context, SlideTopRoute(LoginPage()));
   }
 
@@ -178,12 +211,11 @@ class _UserInfo extends StatelessWidget {
           children: <Widget>[
             isLogin
                 ? ClipOval(
-                    child: CachedNetworkImage(
+                    child: ExtendedImage.network(
+                      avatarUrl,
                       width: AutoSize.size(64),
                       height: AutoSize.size(64),
-                      imageUrl: avatarUrl,
-                      errorWidget: (context, url, error) =>
-                          Icon(FontIcons.user),
+                      cache: true,
                     ),
                   )
                 : Container(

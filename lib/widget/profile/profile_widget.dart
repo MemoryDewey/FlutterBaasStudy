@@ -3,43 +3,6 @@ import 'package:baas_study/pages/system_setting_page.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:flutter/material.dart';
 import '../custom_list_tile.dart';
-import '../grid_group.dart';
-
-/// Grid布局导航
-class ProfileGridGroup extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GridNav(
-      height: 90,
-      children: <Widget>[
-        GridItem(
-          icon: FontIcons.note,
-          text: '课程',
-          iconColor: Color(0xff3f98eb),
-          onTab: () {
-            print('课程');
-          },
-        ),
-        GridItem(
-          icon: FontIcons.wallet,
-          text: '钱包',
-          iconColor: Color(0xffff5a00),
-          onTab: () {
-            print('钱包');
-          },
-        ),
-        GridItem(
-          icon: Icons.favorite,
-          text: '收藏',
-          iconColor: Color(0xffff2121),
-          onTab: () {
-            print('收藏');
-          },
-        )
-      ],
-    );
-  }
-}
 
 /// 最近在学 - 我的考试 ListTile
 class ProfileStudyList extends StatelessWidget {

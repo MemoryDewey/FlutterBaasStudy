@@ -14,6 +14,10 @@ class AppTheme {
         fillColor: Color(0xffededed),
       ),
       splashColor: Colors.white,
+      tabBarTheme: TabBarTheme(
+        unselectedLabelColor: Colors.black87,
+        labelColor: Colors.blueAccent,
+      ),
     );
   }
 
@@ -30,6 +34,10 @@ class AppTheme {
         fillColor: Color(0xff2b2b2b),
       ),
       splashColor: Color(0xff373737),
+      tabBarTheme: TabBarTheme(
+        labelColor: Colors.tealAccent[200],
+        unselectedLabelColor: Colors.white,
+      ),
     );
   }
 }

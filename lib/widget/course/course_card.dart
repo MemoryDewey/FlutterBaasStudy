@@ -1,7 +1,7 @@
 import 'package:baas_study/pages/course/course_info_page.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 
 /// 课程卡片
 class CourseCard extends StatelessWidget {
@@ -27,7 +27,7 @@ class CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.push(context, SlideRoute(CourseInfoPage()));
       },
       child: Container(
@@ -41,10 +41,23 @@ class CourseCard extends StatelessWidget {
                   aspectRatio: 16 / 9,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
-                    child: CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      errorWidget: (context, url, error) => Icon(Icons.image),
+                    child: ExtendedImage.network(
+                      imageUrl,
+                      cache: true,
                       fit: BoxFit.cover,
+                      loadStateChanged: (ExtendedImageState state) {
+                        if (state.extendedImageLoadState == LoadState.loading) {
+                          return Image.asset(
+                            'assets/images/loading.gif',
+                            fit: BoxFit.cover,
+                          );
+                        }
+                        if (state.extendedImageLoadState == LoadState.failed)
+                          return null;
+                        return ExtendedRawImage(
+                          image: state.extendedImageInfo?.image,
+                        );
+                      },
                     ),
                   )),
             ),
@@ -86,8 +99,9 @@ class CourseCard extends StatelessWidget {
                         price == 0 ? '免费' : '￥$price',
                         style: TextStyle(
                           fontSize: 14,
-                          color:
-                          price == 0 ? Color(0xff07c160) : Color(0xffee0a24),
+                          color: price == 0
+                              ? Color(0xff07c160)
+                              : Color(0xffee0a24),
                         ),
                       )
                     ],
@@ -141,10 +155,23 @@ class CourseDiscountCard extends StatelessWidget {
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    errorWidget: (context, url, error) => Icon(Icons.image),
+                  child: ExtendedImage.network(
+                    imageUrl,
+                    cache: true,
                     fit: BoxFit.cover,
+                    loadStateChanged: (ExtendedImageState state) {
+                      if (state.extendedImageLoadState == LoadState.loading) {
+                        return Image.asset(
+                          'assets/images/loading.gif',
+                          fit: BoxFit.fill,
+                        );
+                      }
+                      if (state.extendedImageLoadState == LoadState.failed)
+                        return null;
+                      return ExtendedRawImage(
+                        image: state.extendedImageInfo?.image,
+                      );
+                    },
                   ),
                 )),
             Padding(
