@@ -14,6 +14,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> actions = [];
+    if (tailTitle != null)
+      actions.add(FlatButton(
+        onPressed: tailOnTap,
+        child: Text(tailTitle),
+      ));
+
     return AppBar(
       leading: GestureDetector(
         onTap: () {
@@ -22,6 +29,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Icon(Icons.arrow_back_ios),
       ),
       title: Text(title, style: TextStyle(fontSize: 18)),
+      actions: actions,
       centerTitle: true,
       textTheme: Theme.of(context).textTheme,
       elevation: 0,

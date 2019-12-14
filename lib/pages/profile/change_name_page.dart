@@ -1,6 +1,7 @@
 import 'package:baas_study/dao/profile_dao.dart';
 import 'package:baas_study/model/reponse_normal_model.dart';
 import 'package:baas_study/providers/user_provider.dart';
+import 'package:baas_study/widget/custom_app_bar.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,28 +23,12 @@ class _ChangeNamePageState extends State<ChangeNamePage> {
   Widget build(BuildContext context) {
     _userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(Icons.arrow_back_ios),
-        ),
-        title: Text(
-          widget.isNickname ? '修改昵称' : '修改姓名',
-          style: TextStyle(fontSize: 18),
-        ),
-        centerTitle: true,
-        textTheme: Theme.of(context).textTheme,
-        elevation: 0,
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              _saveName(widget.isNickname);
-            },
-            child: Text('保存'),
-          )
-        ],
+      appBar: CustomAppBar(
+        title: widget.isNickname ? '修改昵称' : '修改姓名',
+        tailTitle: '保存',
+        tailOnTap: () {
+          _saveName(widget.isNickname);
+        },
       ),
       body: Padding(
         padding: EdgeInsets.only(left: 16),
@@ -96,6 +81,7 @@ class _ChangeNamePageState extends State<ChangeNamePage> {
         }
         BotToast.showText(text: '修改成功');
       }
+      FocusScope.of(context).requestFocus(FocusNode());
       Navigator.pop(context);
     } catch (e) {}
     BotToast.closeAllLoading();
