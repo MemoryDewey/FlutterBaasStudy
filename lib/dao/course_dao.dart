@@ -58,4 +58,11 @@ class CourseDao {
         data: {"courseID": courseID});
     return ResponseNormalModel.fromJson(response);
   }
+
+  /// 获取收藏的全部课程
+  static Future<List<CollectionCoursesModel>> getAllCollections() async {
+    final response = await HttpUtil.get('/course/list/collection-all');
+    return CourseManageModel.fromJson(response, CollectionCoursesModel())
+        .courses;
+  }
 }

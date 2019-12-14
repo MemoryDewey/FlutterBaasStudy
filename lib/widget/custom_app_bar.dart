@@ -32,7 +32,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: actions,
       centerTitle: true,
       textTheme: Theme.of(context).textTheme,
-      elevation: 0,
+      elevation: 0.5,
     );
   }
 

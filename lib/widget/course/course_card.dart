@@ -1,5 +1,6 @@
 import 'package:baas_study/pages/course/course_info_page.dart';
 import 'package:baas_study/routes/router.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
 
@@ -372,4 +373,95 @@ class CourseManageCard extends StatelessWidget {
         textColor: textColor,
         splashColor: buttonColor,
       );
+}
+
+/// 收藏课程 最近在学课程卡片
+class CourseSimpleCard extends StatelessWidget {
+  final String name;
+  final int price;
+  final int count;
+  final String image;
+
+  const CourseSimpleCard({
+    Key key,
+    this.name,
+    this.price,
+    this.count,
+    this.image,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      height: 120,
+      color: Theme.of(context).cardColor,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          AspectRatio(
+            aspectRatio: 16 / 9,
+            child: ExtendedImage.network(
+              image,
+              cache: true,
+              fit: BoxFit.cover,
+              loadStateChanged: (ExtendedImageState state) {
+                if (state.extendedImageLoadState == LoadState.loading) {
+                  return Image.asset(
+                    'assets/images/loading.gif',
+                    fit: BoxFit.cover,
+                  );
+                }
+                if (state.extendedImageLoadState == LoadState.failed)
+                  return null;
+                return ExtendedRawImage(
+                  image: state.extendedImageInfo?.image,
+                  fit: BoxFit.cover,
+                );
+              },
+            ),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  height: 50,
+                  child: Text(
+                    name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      price == 0 ? '免费' : '￥$price',
+                      style: TextStyle(
+                        color:
+                            price == 0 ? Color(0xff07c160) : Color(0xffee0a24),
+                        height: 1,
+                      ),
+                    ),
+                    Text(
+                      '$count人报名',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        height: 1,
+                        fontSize: 12,
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

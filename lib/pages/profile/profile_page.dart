@@ -1,6 +1,8 @@
 import 'package:baas_study/dao/passport_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
+import 'package:baas_study/pages/course/collection_course_page.dart';
+import 'package:baas_study/pages/course/latest_browse_course_page.dart';
 import 'package:baas_study/pages/course/user_course_page.dart';
 import 'package:baas_study/pages/passport/login_page.dart';
 import 'package:baas_study/pages/profile/profile_setting_page.dart';
@@ -11,6 +13,7 @@ import 'package:baas_study/providers/dark_mode_provider.dart';
 import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/utils/token_util.dart';
+import 'package:baas_study/widget/custom_list_tile.dart';
 import 'package:baas_study/widget/grid_group.dart';
 import 'package:baas_study/widget/profile/profile_widget.dart';
 import 'package:extended_image/extended_image.dart';
@@ -72,7 +75,7 @@ class _ProfilePageState extends State<ProfilePage>
             ),
             Divider(height: 0, color: Colors.grey),
             _gridGroup(),
-            ProfileStudyList(),
+            _profileStudyList(),
             ProfileBalanceInfo(),
             ProfileAccountInfo(),
           ],
@@ -151,9 +154,29 @@ class _ProfilePageState extends State<ProfilePage>
             text: '收藏',
             iconColor: Color(0xffff2121),
             onTap: () {
-              print('收藏');
+              _jumpToLoginOrOther(CollectionCoursePage());
             },
           )
+        ],
+      );
+
+  /// ListTail 最近在学 我的考试
+  Widget _profileStudyList() => ListTileGroup(
+        top: 20,
+        children: <Widget>[
+          ListTileCustom(
+            leading: FontIcons.time,
+            leadingTitle: '最近在学',
+            color: Color(0xff3f98eb),
+            onTap: (){
+              _jumpToLoginOrOther(LatestBrowseCoursePage());
+            },
+          ),
+          ListTileCustom(
+            leading: FontIcons.paper,
+            leadingTitle: '我的考试',
+            color: Color(0xffff2121),
+          ),
         ],
       );
 

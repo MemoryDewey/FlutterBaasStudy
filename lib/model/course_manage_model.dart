@@ -7,7 +7,7 @@ class CourseManageModel {
 
   factory CourseManageModel.fromJson(
       Map<String, dynamic> json, dynamic courseType) {
-    List<dynamic> courses=[];
+    List<dynamic> courses = [];
     if (json['courses'] != null) {
       if (courseType is UserCoursesModel) {
         courses = new List<UserCoursesModel>();
@@ -23,6 +23,11 @@ class CourseManageModel {
         courses = new List<BstCoursesModel>();
         json['courses'].forEach((v) {
           courses.add(new BstCoursesModel.fromJson(v));
+        });
+      }else if(courseType is CollectionCoursesModel){
+        courses = new List<CollectionCoursesModel>();
+        json['courses'].forEach((v) {
+          courses.add(new CollectionCoursesModel.fromJson(v));
         });
       }
     }
@@ -185,6 +190,42 @@ class CourseInfoModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['courseName'] = this.courseName;
     data['courseImage'] = this.courseImage;
+    return data;
+  }
+}
+
+class CollectionCoursesModel {
+  int courseID;
+  String courseName;
+  String courseImage;
+  int applyCount;
+  int price;
+
+  CollectionCoursesModel({
+    this.courseID,
+    this.courseName,
+    this.courseImage,
+    this.applyCount,
+    this.price,
+  });
+
+  factory CollectionCoursesModel.fromJson(Map<String, dynamic> json) {
+    return CollectionCoursesModel(
+      courseID: json['courseID'],
+      courseName: json['courseName'],
+      courseImage: json['courseImage'],
+      applyCount: json['applyCount'],
+      price: json['price'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['courseID'] = this.courseID;
+    data['courseName'] = this.courseName;
+    data['courseImage'] = this.courseImage;
+    data['applyCount'] = this.applyCount;
+    data['price'] = this.price;
     return data;
   }
 }
