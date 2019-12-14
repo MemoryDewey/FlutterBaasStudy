@@ -56,6 +56,7 @@ class CourseCard extends StatelessWidget {
                           return null;
                         return ExtendedRawImage(
                           image: state.extendedImageInfo?.image,
+                          fit: BoxFit.cover,
                         );
                       },
                     ),
@@ -138,8 +139,8 @@ class CourseDiscountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 170,
-      margin: EdgeInsets.only(right: 10),
+      width: 200,
+      margin: EdgeInsets.only(left: 10),
       child: Card(
         elevation: 2,
         shape: RoundedRectangleBorder(
@@ -163,13 +164,14 @@ class CourseDiscountCard extends StatelessWidget {
                       if (state.extendedImageLoadState == LoadState.loading) {
                         return Image.asset(
                           'assets/images/loading.gif',
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                         );
                       }
                       if (state.extendedImageLoadState == LoadState.failed)
                         return null;
                       return ExtendedRawImage(
                         image: state.extendedImageInfo?.image,
+                        fit: BoxFit.cover,
                       );
                     },
                   ),
@@ -225,14 +227,17 @@ class CourseDiscountCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  MaterialButton(
-                    color: Color(0xffff976a),
-                    textColor: Colors.white,
-                    minWidth: 150,
-                    onPressed: () {
-                      print('course:$id');
-                    },
-                    child: Text('马上抢购'),
+                  Center(
+                    child: MaterialButton(
+                      color: Color(0xffff976a),
+                      textColor: Colors.white,
+                      splashColor: Colors.transparent,
+                      minWidth: 150,
+                      onPressed: () {
+                        print('course:$id');
+                      },
+                      child: Text('马上抢购'),
+                    ),
                   )
                 ],
               ),
@@ -242,4 +247,129 @@ class CourseDiscountCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// 课程管理页面卡片
+class CourseManageCard extends StatelessWidget {
+  final String dateTime;
+  final String state;
+  final String imageUrl;
+  final String courseName;
+  final String price;
+  final bool isFree;
+  final Widget bottom;
+
+  const CourseManageCard({
+    Key key,
+    this.dateTime,
+    this.state,
+    @required this.imageUrl,
+    @required this.courseName,
+    this.price,
+    this.isFree = true,
+    this.bottom,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 16, right: 16, top: 12),
+      margin: EdgeInsets.only(bottom: 16),
+      color: Theme.of(context).cardColor,
+      height: 182,
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                dateTime,
+                style: TextStyle(
+                  color: IconTheme.of(context).color,
+                  fontSize: 18,
+                ),
+              ),
+              Text(
+                state,
+                style: TextStyle(color: Colors.blue),
+              )
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            height: 100,
+            child: Row(
+              children: <Widget>[
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: ExtendedImage.network(
+                    imageUrl,
+                    cache: true,
+                    fit: BoxFit.cover,
+                    loadStateChanged: (ExtendedImageState state) {
+                      if (state.extendedImageLoadState == LoadState.loading) {
+                        return Image.asset(
+                          'assets/images/loading.gif',
+                          fit: BoxFit.cover,
+                        );
+                      }
+                      if (state.extendedImageLoadState == LoadState.failed)
+                        return null;
+                      return ExtendedRawImage(
+                        image: state.extendedImageInfo?.image,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        courseName,
+                        style: TextStyle(fontSize: 16),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      price != null
+                          ? Text(
+                              isFree ? '免费' : price,
+                              style: TextStyle(
+                                color: isFree
+                                    ? Color(0xff07c160)
+                                    : Color(0xffee0a24),
+                              ),
+                            )
+                          : SizedBox(),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          Divider(height: 0, color: Colors.grey),
+          bottom,
+        ],
+      ),
+    );
+  }
+
+  static Widget cardBottomBtn({
+    String text,
+    Color textColor,
+    Color buttonColor,
+    void Function() onPressed,
+  }) =>
+      RaisedButton(
+        onPressed: onPressed,
+        child: Text(text),
+        disabledColor: Color(0xff999999),
+        disabledTextColor: Colors.white70,
+        color: buttonColor,
+        textColor: textColor,
+        splashColor: buttonColor,
+      );
 }

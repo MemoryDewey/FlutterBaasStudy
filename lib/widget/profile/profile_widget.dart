@@ -65,7 +65,7 @@ class ProfileAccountInfo extends StatelessWidget {
           leading: Icons.settings,
           leadingTitle: '系统设置',
           color: Color(0xff3f98eb),
-          onTab: () {
+          onTap: () {
             Navigator.push(context, SlideRoute(SystemSettingPage()));
           },
         ),

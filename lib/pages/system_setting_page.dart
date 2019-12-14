@@ -46,7 +46,7 @@ class _SystemSettingPageState extends State<SystemSettingPage> {
               children: <Widget>[
                 ListTileCustom(
                   leadingTitle: '账号资料',
-                  onTab: () {
+                  onTap: () {
                     Navigator.push(context, SlideRoute(ProfileSetting()));
                   },
                 ),
@@ -71,7 +71,7 @@ class _SystemSettingPageState extends State<SystemSettingPage> {
               ListTileCustom(
                 leadingTitle: '清除缓存',
                 trailingTitle: _cacheSize,
-                onTab: _clearCache,
+                onTap: _clearCache,
               ),
               Material(
                 color: Theme.of(context).cardColor,

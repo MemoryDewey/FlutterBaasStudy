@@ -44,7 +44,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
               children: <Widget>[
                 _avatarListTile(
                     avatarUrl: HttpUtil.getImage(userInfo.user.avatarUrl),
-                    onTab: () {
+                    onTap: () {
                       showDialog<void>(
                         context: context,
                         barrierDismissible: true,
@@ -59,7 +59,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 ListTileCustom(
                   leadingTitle: '昵称',
                   trailingTitle: userInfo.user.nickname,
-                  onTab: () {
+                  onTap: () {
                     Navigator.push(
                       context,
                       SlideRoute(
@@ -73,7 +73,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 ListTileCustom(
                   leadingTitle: '姓名',
                   trailingTitle: userInfo.user.realName,
-                  onTab: () {
+                  onTap: () {
                     Navigator.push(
                       context,
                       SlideRoute(
@@ -87,7 +87,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 ListTileCustom(
                   leadingTitle: '性别',
                   trailingTitle: _sexMap[userInfo.user.sex],
-                  onTab: () {
+                  onTap: () {
                     setState(() {
                       _sex = userInfo.user.sex;
                     });
@@ -103,7 +103,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 ListTileCustom(
                   leadingTitle: '生日',
                   trailingTitle: userInfo.user.birthday,
-                  onTab: () {
+                  onTap: () {
                     DateTime birthday = userInfo.user.birthday == null
                         ? DateTime.now()
                         : DateTime.parse(userInfo.user.birthday);
@@ -126,13 +126,13 @@ class _ProfileSettingState extends State<ProfileSetting> {
   }
 
   /// 头像 ListTile
-  Widget _avatarListTile({String avatarUrl, void Function() onTab}) {
+  Widget _avatarListTile({String avatarUrl, void Function() onTap}) {
     return Material(
       color: Colors.transparent,
       child: ListTile(
         contentPadding: EdgeInsets.all(16),
         leading: Text('头像'),
-        onTap: onTab,
+        onTap: onTap,
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -169,7 +169,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
           text: '拍照',
           iconColor: Color(0xfffa7298),
           iconSize: 40,
-          onTab: () async {
+          onTap: () async {
             File image =
                 await ImagePicker.pickImage(source: ImageSource.camera);
             _cropImage(image);
@@ -180,7 +180,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
           text: '相册',
           iconColor: Color(0xff8bc24a),
           iconSize: 40,
-          onTab: () async {
+          onTap: () async {
             File image =
                 await ImagePicker.pickImage(source: ImageSource.gallery);
             _cropImage(image);
@@ -191,7 +191,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
           text: '默认',
           iconColor: Color(0xff3f98eb),
           iconSize: 40,
-          onTab: () {
+          onTap: () {
             _setDefaultAvatar();
           },
         )
@@ -303,7 +303,7 @@ class __SexGridState extends State<_SexGrid> {
             iconColor: Color(0xff3f98eb),
             iconSize: 40,
             selected: sex == 'M',
-            onTab: () {
+            onTap: () {
               setState(() {
                 sex = 'M';
               });
@@ -315,7 +315,7 @@ class __SexGridState extends State<_SexGrid> {
             iconColor: Color(0xff8bc24a),
             iconSize: 40,
             selected: sex == 'S',
-            onTab: () {
+            onTap: () {
               setState(() {
                 sex = 'S';
               });
@@ -327,7 +327,7 @@ class __SexGridState extends State<_SexGrid> {
             iconColor: Color(0xfffa7298),
             iconSize: 40,
             selected: sex == 'F',
-            onTab: () {
+            onTap: () {
               setState(() {
                 sex = 'F';
               });

@@ -117,12 +117,12 @@ class PassportBtn extends StatelessWidget {
 /// 底部文字链接
 class PassportBottomText extends StatelessWidget {
   final String text;
-  final void Function() onTab;
+  final void Function() onTap;
 
   const PassportBottomText({
     Key key,
     this.text,
-    this.onTab,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -130,7 +130,7 @@ class PassportBottomText extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: GestureDetector(
-        onTap: onTab,
+        onTap: onTap,
         child: Text(
           text,
           style: TextStyle(fontSize: 16, color: Colors.blue),

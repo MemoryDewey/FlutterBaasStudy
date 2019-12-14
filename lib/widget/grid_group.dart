@@ -31,7 +31,7 @@ class GridItem extends StatelessWidget {
   final String text;
   final double fontSize;
   final bool selected;
-  final void Function() onTab;
+  final void Function() onTap;
 
   const GridItem({
     Key key,
@@ -41,7 +41,7 @@ class GridItem extends StatelessWidget {
     this.text,
     this.fontSize = 14,
     this.selected = false,
-    this.onTab,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -58,7 +58,7 @@ class GridItem extends StatelessWidget {
                 child: _item(context),
               )
             : _item(context),
-        onPressed: onTab,
+        onPressed: onTap,
       ),
     );
   }

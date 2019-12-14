@@ -7,7 +7,7 @@ class HomeCourseWidget {
   /// 横排
   static Widget rowCard(List<CourseModel> course) {
     return Container(
-      height: 250,
+      height: 265,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: course.length,
@@ -55,27 +55,21 @@ class HomeTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: Row(
-        children: <Widget>[
-          Icon(
+    return Row(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: Icon(
             icon,
-            size: 25,
+            size: 21,
             color: colors,
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: Text(
-              text,
-              style: TextStyle(
-                color: colors,
-                fontSize: 20,
-              ),
-            ),
-          )
-        ],
-      ),
+        ),
+        Text(
+          text,
+          style: TextStyle(fontSize: 16),
+        ),
+      ],
     );
   }
 }

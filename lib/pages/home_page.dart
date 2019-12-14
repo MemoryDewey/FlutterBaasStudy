@@ -6,7 +6,6 @@ import 'package:baas_study/model/course_model.dart';
 import 'package:baas_study/model/home_course_model.dart';
 import 'package:baas_study/pages/search_page.dart';
 import 'package:baas_study/routes/router.dart';
-import 'package:baas_study/utils/auto_size_utli.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/home/home_widget.dart';
 import 'package:baas_study/widget/loading_container.dart';
@@ -32,12 +31,6 @@ class _HomePageState extends State<HomePage>
   List<CourseModel> _listRecommend = [];
   double _appBarAlpha = 0;
   bool _loading = true;
-  EdgeInsetsGeometry _padding = EdgeInsets.fromLTRB(
-    AutoSize.size(16),
-    AutoSize.size(10),
-    AutoSize.size(16),
-    AutoSize.size(10),
-  );
   static num _paddingTop = MediaQueryData.fromWindow(window).padding.top;
 
   @override
@@ -80,7 +73,7 @@ class _HomePageState extends State<HomePage>
                   child: ListView(
                     children: <Widget>[
                       /// Banner轮播图
-                      _banner,
+                      _banner(),
 
                       /// 限时抢购课程
                       _course(
@@ -88,6 +81,7 @@ class _HomePageState extends State<HomePage>
                         icon: Icons.access_time,
                         color: Color(0xffff976a),
                         course: HomeCourseWidget.rowCard(_listDiscount),
+                        padding: EdgeInsets.symmetric(vertical: 10),
                       ),
 
                       /// 最新课程
@@ -133,23 +127,6 @@ class _HomePageState extends State<HomePage>
     });
   }
 
-  /// 课程
-  _course({String text, IconData icon, Color color, Widget course}) {
-    return Padding(
-      padding: _padding,
-      child: Column(
-        children: <Widget>[
-          HomeTitleWidget(
-            text: text,
-            icon: icon,
-            colors: color,
-          ),
-          course,
-        ],
-      ),
-    );
-  }
-
   /// 跳转到搜索页
   _jumpToSearch() async {
     await Navigator.push(
@@ -186,57 +163,54 @@ class _HomePageState extends State<HomePage>
   }
 
   /// appbar
-  Widget _appBar(Color appBarColor, bool isDark) {
-    return Column(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            /// appBar渐变背景
-            gradient: LinearGradient(
-              colors: [Color(0x66000000), Colors.transparent],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          child: Container(
-            padding: EdgeInsets.only(top: _paddingTop),
+  Widget _appBar(Color appBarColor, bool isDark) => Column(
+        children: <Widget>[
+          Container(
             decoration: BoxDecoration(
-              color: Color.fromARGB(
-                (_appBarAlpha * 255).toInt(),
-                appBarColor.red,
-                appBarColor.green,
-                appBarColor.blue,
+              /// appBar渐变背景
+              gradient: LinearGradient(
+                colors: [Color(0x66000000), Colors.transparent],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
-            child: SearchBar(
-              searchBarType: _appBarAlpha > 0.2
-                  ? SearchBarType.homeLight
-                  : SearchBarType.home,
-              defaultText: SEARCH_BAR_DEFAULT_TEXT,
-              inputBoxClick: _jumpToSearch,
-              leftButtonClick: _jumpToSearch,
+            child: Container(
+              padding: EdgeInsets.only(top: _paddingTop),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(
+                  (_appBarAlpha * 255).toInt(),
+                  appBarColor.red,
+                  appBarColor.green,
+                  appBarColor.blue,
+                ),
+              ),
+              child: SearchBar(
+                searchBarType: _appBarAlpha > 0.2
+                    ? SearchBarType.homeLight
+                    : SearchBarType.home,
+                defaultText: SEARCH_BAR_DEFAULT_TEXT,
+                inputBoxClick: _jumpToSearch,
+                leftButtonClick: _jumpToSearch,
+              ),
             ),
           ),
-        ),
-        Container(
-          height: _appBarAlpha > 0.2 ? 0.5 : 0,
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: isDark ? Colors.white12 : Colors.black12,
-                blurRadius: 0.5,
-              )
-            ],
+          Container(
+            height: _appBarAlpha > 0.2 ? 0.5 : 0,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: isDark ? Colors.white12 : Colors.black12,
+                  blurRadius: 0.5,
+                )
+              ],
+            ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 
   /// Banner轮播图
-  Widget get _banner {
-    return Container(
-        height: AutoSize.size(221),
+  Widget _banner() => Container(
+        height: 225,
         child: AspectRatio(
           aspectRatio: 16 / 9,
           child: Swiper(
@@ -258,6 +232,7 @@ class _HomePageState extends State<HomePage>
                     return null;
                   return ExtendedRawImage(
                     image: state.extendedImageInfo?.image,
+                    fit: BoxFit.cover,
                   );
                 },
               );
@@ -265,10 +240,39 @@ class _HomePageState extends State<HomePage>
             pagination: SwiperPagination(
                 builder: DotSwiperPaginationBuilder(
               activeColor: Colors.blue,
-              size: AutoSize.size(8),
-              activeSize: AutoSize.size(8),
+              size: 8,
+              activeSize: 8,
             )),
           ),
-        ));
-  }
+        ),
+      );
+
+  /// 课程
+  Widget _course({
+    String text,
+    IconData icon,
+    Color color,
+    Widget course,
+    EdgeInsetsGeometry padding: const EdgeInsets.all(10),
+  }) =>
+      Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        color: Theme.of(context).brightness == Brightness.light
+            ? Colors.white70
+            : Colors.grey[800],
+        child: Column(
+          children: <Widget>[
+            HomeTitleWidget(
+              text: text,
+              icon: icon,
+              colors: color,
+            ),
+            Divider(height: 0, color: Colors.grey),
+            Padding(
+              padding: padding,
+              child: course,
+            )
+          ],
+        ),
+      );
 }

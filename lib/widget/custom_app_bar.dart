@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final String tailTitle;
+  final void Function() tailOnTap;
 
-  const CustomAppBar({Key key, @required this.title}) : super(key: key);
+  const CustomAppBar({
+    Key key,
+    @required this.title,
+    this.tailTitle,
+    this.tailOnTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +21,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         },
         child: Icon(Icons.arrow_back_ios),
       ),
-      title: Text(title,style: TextStyle(fontSize: 18)),
+      title: Text(title, style: TextStyle(fontSize: 18)),
       centerTitle: true,
       textTheme: Theme.of(context).textTheme,
       elevation: 0,

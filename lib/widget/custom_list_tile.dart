@@ -47,7 +47,7 @@ class ListTileCustom extends StatelessWidget {
   final String leadingTitle;
   final Color color;
   final String trailingTitle;
-  final void Function() onTab;
+  final void Function() onTap;
 
   const ListTileCustom({
     Key key,
@@ -55,7 +55,7 @@ class ListTileCustom extends StatelessWidget {
     @required this.leadingTitle,
     this.color,
     this.trailingTitle,
-    this.onTab,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -108,7 +108,7 @@ class ListTileCustom extends StatelessWidget {
                   ),
                 ],
               ),
-        onTap: onTab,
+        onTap: onTap,
       ),
     );
   }

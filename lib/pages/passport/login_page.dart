@@ -263,7 +263,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget get _bottomText {
     return PassportBottomText(
       text: _accountLogin ? '手机短信登录' : '用户名密码登录',
-      onTab: () {
+      onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
         setState(() {
           _accountLogin = !_accountLogin;

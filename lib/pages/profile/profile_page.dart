@@ -61,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage>
               builder: (context, userInfo, child) => _UserInfo(
                 backgroundColor: themeData.appBarTheme.color,
                 isLogin: userInfo.hasUser,
-                onTab: () {
+                onTap: () {
                   _jumpToLoginOrOther(ProfileSetting());
                 },
                 nickname: userInfo.user?.nickname,
@@ -134,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage>
             icon: FontIcons.note,
             text: '课程',
             iconColor: Color(0xff3f98eb),
-            onTab: () {
+            onTap: () {
               _jumpToLoginOrOther(UserCoursePage());
             },
           ),
@@ -142,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage>
             icon: FontIcons.wallet,
             text: '钱包',
             iconColor: Color(0xffff5a00),
-            onTab: () {
+            onTap: () {
               print('钱包');
             },
           ),
@@ -150,7 +150,7 @@ class _ProfilePageState extends State<ProfilePage>
             icon: Icons.favorite,
             text: '收藏',
             iconColor: Color(0xffff2121),
-            onTab: () {
+            onTap: () {
               print('收藏');
             },
           )
@@ -189,7 +189,7 @@ class _UserInfo extends StatelessWidget {
   final Color backgroundColor;
   final String nickname;
   final String avatarUrl;
-  final void Function() onTab;
+  final void Function() onTap;
 
   const _UserInfo({
     Key key,
@@ -197,13 +197,13 @@ class _UserInfo extends StatelessWidget {
     @required this.isLogin,
     this.nickname,
     this.avatarUrl,
-    @required this.onTab,
+    @required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTab,
+      onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(16),
         color: backgroundColor,

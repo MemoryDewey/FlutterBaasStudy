@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import '../skeleton.dart';
 
 class CourseCardSkeletonItem extends StatelessWidget {
-  final int index;
-
-  CourseCardSkeletonItem({this.index: 0});
-
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
@@ -77,6 +73,19 @@ class CourseCardSkeletonItem extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CourseMngCardSkeletonItem extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      padding: EdgeInsets.only(left: 16, right: 16, top: 12),
+      margin: EdgeInsets.only(bottom: 16),
+      decoration: SkeletonDecoration(isDark: isDark),
+      height: 182,
     );
   }
 }
