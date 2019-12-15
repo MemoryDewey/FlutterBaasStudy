@@ -24,7 +24,7 @@ class CourseManageModel {
         json['courses'].forEach((v) {
           courses.add(new BstCoursesModel.fromJson(v));
         });
-      }else if(courseType is CollectionCoursesModel){
+      } else if (courseType is CollectionCoursesModel) {
         courses = new List<CollectionCoursesModel>();
         json['courses'].forEach((v) {
           courses.add(new CollectionCoursesModel.fromJson(v));
@@ -200,6 +200,7 @@ class CollectionCoursesModel {
   String courseImage;
   int applyCount;
   int price;
+  bool selected;
 
   CollectionCoursesModel({
     this.courseID,
@@ -207,6 +208,7 @@ class CollectionCoursesModel {
     this.courseImage,
     this.applyCount,
     this.price,
+    this.selected,
   });
 
   factory CollectionCoursesModel.fromJson(Map<String, dynamic> json) {
@@ -216,6 +218,7 @@ class CollectionCoursesModel {
       courseImage: json['courseImage'],
       applyCount: json['applyCount'],
       price: json['price'],
+      selected: false,
     );
   }
 

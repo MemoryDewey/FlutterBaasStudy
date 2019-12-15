@@ -4,7 +4,9 @@ import '../skeleton.dart';
 class CourseCardSkeletonItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    bool isDark = Theme
+        .of(context)
+        .brightness == Brightness.dark;
 
     return Container(
       height: 90,
@@ -80,12 +82,65 @@ class CourseCardSkeletonItem extends StatelessWidget {
 class CourseMngCardSkeletonItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    bool isDark = Theme
+        .of(context)
+        .brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.only(left: 16, right: 16, top: 12),
       margin: EdgeInsets.only(bottom: 16),
       decoration: SkeletonDecoration(isDark: isDark),
       height: 182,
+    );
+  }
+}
+
+class CourseSimpleSkeletonItem extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    bool isDark = Theme
+        .of(context)
+        .brightness == Brightness.dark;
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      height: 120,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Container(decoration: SkeletonDecoration(isDark: isDark)),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  height: 50,
+                  decoration: SkeletonDecoration(isDark: isDark),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Container(
+                        height: 18,
+                        width: 60,
+                        decoration: SkeletonDecoration(isDark: isDark)
+                    ),
+                    Container(
+                        height: 12,
+                        width: 40,
+                        decoration: SkeletonDecoration(isDark: isDark)
+                    )
+                  ],
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

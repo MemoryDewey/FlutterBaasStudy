@@ -10,6 +10,9 @@ class AppTheme {
         brightness: Brightness.light,
         iconTheme: IconThemeData(color: Colors.grey[900]),
       ),
+      bottomAppBarTheme: BottomAppBarTheme(
+        color: Colors.white,
+      ),
       inputDecorationTheme: InputDecorationTheme(
         fillColor: Color(0xffededed),
       ),
@@ -28,6 +31,9 @@ class AppTheme {
       appBarTheme: AppBarTheme(
         color: Color(0xff3b3b3b),
         brightness: Brightness.dark,
+      ),
+      bottomAppBarTheme: BottomAppBarTheme(
+        color: Color(0xff3b3b3b),
       ),
       cardColor: Color(0xff373737),
       inputDecorationTheme: InputDecorationTheme(

@@ -65,4 +65,10 @@ class CourseDao {
     return CourseManageModel.fromJson(response, CollectionCoursesModel())
         .courses;
   }
+
+  /// 删除指定收藏课程
+  static Future<Null> deleteCollections(List<int> deleteList) async {
+    await HttpUtil.post('/course/information/collection/delete',
+        data: {"list": deleteList});
+  }
 }

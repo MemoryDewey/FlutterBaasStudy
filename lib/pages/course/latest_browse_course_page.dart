@@ -10,11 +10,8 @@ class _LatestBrowseCoursePageState extends State<LatestBrowseCoursePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: '最近浏览',
-        tailTitle: '管理',
-        tailOnTap: () {},
-      ),
+      appBar: CustomAppBar(title: '最近在学'),
+      body: Container(),
     );
   }
 }

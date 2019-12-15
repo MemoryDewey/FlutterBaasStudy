@@ -381,6 +381,10 @@ class CourseSimpleCard extends StatelessWidget {
   final int price;
   final int count;
   final String image;
+  final bool editable;
+  final bool selected;
+  final void Function() onTap;
+  final void Function(bool selectedValue) onSelected;
 
   const CourseSimpleCard({
     Key key,
@@ -388,79 +392,100 @@ class CourseSimpleCard extends StatelessWidget {
     this.price,
     this.count,
     this.image,
+    this.editable = false,
+    this.selected = false,
+    this.onTap,
+    this.onSelected,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-      height: 120,
-      color: Theme.of(context).cardColor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          AspectRatio(
-            aspectRatio: 16 / 9,
-            child: ExtendedImage.network(
-              image,
-              cache: true,
-              fit: BoxFit.cover,
-              loadStateChanged: (ExtendedImageState state) {
-                if (state.extendedImageLoadState == LoadState.loading) {
-                  return Image.asset(
-                    'assets/images/loading.gif',
+    EdgeInsetsGeometry padding = editable
+        ? EdgeInsets.fromLTRB(0, 10, 16, 10)
+        : EdgeInsets.symmetric(vertical: 10, horizontal: 16);
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: padding,
+        height: 120,
+        color: Theme.of(context).cardColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Offstage(
+              offstage: !editable,
+              child: Checkbox(
+                value: selected,
+                onChanged: onSelected,
+                checkColor: Colors.white,
+                activeColor: Colors.blue,
+              ),
+            ),
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: ExtendedImage.network(
+                image,
+                cache: true,
+                fit: BoxFit.cover,
+                loadStateChanged: (ExtendedImageState state) {
+                  if (state.extendedImageLoadState == LoadState.loading) {
+                    return Image.asset(
+                      'assets/images/loading.gif',
+                      fit: BoxFit.cover,
+                    );
+                  }
+                  if (state.extendedImageLoadState == LoadState.failed)
+                    return null;
+                  return ExtendedRawImage(
+                    image: state.extendedImageInfo?.image,
                     fit: BoxFit.cover,
                   );
-                }
-                if (state.extendedImageLoadState == LoadState.failed)
-                  return null;
-                return ExtendedRawImage(
-                  image: state.extendedImageInfo?.image,
-                  fit: BoxFit.cover,
-                );
-              },
+                },
+              ),
             ),
-          ),
-          SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  height: 50,
-                  child: Text(
-                    name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      price == 0 ? '免费' : '￥$price',
-                      style: TextStyle(
-                        color:
-                            price == 0 ? Color(0xff07c160) : Color(0xffee0a24),
-                        height: 1,
-                      ),
+            SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    height: 50,
+                    child: Text(
+                      name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 16),
                     ),
-                    Text(
-                      '$count人报名',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        height: 1,
-                        fontSize: 12,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        price == 0 ? '免费' : '￥$price',
+                        style: TextStyle(
+                          color: price == 0
+                              ? Color(0xff07c160)
+                              : Color(0xffee0a24),
+                          height: 1,
+                        ),
                       ),
-                    )
-                  ],
-                )
-              ],
+                      Text(
+                        '$count人报名',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          height: 1,
+                          fontSize: 12,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
