@@ -60,15 +60,28 @@ class CourseDao {
   }
 
   /// 获取收藏的全部课程
-  static Future<List<CollectionCoursesModel>> getAllCollections() async {
+  static Future<List<SimpleCoursesModel>> getAllCollections() async {
     final response = await HttpUtil.get('/course/list/collection-all');
-    return CourseManageModel.fromJson(response, CollectionCoursesModel())
-        .courses;
+    return CourseManageModel.fromJson(response, SimpleCoursesModel()).courses;
   }
 
   /// 删除指定收藏课程
   static Future<Null> deleteCollections(List<int> deleteList) async {
     await HttpUtil.post('/course/information/collection/delete',
         data: {"list": deleteList});
+  }
+
+  /// 获取最近浏览的10节课程
+  static Future<List<SimpleCoursesModel>> getBrowseCourse() async {
+    final response = await HttpUtil.get('/course/list/latest-browse');
+    return CourseManageModel.fromJson(response, SimpleCoursesModel()).courses;
+  }
+
+  /// 获取正在进行考试 / 已完成的考试课程
+  static Future<CourseManageModel> getExamCourse(int page) async {
+    final response = await HttpUtil.get('/examine/user-exam', data: {
+      "page": page,
+    });
+    return CourseManageModel.fromJson(response, ExamCoursesModel());
   }
 }

@@ -24,10 +24,15 @@ class CourseManageModel {
         json['courses'].forEach((v) {
           courses.add(new BstCoursesModel.fromJson(v));
         });
-      } else if (courseType is CollectionCoursesModel) {
-        courses = new List<CollectionCoursesModel>();
+      } else if (courseType is SimpleCoursesModel) {
+        courses = new List<SimpleCoursesModel>();
         json['courses'].forEach((v) {
-          courses.add(new CollectionCoursesModel.fromJson(v));
+          courses.add(new SimpleCoursesModel.fromJson(v));
+        });
+      }else if(courseType is ExamCoursesModel){
+        courses = new List<ExamCoursesModel>();
+        json['courses'].forEach((v) {
+          courses.add(new ExamCoursesModel.fromJson(v));
         });
       }
     }
@@ -194,7 +199,7 @@ class CourseInfoModel {
   }
 }
 
-class CollectionCoursesModel {
+class SimpleCoursesModel {
   int courseID;
   String courseName;
   String courseImage;
@@ -202,7 +207,7 @@ class CollectionCoursesModel {
   int price;
   bool selected;
 
-  CollectionCoursesModel({
+  SimpleCoursesModel({
     this.courseID,
     this.courseName,
     this.courseImage,
@@ -211,8 +216,8 @@ class CollectionCoursesModel {
     this.selected,
   });
 
-  factory CollectionCoursesModel.fromJson(Map<String, dynamic> json) {
-    return CollectionCoursesModel(
+  factory SimpleCoursesModel.fromJson(Map<String, dynamic> json) {
+    return SimpleCoursesModel(
       courseID: json['courseID'],
       courseName: json['courseName'],
       courseImage: json['courseImage'],
@@ -229,6 +234,48 @@ class CollectionCoursesModel {
     data['courseImage'] = this.courseImage;
     data['applyCount'] = this.applyCount;
     data['price'] = this.price;
+    return data;
+  }
+}
+
+class ExamCoursesModel {
+  int courseID;
+  String courseName;
+  String image;
+  int state;
+  int score;
+  String startTime;
+  String endTime;
+
+  ExamCoursesModel({
+    this.courseID,
+    this.courseName,
+    this.image,
+    this.state,
+    this.score,
+    this.startTime,
+    this.endTime,
+  });
+
+  factory ExamCoursesModel.fromJson(Map<String, dynamic> json) {
+    return ExamCoursesModel(
+      courseID: json['courseID'],
+      courseName: json['courseName'],
+      image: json['image'],
+      state: json['state'],
+      score: json['score'],
+      startTime: json['time'] != null ? json['time']['startTime'] : null,
+      endTime: json['time'] != null ? json['time']['endTime'] : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['courseID'] = this.courseID;
+    data['courseName'] = this.courseName;
+    data['image'] = this.image;
+    data['state'] = this.state;
+    data['score'] = this.score;
     return data;
   }
 }

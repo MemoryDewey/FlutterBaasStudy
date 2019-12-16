@@ -2,6 +2,7 @@ import 'package:baas_study/dao/passport_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
 import 'package:baas_study/pages/course/collection_course_page.dart';
+import 'package:baas_study/pages/course/exam_course_page.dart';
 import 'package:baas_study/pages/course/latest_browse_course_page.dart';
 import 'package:baas_study/pages/course/user_course_page.dart';
 import 'package:baas_study/pages/passport/login_page.dart';
@@ -168,7 +169,7 @@ class _ProfilePageState extends State<ProfilePage>
             leading: FontIcons.time,
             leadingTitle: '最近在学',
             color: Color(0xff3f98eb),
-            onTap: (){
+            onTap: () {
               _jumpToLoginOrOther(LatestBrowseCoursePage());
             },
           ),
@@ -176,6 +177,9 @@ class _ProfilePageState extends State<ProfilePage>
             leading: FontIcons.paper,
             leadingTitle: '我的考试',
             color: Color(0xffff2121),
+            onTap: () {
+              _jumpToLoginOrOther(ExamCoursePage());
+            },
           ),
         ],
       );

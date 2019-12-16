@@ -13,7 +13,7 @@ class CollectionCoursePage extends StatefulWidget {
 }
 
 class _CollectionCoursePageState extends State<CollectionCoursePage> {
-  List<CollectionCoursesModel> _courses = [];
+  List<SimpleCoursesModel> _courses = [];
 
   /// 可编辑状态
   bool _editAble = false;
@@ -152,7 +152,7 @@ class _CollectionCoursePageState extends State<CollectionCoursePage> {
 
   Future<Null> _getAllCourse() async {
     try {
-      List<CollectionCoursesModel> list = await CourseDao.getAllCollections();
+      List<SimpleCoursesModel> list = await CourseDao.getAllCollections();
       setState(() {
         _courses = list;
         _loadComplete = true;

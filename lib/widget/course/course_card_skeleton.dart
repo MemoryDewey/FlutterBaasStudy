@@ -4,9 +4,7 @@ import '../skeleton.dart';
 class CourseCardSkeletonItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    bool isDark = Theme
-        .of(context)
-        .brightness == Brightness.dark;
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       height: 90,
@@ -82,9 +80,7 @@ class CourseCardSkeletonItem extends StatelessWidget {
 class CourseMngCardSkeletonItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    bool isDark = Theme
-        .of(context)
-        .brightness == Brightness.dark;
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.only(left: 16, right: 16, top: 12),
       margin: EdgeInsets.only(bottom: 16),
@@ -97,9 +93,7 @@ class CourseMngCardSkeletonItem extends StatelessWidget {
 class CourseSimpleSkeletonItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    bool isDark = Theme
-        .of(context)
-        .brightness == Brightness.dark;
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       height: 120,
@@ -127,13 +121,11 @@ class CourseSimpleSkeletonItem extends StatelessWidget {
                     Container(
                         height: 18,
                         width: 60,
-                        decoration: SkeletonDecoration(isDark: isDark)
-                    ),
+                        decoration: SkeletonDecoration(isDark: isDark)),
                     Container(
                         height: 12,
                         width: 40,
-                        decoration: SkeletonDecoration(isDark: isDark)
-                    )
+                        decoration: SkeletonDecoration(isDark: isDark))
                   ],
                 )
               ],

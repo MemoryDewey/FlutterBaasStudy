@@ -74,6 +74,7 @@ class _HomePageState extends State<HomePage>
                     children: <Widget>[
                       /// Banner轮播图
                       _banner(),
+                      SizedBox(height: 10),
 
                       /// 限时抢购课程
                       _course(
@@ -99,6 +100,7 @@ class _HomePageState extends State<HomePage>
                         color: Color(0xffee0a24),
                         course: HomeCourseWidget.columnCard(_listRecommend),
                       ),
+                      SizedBox(height: 10),
                     ],
                   ),
                 ),
