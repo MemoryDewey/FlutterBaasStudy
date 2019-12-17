@@ -12,7 +12,6 @@ class InviteIntroPage extends StatelessWidget {
       appBar: CustomAppBar(title: '邀请说明'),
       body: ListView(
         children: <Widget>[
-          IntroWidget.h1Title(title: '邀请说明'),
           IntroWidget.h2Title(title: '一、如何邀请好友'),
           IntroWidget.section(index: 1, color: color, children: <TextSpan>[
             TextSpan(text: '进入', style: normalStyle),

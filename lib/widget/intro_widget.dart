@@ -13,17 +13,6 @@ class IntroWidget {
         fontWeight: FontWeight.bold,
       );
 
-  static Widget h1Title({String title}) => Container(
-        padding: EdgeInsets.only(top: 20),
-        width: double.infinity,
-        child: Text(
-          title,
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
-        ),
-      );
-
   static Widget h2Title({String title}) => Container(
         width: double.infinity,
         padding: EdgeInsets.only(left: 16, right: 16, top: 16),
@@ -44,7 +33,7 @@ class IntroWidget {
       padding: EdgeInsets.only(left: 24, top: 6, right: 24),
       child: RichText(
         text: TextSpan(
-          text: '$index . ',
+          text: index != null ? '$index . ' : '',
           style: style,
           children: children ?? [],
         ),

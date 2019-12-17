@@ -100,6 +100,7 @@ class _SystemSettingPageState extends State<SystemSettingPage> {
               onTap: () async {
                 if (_userProvider.hasUser) {
                   _userProvider.clearUser();
+                  _userProvider.clearWalletInfo();
                   TokenUtil.remove();
                   HttpUtil.clear();
                   Navigator.pop(context);

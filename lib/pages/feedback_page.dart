@@ -34,7 +34,15 @@ class _FeedbackPageState extends State<FeedbackPage> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
                 (context, index) => Container(
-                      color: Theme.of(context).cardColor,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        border: index != _feedbackType.length - 1
+                            ? Border(
+                                bottom:
+                                    BorderSide(width: 0.5, color: Colors.grey),
+                              )
+                            : Border(),
+                      ),
                       child: RadioListTile<int>(
                           title: Text(_feedbackType[index].name),
                           value: _feedbackType[index].id,

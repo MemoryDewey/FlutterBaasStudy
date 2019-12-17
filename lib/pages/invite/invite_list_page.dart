@@ -58,9 +58,12 @@ class _InviteListPageState extends State<InviteListPage> {
                   return Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
-                      border: Border(
-                        bottom: BorderSide(width: 0.5, color: Colors.grey),
-                      ),
+                      border: index != _invites.length - 1
+                          ? Border(
+                              bottom:
+                                  BorderSide(width: 0.5, color: Colors.grey),
+                            )
+                          : Border(),
                     ),
                     child: ListTile(
                       title: Text(_invites[index].invitedUser.nickname),
@@ -78,22 +81,22 @@ class _InviteListPageState extends State<InviteListPage> {
     );
   }
 
-  void _onLoading() async{
+  void _onLoading() async {
     setState(() {
-      _current+=1;
+      _current += 1;
     });
-    if(_current>_pageSum){
+    if (_current > _pageSum) {
       _refreshController.loadNoData();
-    }else{
-     List<InviteListModel> list  = await _getInviteList();
-     if (list == null)
-       _refreshController.loadFailed();
-     else {
-       setState(() {
-         _invites.addAll(list);
-       });
-       _refreshController.loadComplete();
-     }
+    } else {
+      List<InviteListModel> list = await _getInviteList();
+      if (list == null)
+        _refreshController.loadFailed();
+      else {
+        setState(() {
+          _invites.addAll(list);
+        });
+        _refreshController.loadComplete();
+      }
     }
   }
 
@@ -102,6 +105,7 @@ class _InviteListPageState extends State<InviteListPage> {
       InviteResultModel result = await InviteDao.getInviteList(_current);
       setState(() {
         _inviteSum = result.count;
+        _pageSum = result.pageSum;
       });
       return result.invites;
     } catch (e) {

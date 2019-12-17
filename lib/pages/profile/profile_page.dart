@@ -1,6 +1,8 @@
 import 'package:baas_study/dao/passport_dao.dart';
+import 'package:baas_study/dao/wallet_dao.dart';
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
+import 'package:baas_study/model/wallet_model.dart';
 import 'package:baas_study/pages/course/collection_course_page.dart';
 import 'package:baas_study/pages/course/exam_course_page.dart';
 import 'package:baas_study/pages/course/latest_browse_course_page.dart';
@@ -10,6 +12,7 @@ import 'package:baas_study/pages/invite/invite_page.dart';
 import 'package:baas_study/pages/passport/login_page.dart';
 import 'package:baas_study/pages/profile/profile_setting_page.dart';
 import 'package:baas_study/pages/profile/qr_code_scan_page.dart';
+import 'package:baas_study/pages/wallet/balance_page.dart';
 import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/providers/dark_mode_provider.dart';
@@ -18,7 +21,6 @@ import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/utils/token_util.dart';
 import 'package:baas_study/widget/custom_list_tile.dart';
 import 'package:baas_study/widget/grid_group.dart';
-import 'package:baas_study/widget/profile/profile_widget.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -81,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage>
             Divider(height: 0, color: Colors.grey),
             _gridGroup(),
             _profileStudyList(),
-            ProfileBalanceInfo(),
+            _balanceInfoList(),
             _profileAccountList(),
           ],
         ),
@@ -151,7 +153,7 @@ class _ProfilePageState extends State<ProfilePage>
             text: '钱包',
             iconColor: Color(0xffff5a00),
             onTap: () {
-              print('钱包');
+              print(_userProvider.balance);
             },
           ),
           GridItem(
@@ -165,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage>
         ],
       );
 
-  /// ListTail 最近在学 我的考试
+  /// 最近在学 我的考试 ListTail
   Widget _profileStudyList() => ListTileGroup(
         top: 20,
         children: <Widget>[
@@ -188,35 +190,54 @@ class _ProfilePageState extends State<ProfilePage>
         ],
       );
 
+  /// 账户余额 ListTail
+  Widget _balanceInfoList() => ListTileGroup(
+        top: 20,
+        bottom: 20,
+        children: <Widget>[
+         Consumer<UserProvider>(
+           builder: (context,userInfo,child)=> ListTileCustom(
+             leading: FontIcons.coin,
+             leadingTitle: '账户余额',
+             trailingTitle: userInfo.balance,
+             color: Color(0xffffdf0c),
+             onTap: (){
+               _jumpToLoginOrOther(BalancePage());
+             },
+           ),
+         ),
+        ],
+      );
+
   /// 邀请好友 - 反馈建议 - 设置 ListTile
   Widget _profileAccountList() => ListTileGroup(
-    children: <Widget>[
-      ListTileCustom(
-        leading: FontIcons.invite,
-        leadingTitle: '邀请好友',
-        color: Color(0xffff2121),
-        onTap: (){
-          _jumpToLoginOrOther(InvitePage());
-        },
-      ),
-      ListTileCustom(
-        leading: FontIcons.feedback,
-        leadingTitle: '反馈建议',
-        color: Color(0xff00f6d0),
-        onTap: (){
-          _jumpToLoginOrOther(FeedbackPage());
-        },
-      ),
-      ListTileCustom(
-        leading: Icons.settings,
-        leadingTitle: '系统设置',
-        color: Color(0xff3f98eb),
-        onTap: () {
-          Navigator.push(context, SlideRoute(SystemSettingPage()));
-        },
-      ),
-    ],
-  );
+        children: <Widget>[
+          ListTileCustom(
+            leading: FontIcons.invite,
+            leadingTitle: '邀请好友',
+            color: Color(0xffff2121),
+            onTap: () {
+              _jumpToLoginOrOther(InvitePage());
+            },
+          ),
+          ListTileCustom(
+            leading: FontIcons.feedback,
+            leadingTitle: '反馈建议',
+            color: Color(0xff00f6d0),
+            onTap: () {
+              _jumpToLoginOrOther(FeedbackPage());
+            },
+          ),
+          ListTileCustom(
+            leading: Icons.settings,
+            leadingTitle: '账户设置',
+            color: Color(0xff3f98eb),
+            onTap: () {
+              Navigator.push(context, SlideRoute(SystemSettingPage()));
+            },
+          ),
+        ],
+      );
 
   /// 跳转到登录页或其他页
   void _jumpToLoginOrOther(Widget toPage) {
@@ -227,6 +248,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   void _onRefresh() async {
     await _getInfo();
+    await _getWalletInfo();
     _refreshController.refreshCompleted();
   }
 
@@ -241,7 +263,16 @@ class _ProfilePageState extends State<ProfilePage>
       } else {
         _userProvider.saveUser(model.info);
       }
-    } catch (e) {}
+    } catch (e) {print(e);}
+  }
+
+  Future<Null> _getWalletInfo() async {
+    try {
+      WalletModel wallet = await WalletDao.getWalletInfo();
+      _userProvider.saveWalletInfo(wallet.balance);
+    } catch (e) {
+      print(e);
+    }
   }
 }
 
