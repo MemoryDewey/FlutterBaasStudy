@@ -5,6 +5,7 @@ import 'package:baas_study/pages/course/collection_course_page.dart';
 import 'package:baas_study/pages/course/exam_course_page.dart';
 import 'package:baas_study/pages/course/latest_browse_course_page.dart';
 import 'package:baas_study/pages/course/user_course_page.dart';
+import 'package:baas_study/pages/feedback_page.dart';
 import 'package:baas_study/pages/invite/invite_page.dart';
 import 'package:baas_study/pages/passport/login_page.dart';
 import 'package:baas_study/pages/profile/profile_setting_page.dart';
@@ -202,6 +203,9 @@ class _ProfilePageState extends State<ProfilePage>
         leading: FontIcons.feedback,
         leadingTitle: '反馈建议',
         color: Color(0xff00f6d0),
+        onTap: (){
+          _jumpToLoginOrOther(FeedbackPage());
+        },
       ),
       ListTileCustom(
         leading: Icons.settings,
