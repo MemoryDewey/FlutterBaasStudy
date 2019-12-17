@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String tailTitle;
+  final Icon tailIcon;
   final void Function() tailOnTap;
 
   const CustomAppBar({
@@ -10,6 +11,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     @required this.title,
     this.tailTitle,
     this.tailOnTap,
+    this.tailIcon,
   }) : super(key: key);
 
   @override
@@ -19,6 +21,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions.add(FlatButton(
         onPressed: tailOnTap,
         child: Text(tailTitle),
+      ));
+    else if (tailIcon != null)
+      actions.add(FlatButton(
+        onPressed: tailOnTap,
+        child: tailIcon,
       ));
 
     return AppBar(

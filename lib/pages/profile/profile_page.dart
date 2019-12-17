@@ -5,6 +5,7 @@ import 'package:baas_study/pages/course/collection_course_page.dart';
 import 'package:baas_study/pages/course/exam_course_page.dart';
 import 'package:baas_study/pages/course/latest_browse_course_page.dart';
 import 'package:baas_study/pages/course/user_course_page.dart';
+import 'package:baas_study/pages/invite/invite_page.dart';
 import 'package:baas_study/pages/passport/login_page.dart';
 import 'package:baas_study/pages/profile/profile_setting_page.dart';
 import 'package:baas_study/pages/profile/qr_code_scan_page.dart';
@@ -22,6 +23,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import '../system_setting_page.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -78,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage>
             _gridGroup(),
             _profileStudyList(),
             ProfileBalanceInfo(),
-            ProfileAccountInfo(),
+            _profileAccountList(),
           ],
         ),
         onRefresh: _onRefresh,
@@ -183,6 +186,33 @@ class _ProfilePageState extends State<ProfilePage>
           ),
         ],
       );
+
+  /// 邀请好友 - 反馈建议 - 设置 ListTile
+  Widget _profileAccountList() => ListTileGroup(
+    children: <Widget>[
+      ListTileCustom(
+        leading: FontIcons.invite,
+        leadingTitle: '邀请好友',
+        color: Color(0xffff2121),
+        onTap: (){
+          _jumpToLoginOrOther(InvitePage());
+        },
+      ),
+      ListTileCustom(
+        leading: FontIcons.feedback,
+        leadingTitle: '反馈建议',
+        color: Color(0xff00f6d0),
+      ),
+      ListTileCustom(
+        leading: Icons.settings,
+        leadingTitle: '系统设置',
+        color: Color(0xff3f98eb),
+        onTap: () {
+          Navigator.push(context, SlideRoute(SystemSettingPage()));
+        },
+      ),
+    ],
+  );
 
   /// 跳转到登录页或其他页
   void _jumpToLoginOrOther(Widget toPage) {

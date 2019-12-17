@@ -43,6 +43,9 @@ class _CourseListPageState extends State<CourseListPage> {
   /// 下拉刷新
   RefreshController _refreshController = RefreshController();
 
+  /// 滚动控制器
+  ScrollController _scrollController = ScrollController();
+
   /// 课程
   bool _loadComplete = false;
   List<CourseModel> _courses = [];
@@ -175,6 +178,7 @@ class _CourseListPageState extends State<CourseListPage> {
                         onRefresh: _onRefresh,
                         onLoading: _onLoading,
                         child: ListView.builder(
+                          controller: _scrollController,
                           padding: EdgeInsets.all(16),
                           itemCount: _courses.length,
                           itemBuilder: (context, index) => CourseCard(
@@ -215,6 +219,8 @@ class _CourseListPageState extends State<CourseListPage> {
                       _typeId = value.typeId;
                     });
                     _dropdownController.hide();
+                    _scrollController.animateTo(0,
+                        duration: Duration(seconds: 1), curve: Curves.ease);
                     _onRefresh();
                   },
                 ),
@@ -227,6 +233,8 @@ class _CourseListPageState extends State<CourseListPage> {
                     _selectSortCondition = value;
                     _dropdownHeaderItems[1] = _selectSortCondition.name;
                     _dropdownController.hide();
+                    _scrollController.animateTo(0,
+                        duration: Duration(seconds: 1), curve: Curves.ease);
                     setState(() {
                       _sort = _selectSortCondition.value;
                     });
@@ -242,6 +250,11 @@ class _CourseListPageState extends State<CourseListPage> {
                     _selectFilterCondition = value;
                     _dropdownHeaderItems[2] = _selectFilterCondition.name;
                     _dropdownController.hide();
+                    _scrollController.animateTo(
+                      0,
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
                     setState(() {
                       _filter = _selectFilterCondition.value;
                     });

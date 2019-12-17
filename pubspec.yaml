@@ -38,6 +38,9 @@ dependencies:
   dio: ^3.0.4
   shared_preferences: ^0.5.4+5
 
+  # Permission 权限管理
+  permission_handler: ^4.0.0
+
   # Cache 缓存图片
   extended_image: ^0.6.7
   extended_image_library: ^0.1.8
@@ -45,12 +48,16 @@ dependencies:
   flutter_screenutil: ^0.6.0
   # Toast 提示
   bot_toast: ^2.1.0
-  # Scanner 二维码扫描
+  # Qr Scanner 二维码扫描
   qr_code_scanner: ^0.0.12
-  # Image 图片选择（相册/相机）
+  # Qr Generator 二维码生成
+  qr_flutter: ^3.1.0
+  # Image Picker 图片选择（相册/相机）
   image_picker: ^0.6.2+1
-  # Cropper 图片裁剪
+  # Image Cropper 图片裁剪
   image_cropper: ^1.1.1
+  # Image Saver 图片保存
+  image_gallery_saver: ^1.2.2
   # Refresh 下拉刷新
   pull_to_refresh: ^1.5.7
   # Menu 下拉菜单
