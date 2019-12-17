@@ -22,11 +22,6 @@ class _FeedbackPageState extends State<FeedbackPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: '用户反馈'),

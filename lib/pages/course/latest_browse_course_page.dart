@@ -24,21 +24,38 @@ class _LatestBrowseCoursePageState extends State<LatestBrowseCoursePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> sliverWidget = [];
+    if (_loadComplete) {
+      sliverWidget.add(SliverList(
+        delegate: SliverChildBuilderDelegate(
+            (context, index) => CourseSimpleCard(
+                  image: HttpUtil.getImage(_courses[index].courseImage),
+                  name: _courses[index].courseName,
+                  count: _courses[index].applyCount,
+                  price: _courses[index].price,
+                ),
+            childCount: _courses.length),
+      ));
+      sliverWidget.add(SliverToBoxAdapter(
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: Text(
+            '只展示最近在学的10门课程',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.grey),
+          ),
+        ),
+      ));
+    } else
+      sliverWidget.add(SliverToBoxAdapter(
+        child: SkeletonList(
+          builder: (context, index) => CourseSimpleSkeletonItem(),
+        ),
+      ));
     return Scaffold(
       appBar: CustomAppBar(title: '最近在学'),
-      body: _loadComplete
-          ? ListView.builder(
-              itemCount: _courses.length,
-              itemBuilder: (context, index) => CourseSimpleCard(
-                image: HttpUtil.getImage(_courses[index].courseImage),
-                name: _courses[index].courseName,
-                count: _courses[index].applyCount,
-                price: _courses[index].price,
-              ),
-            )
-          : SkeletonList(
-              builder: (context, index) => CourseSimpleSkeletonItem(),
-            ),
+      body: CustomScrollView(
+          physics: ClampingScrollPhysics(), slivers: sliverWidget),
     );
   }
 
