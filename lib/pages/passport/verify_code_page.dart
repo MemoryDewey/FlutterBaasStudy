@@ -1,6 +1,8 @@
 import 'package:baas_study/dao/passport_dao.dart';
+import 'package:baas_study/dao/wallet_dao.dart';
 import 'package:baas_study/model/passport_model.dart';
 import 'package:baas_study/model/reponse_normal_model.dart';
+import 'package:baas_study/model/wallet_model.dart';
 import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/utils/token_util.dart';
 import 'package:baas_study/widget/custom_app_bar.dart';
@@ -95,6 +97,8 @@ class _VerifyCodePageState extends State<VerifyCodePage> {
       String token = model.token ?? null;
       TokenUtil.set(token);
       _userProvider.saveUser(model.info);
+      WalletModel wallet = await WalletDao.getWalletInfo();
+      _userProvider.saveWalletInfo(wallet.balance);
       return true;
     } catch (e) {
       return false;

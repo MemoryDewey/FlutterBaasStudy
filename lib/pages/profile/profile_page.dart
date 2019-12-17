@@ -13,6 +13,7 @@ import 'package:baas_study/pages/passport/login_page.dart';
 import 'package:baas_study/pages/profile/profile_setting_page.dart';
 import 'package:baas_study/pages/profile/qr_code_scan_page.dart';
 import 'package:baas_study/pages/wallet/balance_page.dart';
+import 'package:baas_study/pages/wallet/wallet_page.dart';
 import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/providers/dark_mode_provider.dart';
@@ -153,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage>
             text: '钱包',
             iconColor: Color(0xffff5a00),
             onTap: () {
-              print(_userProvider.balance);
+              _jumpToLoginOrOther(WalletPage());
             },
           ),
           GridItem(
