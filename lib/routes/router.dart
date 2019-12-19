@@ -20,7 +20,7 @@ class SlideRoute extends PageRouteBuilder {
             Widget child,
           ) =>
               SlideTransition(
-                textDirection: TextDirection.rtl,
+            textDirection: TextDirection.rtl,
             position: Tween<Offset>(
               begin: const Offset(-1, 0),
               end: Offset.zero,
@@ -30,20 +30,21 @@ class SlideRoute extends PageRouteBuilder {
         );
 }
 
+/// 路由动画 上下切换
 class SlideTopRoute extends PageRouteBuilder {
   final Widget widget;
 
   SlideTopRoute(this.widget)
       : super(
-      pageBuilder: (context, animation, secondaryAnimation) => widget,
-      transitionDuration: Duration(milliseconds: 500),
-      transitionsBuilder:
-          (context, animation, secondaryAnimation, child) =>
-          SlideTransition(
-            position: Tween<Offset>(
-                begin: Offset(0.0, -1.0), end: Offset(0.0, 0.0))
-                .animate(CurvedAnimation(
-                parent: animation, curve: Curves.fastOutSlowIn)),
+          pageBuilder: (context, animation, secondaryAnimation) => widget,
+          transitionDuration: Duration(milliseconds: 500),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              SlideTransition(
+            position:
+                Tween<Offset>(begin: Offset(0.0, -1.0), end: Offset(0.0, 0.0))
+                    .animate(CurvedAnimation(
+                        parent: animation, curve: Curves.fastOutSlowIn)),
             child: child,
-          ));
+          ),
+        );
 }

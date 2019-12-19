@@ -1,6 +1,5 @@
 import 'package:baas_study/icons/font_icon.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class WalletIconText extends StatelessWidget {
