@@ -5,6 +5,7 @@ import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/confirm_dialog.dart';
 import 'package:baas_study/widget/course/course_card.dart';
 import 'package:baas_study/widget/course/course_card_skeleton.dart';
+import 'package:baas_study/widget/list_empty.dart';
 import 'package:baas_study/widget/skeleton.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,7 @@ class _UserCourseTabView extends StatefulWidget {
 class __UserCourseTabViewState extends State<_UserCourseTabView>
     with AutomaticKeepAliveClientMixin {
   RefreshController _refreshUserController = RefreshController();
-  List<UserCoursesModel> _userCourses = [];
+  List<UserCoursesModel> _courses = [];
   int _userCoursesCurrent = 0;
   int _userCoursesPage = 1;
   bool _loadComplete = false;
@@ -88,64 +89,66 @@ class __UserCourseTabViewState extends State<_UserCourseTabView>
   Widget build(BuildContext context) {
     super.build(context);
     return _loadComplete
-        ? SmartRefresher(
-            controller: _refreshUserController,
-            enablePullUp: true,
-            enablePullDown: false,
-            child: ListView.builder(
-              padding: EdgeInsets.only(top: 16),
-              itemCount: _userCourses.length,
-              itemBuilder: (context, index) => CourseManageCard(
-                imageUrl: HttpUtil.getImage(_userCourses[index].image),
-                dateTime: _userCourses[index].joinTime,
-                courseName: _userCourses[index].courseName,
-                price: '￥${_userCourses[index].price}',
-                state: '报名成功',
-                isFree: _userCourses[index].price == 0,
-                bottom: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    CourseManageCard.cardBottomBtn(
-                        text: '评价课程',
-                        textColor: Colors.white,
-                        buttonColor: Colors.blue,
-                        onPressed: () {}),
-                    Offstage(
-                      offstage: _userCourses[index].price > 0,
-                      child: Container(
-                        margin: EdgeInsets.only(left: 10),
-                        child: CourseManageCard.cardBottomBtn(
-                          text: '取消报名',
-                          textColor: Colors.white,
-                          buttonColor: Colors.deepOrange,
-                          onPressed: () {
-                            showDialog<void>(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (dialogContext) {
-                                  return ConfirmDialog(
-                                    title: '取消报名',
-                                    content: Text(
-                                      '您确定要取消报名吗？',
-                                      style: TextStyle(height: 1),
-                                    ),
-                                    confirmPress: () {
-                                      _cancelCourse(
-                                        _userCourses[index].courseID,
+        ? _courses.length == 0
+            ? ListEmptyWidget()
+            : SmartRefresher(
+                controller: _refreshUserController,
+                enablePullUp: true,
+                enablePullDown: false,
+                child: ListView.builder(
+                  padding: EdgeInsets.only(top: 16),
+                  itemCount: _courses.length,
+                  itemBuilder: (context, index) => CourseManageCard(
+                    imageUrl: HttpUtil.getImage(_courses[index].image),
+                    dateTime: _courses[index].joinTime,
+                    courseName: _courses[index].courseName,
+                    price: '￥${_courses[index].price}',
+                    state: '报名成功',
+                    isFree: _courses[index].price == 0,
+                    bottom: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        CourseManageCard.cardBottomBtn(
+                            text: '评价课程',
+                            textColor: Colors.white,
+                            buttonColor: Colors.blue,
+                            onPressed: () {}),
+                        Offstage(
+                          offstage: _courses[index].price > 0,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 10),
+                            child: CourseManageCard.cardBottomBtn(
+                              text: '取消报名',
+                              textColor: Colors.white,
+                              buttonColor: Colors.deepOrange,
+                              onPressed: () {
+                                showDialog<void>(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (dialogContext) {
+                                      return ConfirmDialog(
+                                        title: '取消报名',
+                                        content: Text(
+                                          '您确定要取消报名吗？',
+                                          style: TextStyle(height: 1),
+                                        ),
+                                        confirmPress: () {
+                                          _cancelCourse(
+                                            _courses[index].courseID,
+                                          );
+                                        },
                                       );
-                                    },
-                                  );
-                                });
-                          },
+                                    });
+                              },
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            onLoading: _onUserCourseLoading,
-          )
+                onLoading: _onUserCourseLoading,
+              )
         : Padding(
             padding: EdgeInsets.only(top: 16),
             child: SkeletonList(
@@ -170,7 +173,7 @@ class __UserCourseTabViewState extends State<_UserCourseTabView>
       else {
         setState(() {
           _loadComplete = true;
-          _userCourses.addAll(course);
+          _courses.addAll(course);
         });
         _refreshUserController.loadComplete();
       }
@@ -195,7 +198,7 @@ class __UserCourseTabViewState extends State<_UserCourseTabView>
       ResponseNormalModel res = await CourseDao.cancelFreeCourse(courseID);
       if (res.code == 1000) {
         BotToast.showText(text: res.msg ?? '取消报名成功');
-        _userCourses.clear();
+        _courses.clear();
         setState(() {
           _userCoursesCurrent = 0;
         });
@@ -216,7 +219,7 @@ class _BalanceCourseTabView extends StatefulWidget {
 class __BalanceCourseTabViewState extends State<_BalanceCourseTabView>
     with AutomaticKeepAliveClientMixin {
   RefreshController _refreshBalanceController = RefreshController();
-  List<BalanceCoursesModel> _balanceCourses = [];
+  List<BalanceCoursesModel> _courses = [];
   int _balanceCoursesCurrent = 0;
   int _balanceCoursesPage = 1;
   bool _loadComplete = false;
@@ -231,19 +234,21 @@ class __BalanceCourseTabViewState extends State<_BalanceCourseTabView>
   Widget build(BuildContext context) {
     super.build(context);
     return _loadComplete
-        ? SmartRefresher(
+        ?  _courses.length == 0
+        ? ListEmptyWidget()
+        : SmartRefresher(
             controller: _refreshBalanceController,
             enablePullUp: true,
             enablePullDown: false,
             child: ListView.builder(
               padding: EdgeInsets.only(top: 16),
-              itemCount: _balanceCourses.length,
+              itemCount: _courses.length,
               itemBuilder: (context, index) => CourseManageCard(
                 imageUrl: HttpUtil.getImage(
-                    _balanceCourses[index].courseInformation.courseImage),
-                dateTime: _balanceCourses[index].createdAt,
-                courseName: _balanceCourses[index].courseInformation.courseName,
-                price: '￥${_balanceCourses[index].amount}',
+                    _courses[index].courseInformation.courseImage),
+                dateTime: _courses[index].createdAt,
+                courseName: _courses[index].courseInformation.courseName,
+                price: '￥${_courses[index].amount}',
                 state: '购买成功',
                 isFree: false,
                 bottom: Row(
@@ -285,7 +290,7 @@ class __BalanceCourseTabViewState extends State<_BalanceCourseTabView>
       else {
         setState(() {
           _loadComplete = true;
-          _balanceCourses.addAll(course);
+          _courses.addAll(course);
         });
         _refreshBalanceController.loadComplete();
       }
@@ -315,7 +320,7 @@ class _BstCourseTabView extends StatefulWidget {
 class __BstCourseTabViewState extends State<_BstCourseTabView>
     with AutomaticKeepAliveClientMixin {
   RefreshController _refreshBstController = RefreshController();
-  List<BstCoursesModel> _bstCourses = [];
+  List<BstCoursesModel> _courses = [];
   int _bstCoursesCurrent = 0;
   int _bstCoursesPage = 1;
   bool _loadComplete = false;
@@ -330,19 +335,21 @@ class __BstCourseTabViewState extends State<_BstCourseTabView>
   Widget build(BuildContext context) {
     super.build(context);
     return _loadComplete
-        ? SmartRefresher(
+        ?  _courses.length == 0
+        ? ListEmptyWidget()
+        : SmartRefresher(
             controller: _refreshBstController,
             enablePullUp: true,
             enablePullDown: false,
             child: ListView.builder(
               padding: EdgeInsets.only(top: 16),
-              itemCount: _bstCourses.length,
+              itemCount: _courses.length,
               itemBuilder: (context, index) => CourseManageCard(
                 imageUrl: HttpUtil.getImage(
-                    _bstCourses[index].courseInformation.courseImage),
-                dateTime: _bstCourses[index].createdAt,
-                courseName: _bstCourses[index].courseInformation.courseName,
-                price: '${_bstCourses[index].amount} BST',
+                    _courses[index].courseInformation.courseImage),
+                dateTime: _courses[index].createdAt,
+                courseName: _courses[index].courseInformation.courseName,
+                price: '${_courses[index].amount} BST',
                 state: '报名成功',
                 isFree: false,
                 bottom: Row(
@@ -354,7 +361,7 @@ class __BstCourseTabViewState extends State<_BstCourseTabView>
                       buttonColor: Colors.greenAccent,
                       onPressed: () {
                         Clipboard.setData(ClipboardData(
-                            text: _bstCourses[index].txHash ?? ''));
+                            text: _courses[index].txHash ?? ''));
                         BotToast.showText(text: '已复制');
                       },
                     ),
@@ -388,7 +395,7 @@ class __BstCourseTabViewState extends State<_BstCourseTabView>
       else {
         setState(() {
           _loadComplete = true;
-          _bstCourses.addAll(course);
+          _courses.addAll(course);
         });
         _refreshBstController.loadComplete();
       }

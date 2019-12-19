@@ -1,6 +1,7 @@
 import 'package:baas_study/dao/invite_dao.dart';
 import 'package:baas_study/model/invite_model.dart';
 import 'package:baas_study/widget/custom_app_bar.dart';
+import 'package:baas_study/widget/list_empty.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -15,6 +16,7 @@ class _InviteListPageState extends State<InviteListPage> {
   RefreshController _refreshController = RefreshController();
   int _current = 0;
   int _pageSum = 1;
+  bool _loadComplete = false;
 
   @override
   void initState() {
@@ -48,33 +50,35 @@ class _InviteListPageState extends State<InviteListPage> {
             ),
           ),
           Expanded(
-            child: SmartRefresher(
-              controller: _refreshController,
-              enablePullUp: true,
-              enablePullDown: false,
-              child: ListView.builder(
-                itemCount: _invites.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      border: index != _invites.length - 1
-                          ? Border(
-                              bottom:
-                                  BorderSide(width: 0.5, color: Colors.grey),
-                            )
-                          : Border(),
+            child: _invites.length == 0 && _loadComplete
+                ? ListEmptyWidget()
+                : SmartRefresher(
+                    controller: _refreshController,
+                    enablePullUp: true,
+                    enablePullDown: false,
+                    child: ListView.builder(
+                      itemCount: _invites.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            border: index != _invites.length - 1
+                                ? Border(
+                                    bottom: BorderSide(
+                                        width: 0.5, color: Colors.grey),
+                                  )
+                                : Border(),
+                          ),
+                          child: ListTile(
+                            title: Text(_invites[index].invitedUser.nickname),
+                            subtitle: Text(_invites[index].invitedUser.phone),
+                            trailing: Text(_invites[index].inviteTime),
+                          ),
+                        );
+                      },
                     ),
-                    child: ListTile(
-                      title: Text(_invites[index].invitedUser.nickname),
-                      subtitle: Text(_invites[index].invitedUser.phone),
-                      trailing: Text(_invites[index].inviteTime),
-                    ),
-                  );
-                },
-              ),
-              onLoading: _onLoading,
-            ),
+                    onLoading: _onLoading,
+                  ),
           )
         ],
       ),
@@ -106,6 +110,7 @@ class _InviteListPageState extends State<InviteListPage> {
       setState(() {
         _inviteSum = result.count;
         _pageSum = result.pageSum;
+        _loadComplete = true;
       });
       return result.invites;
     } catch (e) {

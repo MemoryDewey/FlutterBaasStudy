@@ -4,6 +4,7 @@ import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/course/course_card.dart';
 import 'package:baas_study/widget/course/course_card_skeleton.dart';
 import 'package:baas_study/widget/custom_app_bar.dart';
+import 'package:baas_study/widget/list_empty.dart';
 import 'package:baas_study/widget/skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -37,38 +38,40 @@ class _ExamCoursePageState extends State<ExamCoursePage> {
     return Scaffold(
       appBar: CustomAppBar(title: '我的考试列表'),
       body: _loadComplete
-          ? SmartRefresher(
-              controller: _refreshUserController,
-              enablePullUp: true,
-              enablePullDown: false,
-              child: ListView.builder(
-                padding: EdgeInsets.only(top: 16),
-                itemCount: _courses.length,
-                itemBuilder: (context, index) => CourseManageCard(
-                  imageUrl: HttpUtil.getImage(_courses[index].image),
-                  dateTime:
-                      '${_courses[index].startTime} - ${_courses[index].endTime}',
-                  courseName: _courses[index].courseName,
-                  state: _EXAM_STATE[_courses[index].state],
-                  bottom: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Text(
-                          '成绩: ${_courses[index].score}',
-                          style: TextStyle(
-                            color: Color(0xffee0a24),
-                            fontSize: 18,
-                          ),
-                        ),
-                      )
-                    ],
+          ? _courses.length == 0
+              ? ListEmptyWidget()
+              : SmartRefresher(
+                  controller: _refreshUserController,
+                  enablePullUp: true,
+                  enablePullDown: false,
+                  child: ListView.builder(
+                    padding: EdgeInsets.only(top: 16),
+                    itemCount: _courses.length,
+                    itemBuilder: (context, index) => CourseManageCard(
+                      imageUrl: HttpUtil.getImage(_courses[index].image),
+                      dateTime:
+                          '${_courses[index].startTime} - ${_courses[index].endTime}',
+                      courseName: _courses[index].courseName,
+                      state: _EXAM_STATE[_courses[index].state],
+                      bottom: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              '成绩: ${_courses[index].score}',
+                              style: TextStyle(
+                                color: Color(0xffee0a24),
+                                fontSize: 18,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              onLoading: _onCourseLoading,
-            )
+                  onLoading: _onCourseLoading,
+                )
           : Padding(
               padding: EdgeInsets.only(top: 16),
               child: SkeletonList(

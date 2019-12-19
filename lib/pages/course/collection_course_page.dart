@@ -4,6 +4,7 @@ import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/course/course_card.dart';
 import 'package:baas_study/widget/course/course_card_skeleton.dart';
 import 'package:baas_study/widget/custom_app_bar.dart';
+import 'package:baas_study/widget/list_empty.dart';
 import 'package:baas_study/widget/skeleton.dart';
 import 'package:flutter/material.dart';
 
@@ -53,33 +54,35 @@ class _CollectionCoursePageState extends State<CollectionCoursePage> {
             : null,
       ),
       body: _loadComplete
-          ? ListView.builder(
-              itemCount: _courses.length,
-              itemBuilder: (context, index) => CourseSimpleCard(
-                image: HttpUtil.getImage(_courses[index].courseImage),
-                name: _courses[index].courseName,
-                count: _courses[index].applyCount,
-                price: _courses[index].price,
-                editable: _editAble,
-                selected: _courses[index].selected,
-                onTap: () {
-                  if (_editAble) {
-                    setState(() {
-                      _courses[index].selected = !_courses[index].selected;
-                      _courses[index].selected
-                          ? _selectedSum++
-                          : _selectedSum--;
-                    });
-                  }
-                },
-                onSelected: (value) {
-                  setState(() {
-                    _courses[index].selected = value;
-                    value ? _selectedSum++ : _selectedSum--;
-                  });
-                },
-              ),
-            )
+          ? _courses.length == 0
+              ? ListEmptyWidget()
+              : ListView.builder(
+                  itemCount: _courses.length,
+                  itemBuilder: (context, index) => CourseSimpleCard(
+                    image: HttpUtil.getImage(_courses[index].courseImage),
+                    name: _courses[index].courseName,
+                    count: _courses[index].applyCount,
+                    price: _courses[index].price,
+                    editable: _editAble,
+                    selected: _courses[index].selected,
+                    onTap: () {
+                      if (_editAble) {
+                        setState(() {
+                          _courses[index].selected = !_courses[index].selected;
+                          _courses[index].selected
+                              ? _selectedSum++
+                              : _selectedSum--;
+                        });
+                      }
+                    },
+                    onSelected: (value) {
+                      setState(() {
+                        _courses[index].selected = value;
+                        value ? _selectedSum++ : _selectedSum--;
+                      });
+                    },
+                  ),
+                )
           : SkeletonList(
               builder: (context, index) => CourseSimpleSkeletonItem(),
             ),

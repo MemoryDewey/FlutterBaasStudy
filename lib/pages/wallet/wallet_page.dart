@@ -9,6 +9,7 @@ import 'package:baas_study/pages/wallet/wallet_info_page.dart';
 import 'package:baas_study/providers/user_provider.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/widget/custom_app_bar.dart';
+import 'package:baas_study/widget/list_empty.dart';
 import 'package:baas_study/widget/wallet/wallet_card_widget.dart';
 import 'package:baas_study/widget/wallet/wallet_wiget.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -32,6 +33,7 @@ class _WalletPageState extends State<WalletPage> {
 
   /// 交易记录
   List<BalanceLogsModel> _logs = [];
+  bool _logsLoadComplete = false;
 
   @override
   void initState() {
@@ -80,15 +82,17 @@ class _WalletPageState extends State<WalletPage> {
                 SliverToBoxAdapter(child: _optionsBar()),
                 _selectedOptions == 0
                     ? SliverToBoxAdapter(child: _walletMng())
-                    : SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) => _payLogs(index),
-                          childCount: _logs.length,
-                        ),
-                      ),
+                    : _logs.length == 0 && _logsLoadComplete
+                        ? SliverToBoxAdapter(child: _payLogsEmpty())
+                        : SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) => _payLogs(index),
+                              childCount: _logs.length,
+                            ),
+                          ),
                 SliverToBoxAdapter(
                   child: Offstage(
-                      offstage: _selectedOptions == 0,
+                      offstage: _selectedOptions == 0 || _logs.length == 0,
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: GestureDetector(
@@ -170,7 +174,7 @@ class _WalletPageState extends State<WalletPage> {
   Widget _walletMng() => Container(
         margin: EdgeInsets.symmetric(horizontal: 24),
         decoration: BoxDecoration(color: Theme.of(context).cardColor),
-        height: 120,
+        height: 150,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: _bstBalance == '-1'
@@ -253,6 +257,14 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
+  /// 交易记录为空
+  Widget _payLogsEmpty() => Container(
+        margin: EdgeInsets.symmetric(horizontal: 24),
+        decoration: BoxDecoration(color: Theme.of(context).cardColor),
+        height: 150,
+        child: ListEmptyWidget(),
+      );
+
   Future<Null> _getBalance() async {
     try {
       await WalletDao.refreshWallet();
@@ -294,6 +306,7 @@ class _WalletPageState extends State<WalletPage> {
     try {
       WalletLogsModel logsModel = await WalletDao.getBalanceLogs(1);
       setState(() {
+        _loadComplete = true;
         _logs = logsModel.logs;
       });
     } catch (e) {

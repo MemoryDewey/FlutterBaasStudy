@@ -4,6 +4,7 @@ import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/course/course_card_skeleton.dart';
 import 'package:baas_study/widget/course/course_card.dart';
 import 'package:baas_study/widget/course/course_condition_list.dart';
+import 'package:baas_study/widget/list_empty.dart';
 import 'package:baas_study/widget/search_bar.dart';
 import 'package:baas_study/widget/skeleton.dart';
 import 'package:flutter/cupertino.dart';
@@ -147,52 +148,54 @@ class _CourseListPageState extends State<CourseListPage> {
               Expanded(
                 flex: 1,
                 child: _loadComplete
-                    ? SmartRefresher(
-                        controller: _refreshController,
-                        enablePullDown: true,
-                        enablePullUp: true,
-                        header: BezierCircleHeader(
-                          bezierColor: Theme.of(context).cardColor,
-                          circleColor: Theme.of(context).primaryColor,
-                        ),
-                        footer: CustomFooter(builder: (context, mode) {
-                          Widget body;
-                          Widget getText(String text) =>
-                              Text(text, style: TextStyle(color: Colors.grey));
-                          if (mode == LoadStatus.idle) {
-                            body = getText('上拉加载');
-                          } else if (mode == LoadStatus.loading) {
-                            body = CupertinoActivityIndicator();
-                          } else if (mode == LoadStatus.failed) {
-                            body = getText('加载失败!点击重试!');
-                          } else if (mode == LoadStatus.canLoading) {
-                            body = getText('加载更多');
-                          } else {
-                            body = getText('-- 我也是有底线的 --');
-                          }
-                          return Container(
-                            height: 40,
-                            child: Center(child: body),
-                          );
-                        }),
-                        onRefresh: _onRefresh,
-                        onLoading: _onLoading,
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          padding: EdgeInsets.all(16),
-                          itemCount: _courses.length,
-                          itemBuilder: (context, index) => CourseCard(
-                            id: _courses[index].id,
-                            imageUrl:
-                                HttpUtil.getImage(_courses[index].imageUrl),
-                            name: _courses[index].name,
-                            description: _courses[index].description,
-                            rate: _courses[index].rate,
-                            price: _courses[index].price,
-                            applyCount: _courses[index].apply,
-                          ),
-                        ),
-                      )
+                    ? _courses.length == 0
+                        ? ListEmptyWidget()
+                        : SmartRefresher(
+                            controller: _refreshController,
+                            enablePullDown: true,
+                            enablePullUp: true,
+                            header: BezierCircleHeader(
+                              bezierColor: Theme.of(context).cardColor,
+                              circleColor: Theme.of(context).primaryColor,
+                            ),
+                            footer: CustomFooter(builder: (context, mode) {
+                              Widget body;
+                              Widget getText(String text) => Text(text,
+                                  style: TextStyle(color: Colors.grey));
+                              if (mode == LoadStatus.idle) {
+                                body = getText('上拉加载');
+                              } else if (mode == LoadStatus.loading) {
+                                body = CupertinoActivityIndicator();
+                              } else if (mode == LoadStatus.failed) {
+                                body = getText('加载失败!点击重试!');
+                              } else if (mode == LoadStatus.canLoading) {
+                                body = getText('加载更多');
+                              } else {
+                                body = getText('-- 我也是有底线的 --');
+                              }
+                              return Container(
+                                height: 40,
+                                child: Center(child: body),
+                              );
+                            }),
+                            onRefresh: _onRefresh,
+                            onLoading: _onLoading,
+                            child: ListView.builder(
+                              controller: _scrollController,
+                              padding: EdgeInsets.all(16),
+                              itemCount: _courses.length,
+                              itemBuilder: (context, index) => CourseCard(
+                                id: _courses[index].id,
+                                imageUrl:
+                                    HttpUtil.getImage(_courses[index].imageUrl),
+                                name: _courses[index].name,
+                                description: _courses[index].description,
+                                rate: _courses[index].rate,
+                                price: _courses[index].price,
+                                applyCount: _courses[index].apply,
+                              ),
+                            ),
+                          )
                     : Padding(
                         padding: EdgeInsets.all(8),
                         child: SkeletonList(

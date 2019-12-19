@@ -36,4 +36,5 @@ class FontIcons {
   static const IconData invite = IconData(0xe626, fontFamily: 'IconFont');
   static const IconData visibility_off =
       IconData(0xe628, fontFamily: 'IconFont');
+  static const IconData empty = IconData(0xe62b, fontFamily: 'IconFont');
 }

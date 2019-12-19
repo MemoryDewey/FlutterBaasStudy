@@ -1,5 +1,4 @@
 import 'package:baas_study/icons/font_icon.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 enum SearchBarType { home, normal, homeLight }

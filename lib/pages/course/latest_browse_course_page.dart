@@ -4,6 +4,7 @@ import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/course/course_card.dart';
 import 'package:baas_study/widget/course/course_card_skeleton.dart';
 import 'package:baas_study/widget/custom_app_bar.dart';
+import 'package:baas_study/widget/list_empty.dart';
 import 'package:baas_study/widget/skeleton.dart';
 import 'package:flutter/material.dart';
 
@@ -36,16 +37,21 @@ class _LatestBrowseCoursePageState extends State<LatestBrowseCoursePage> {
                 ),
             childCount: _courses.length),
       ));
-      sliverWidget.add(SliverToBoxAdapter(
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 20),
-          child: Text(
-            '只展示最近在学的10门课程',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey),
+      if (_courses.length > 0)
+        sliverWidget.add(SliverToBoxAdapter(
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: Text(
+              '只展示最近在学的10门课程',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey),
+            ),
           ),
-        ),
-      ));
+        ));
+      else
+        sliverWidget.add(SliverToBoxAdapter(
+          child: ListEmptyWidget(),
+        ));
     } else
       sliverWidget.add(SliverToBoxAdapter(
         child: SkeletonList(
