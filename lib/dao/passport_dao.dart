@@ -44,10 +44,36 @@ class PassportDao {
     String option,
     String phone,
   }) async {
-    final response = await HttpUtil.post(
-      '/passport/short-message-captcha',
-      data: {"account": phone, "option": option},
-    );
+    final response =
+        await HttpUtil.post('/passport/short-message-captcha', data: {
+      "account": phone,
+      "option": option,
+    });
     return ResponseNormalModel.fromJson(response);
+  }
+
+  /// 获取邮箱验证码
+  static Future<ResponseNormalModel> sendMailCode({
+    String email,
+  }) async {
+    final response = await HttpUtil.post('/passport/email-captcha', data: {
+      "account": email,
+    });
+    return ResponseNormalModel.fromJson(response);
+  }
+
+  /// 添加邮箱
+  static Future<EmailModel> bindEmail({String email, String code}) async {
+    final response = await HttpUtil.post('/passport/add-email', data: {
+      "account": email,
+      "verifyCode": code,
+    });
+    return EmailModel.fromJson(response);
+  }
+
+  /// 解除已绑定的邮箱
+  static Future<String> unbindEmail() async {
+    final response = await HttpUtil.get('/passport/delete-email');
+    return ResponseNormalModel.fromJson(response).msg;
   }
 }

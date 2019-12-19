@@ -37,3 +37,27 @@ class LoginModel {
     return data;
   }
 }
+
+class EmailModel {
+  int code;
+  String msg;
+  String email;
+
+  EmailModel({this.code, this.msg, this.email});
+
+  factory EmailModel.fromJson(Map<String, dynamic> json) {
+    return EmailModel(
+        code : json['code'],
+        msg : json['msg'],
+        email : json['email'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['msg'] = this.msg;
+    data['email'] = this.email;
+    return data;
+  }
+}

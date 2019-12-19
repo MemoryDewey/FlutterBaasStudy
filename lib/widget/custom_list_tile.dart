@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// 自定义封装ListGroup
@@ -47,6 +48,7 @@ class ListTileCustom extends StatelessWidget {
   final String leadingTitle;
   final Color color;
   final String trailingTitle;
+  final String subTitle;
   final void Function() onTap;
 
   const ListTileCustom({
@@ -54,6 +56,7 @@ class ListTileCustom extends StatelessWidget {
     this.leading,
     @required this.leadingTitle,
     this.color,
+    this.subTitle,
     this.trailingTitle,
     this.onTap,
   }) : super(key: key);
@@ -79,7 +82,23 @@ class ListTileCustom extends StatelessWidget {
                   )
                 ],
               )
-            : Text(leadingTitle),
+            : subTitle != null
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        leadingTitle,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        subTitle,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 13, color: Colors.grey),
+                      ),
+                    ],
+                  )
+                : Text(leadingTitle),
         trailing: trailingTitle == null
             ? Icon(
                 Icons.arrow_forward_ios,

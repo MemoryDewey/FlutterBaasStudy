@@ -215,7 +215,7 @@ class _SearchBarState extends State<SearchBar> {
                     ),
                     decoration: InputDecoration(
                       contentPadding:
-                          EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                          EdgeInsets.symmetric(horizontal: 5, vertical: 9),
                       border: InputBorder.none,
                       hintText: widget.hint ?? '',
                       hintStyle: TextStyle(fontSize: 15),
