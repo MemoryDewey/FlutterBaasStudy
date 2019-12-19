@@ -1,5 +1,5 @@
 import 'package:baas_study/icons/font_icon.dart';
-import 'package:baas_study/utils/auto_size_utli.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 enum SearchBarType { home, normal, homeLight }
@@ -70,30 +70,22 @@ class _SearchBarState extends State<SearchBar> {
         : _genHomeSearch();
   }
 
-  _size(double size) {
-    return AutoSize.size(size);
-  }
-
-  _font(double fontSize) {
-    return AutoSize.font(fontSize);
-  }
-
   /// 搜索页搜索框
   _genNormalSearch() {
     return Container(
       color: _searchBarColor,
-      padding: EdgeInsets.fromLTRB(_size(6), _size(10), _size(10), _size(10)),
+      padding: EdgeInsets.fromLTRB(6, 10, 10, 10),
       child: Row(
         children: <Widget>[
           _wrapTap(
             Container(
-              padding: EdgeInsets.only(right: _size(6)),
+              padding: EdgeInsets.only(right: 6),
               child: widget?.hideLeft ?? false
                   ? null
                   : Icon(
                       Icons.arrow_back_ios,
                       color: Colors.grey,
-                      size: _size(24),
+                      size: 24,
                     ),
             ),
             widget.leftButtonClick,
@@ -105,15 +97,15 @@ class _SearchBarState extends State<SearchBar> {
           _wrapTap(
             Container(
               padding: EdgeInsets.only(
-                top: _size(3),
-                bottom: _size(3),
-                left: _size(10),
+                top: 3,
+                bottom: 3,
+                left: 10,
               ),
               child: Text(
                 '搜索',
                 style: TextStyle(
                   color: Colors.blue,
-                  fontSize: _font(16),
+                  fontSize: 16,
                 ),
               ),
             ),
@@ -127,25 +119,25 @@ class _SearchBarState extends State<SearchBar> {
   /// 首页搜索框
   _genHomeSearch() {
     return Container(
-      margin: EdgeInsets.fromLTRB(_size(6), _size(10), _size(10), _size(10)),
+      margin: EdgeInsets.fromLTRB(6, 10, 10, 10),
       child: Row(
         children: <Widget>[
           _wrapTap(
             Container(
-              padding: EdgeInsets.only(right: _size(5)),
+              padding: EdgeInsets.only(right: 5),
               child: Row(
                 children: <Widget>[
                   Text(
                     '课程',
                     style: TextStyle(
                       color: _homeFontColor(),
-                      fontSize: _font(16),
+                      fontSize: 16,
                     ),
                   ),
                   Icon(
                     Icons.expand_more,
                     color: _homeFontColor(),
-                    size: _size(22),
+                    size: 22,
                   )
                 ],
               ),
@@ -158,11 +150,11 @@ class _SearchBarState extends State<SearchBar> {
           ),
           _wrapTap(
             Container(
-              padding: EdgeInsets.only(left: _size(10)),
+              padding: EdgeInsets.only(left: 10),
               child: Icon(
                 Icons.playlist_play,
                 color: _homeFontColor(),
-                size: _size(28),
+                size: 28,
               ),
             ),
             widget.rightButtonClick,
@@ -190,19 +182,19 @@ class _SearchBarState extends State<SearchBar> {
     else
       inputBoxColor = _fillColor;
     return Container(
-      height: _size(30),
-      padding: EdgeInsets.symmetric(horizontal: _size(10)),
+      height: 30,
+      padding: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         color: inputBoxColor,
-        borderRadius: BorderRadius.circular(_size(15)),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(right: _size(5)),
+            margin: EdgeInsets.only(right: 5),
             child: Icon(
               FontIcons.search,
-              size: _size(15),
+              size: 15,
               color: widget.searchBarType == SearchBarType.normal
                   ? Color(0xffa9a9a9)
                   : Colors.blue,
@@ -216,25 +208,26 @@ class _SearchBarState extends State<SearchBar> {
                     onChanged: _onChanged,
                     onSubmitted: _onSubmitted,
                     autofocus: widget.autofocus,
+                    textInputAction: TextInputAction.search,
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w300,
                       textBaseline: TextBaseline.alphabetic,
                     ),
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                       border: InputBorder.none,
                       hintText: widget.hint ?? '',
                       hintStyle: TextStyle(fontSize: 15),
                     ),
-                    textInputAction: TextInputAction.search,
                   )
                 : _wrapTap(
                     Container(
                       child: Text(
                         widget.defaultText,
                         style: TextStyle(
-                          fontSize: _font(15),
+                          fontSize: 15,
                           color: Colors.grey,
                         ),
                       ),
@@ -247,7 +240,7 @@ class _SearchBarState extends State<SearchBar> {
             child: _wrapTap(
                 Icon(
                   Icons.clear,
-                  size: _size(22),
+                  size: 22,
                   color: Colors.grey,
                 ), () {
               setState(() {
