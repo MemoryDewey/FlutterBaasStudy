@@ -1,6 +1,5 @@
 import 'package:baas_study/pages/course/course_info_page.dart';
 import 'package:baas_study/routes/router.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
 

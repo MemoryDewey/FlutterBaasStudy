@@ -14,6 +14,9 @@ class HttpUtil {
   /// 设置请求地址
   static const String URL_PREFIX = 'http://47.102.97.205';
 
+  /// WebSocket请求地址
+  static const String WEBSOCKET_URL_PREFIX = 'ws://47.102.97.205';
+
   /// API前缀
   static const String _API_PREFIX = '$URL_PREFIX/api';
 

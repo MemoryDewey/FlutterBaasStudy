@@ -5,7 +5,6 @@ import 'package:baas_study/widget/course/course_card.dart';
 import 'package:baas_study/widget/course/course_card_skeleton.dart';
 import 'package:baas_study/widget/custom_app_bar.dart';
 import 'package:baas_study/widget/skeleton.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 

@@ -55,7 +55,9 @@ class _LatestBrowseCoursePageState extends State<LatestBrowseCoursePage> {
     return Scaffold(
       appBar: CustomAppBar(title: '最近在学'),
       body: CustomScrollView(
-          physics: ClampingScrollPhysics(), slivers: sliverWidget),
+        physics: ClampingScrollPhysics(),
+        slivers: sliverWidget,
+      ),
     );
   }
 

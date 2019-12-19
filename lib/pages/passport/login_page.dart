@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:baas_study/dao/passport_dao.dart';
 import 'package:baas_study/dao/wallet_dao.dart';
+import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/passport_model.dart';
 import 'package:baas_study/model/reponse_normal_model.dart';
 import 'package:baas_study/model/wallet_model.dart';
@@ -211,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
               _showPsw = !_showPsw;
             });
           },
-          child: _showPsw ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+          child: _showPsw ? Icon(Icons.visibility) : Icon(FontIcons.visibility_off),
         ),
       ),
       validator: (value) {

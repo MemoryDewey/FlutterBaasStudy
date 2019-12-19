@@ -37,33 +37,42 @@ dependencies:
   # Data 数据交互处理
   dio: ^3.0.7
   shared_preferences: ^0.5.6
+  adhara_socket_io: ^0.4.1
 
   # Permission 权限管理
   permission_handler: ^4.0.0
 
+  # Encrypt 加密
+  encrypt: ^3.3.1
+
   # Cache 缓存图片
   extended_image: ^0.6.8
   extended_image_library: ^0.1.9
-  # Screen 屏幕适配
-  flutter_screenutil: ^0.7.0
-  # Toast 提示
-  bot_toast: ^2.2.0
-  # Qr Scanner 二维码扫描
-  qr_code_scanner: ^0.0.12
-  # Qr Generator 二维码生成
-  qr_flutter: ^3.1.0
   # Image Picker 图片选择（相册/相机）
   image_picker: ^0.6.2+3
   # Image Cropper 图片裁剪
   image_cropper: ^1.1.1
   # Image Saver 图片保存
   image_gallery_saver: ^1.2.2
+
+  # Screen 屏幕适配
+  flutter_screenutil: ^0.7.0
+  # Toast 提示
+  bot_toast: ^2.2.0
+
+  # Qr Scanner 二维码扫描
+  qr_code_scanner: ^0.0.12
+  # Qr Generator 二维码生成
+  qr_flutter: ^3.1.0
+
   # Refresh 下拉刷新
   pull_to_refresh: ^1.5.7
   # Menu 下拉菜单
   gzx_dropdown_menu: ^1.0.3
+
   # Shimmer 闪烁（骨架屏使用）
   shimmer: ^1.0.1
+
   # Video 视频播放插件
   flutter_ijkplayer: ^0.3.5+1
 

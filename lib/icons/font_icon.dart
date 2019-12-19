@@ -25,12 +25,15 @@ class FontIcons {
   static const IconData dark_mode = IconData(0xe614, fontFamily: 'IconFont');
   static const IconData qr_code = IconData(0xe615, fontFamily: 'IconFont');
   static const IconData scan = IconData(0xe617, fontFamily: 'IconFont');
-  static const IconData wallet_border = IconData(0xe618, fontFamily: 'IconFont');
+  static const IconData wallet_border =
+      IconData(0xe618, fontFamily: 'IconFont');
   static const IconData wallet = IconData(0xe61c, fontFamily: 'IconFont');
   static const IconData note = IconData(0xe61d, fontFamily: 'IconFont');
   static const IconData search = IconData(0xe61e, fontFamily: 'Iconfont');
-  static const IconData time = IconData(0xe61f,fontFamily: 'IconFont');
-  static const IconData feedback = IconData(0xe622,fontFamily: 'IconFont');
-  static const IconData paper = IconData(0xe624,fontFamily: 'IconFont');
-  static const IconData invite = IconData(0xe626,fontFamily: 'IconFont');
+  static const IconData time = IconData(0xe61f, fontFamily: 'IconFont');
+  static const IconData feedback = IconData(0xe622, fontFamily: 'IconFont');
+  static const IconData paper = IconData(0xe624, fontFamily: 'IconFont');
+  static const IconData invite = IconData(0xe626, fontFamily: 'IconFont');
+  static const IconData visibility_off =
+      IconData(0xe628, fontFamily: 'IconFont');
 }

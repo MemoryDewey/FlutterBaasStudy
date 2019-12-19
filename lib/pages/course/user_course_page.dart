@@ -121,6 +121,7 @@ class __UserCourseTabViewState extends State<_UserCourseTabView>
                           onPressed: () {
                             showDialog<void>(
                                 context: context,
+                                barrierDismissible: false,
                                 builder: (dialogContext) {
                                   return ConfirmDialog(
                                     title: '取消报名',
@@ -130,7 +131,8 @@ class __UserCourseTabViewState extends State<_UserCourseTabView>
                                     ),
                                     confirmPress: () {
                                       _cancelCourse(
-                                          _userCourses[index].courseID);
+                                        _userCourses[index].courseID,
+                                      );
                                     },
                                   );
                                 });
@@ -193,7 +195,6 @@ class __UserCourseTabViewState extends State<_UserCourseTabView>
       ResponseNormalModel res = await CourseDao.cancelFreeCourse(courseID);
       if (res.code == 1000) {
         BotToast.showText(text: res.msg ?? '取消报名成功');
-        Navigator.pop(context);
         _userCourses.clear();
         setState(() {
           _userCoursesCurrent = 0;

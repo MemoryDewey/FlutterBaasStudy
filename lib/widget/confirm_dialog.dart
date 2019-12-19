@@ -53,7 +53,10 @@ class ConfirmDialog extends StatelessWidget {
               ),
               Expanded(
                 child: InkWell(
-                  onTap: confirmPress,
+                  onTap: () {
+                    Navigator.pop(context);
+                    confirmPress();
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     decoration: BoxDecoration(

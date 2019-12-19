@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage>
                     if (scrollNotification is ScrollNotification &&
                         scrollNotification.depth == 0) {
                       /// 滚动且是列表滚动的时候
-                      _onScroll(scrollNotification.metrics.pixels, isDark);
+                      _onScroll(scrollNotification.metrics.pixels);
                     }
                     return null;
                   },
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage>
   bool get wantKeepAlive => true;
 
   /// 滚动事件 - 改变AppBar透明度
-  _onScroll(double offset, bool isDark) {
+  _onScroll(double offset) {
     double alpha = offset / APPBAR_SCROLL_OFFSET;
     if (alpha < 0)
       alpha = 0;

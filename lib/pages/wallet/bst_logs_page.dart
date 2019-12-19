@@ -1,23 +1,26 @@
 import 'package:baas_study/dao/wallet_dao.dart';
 import 'package:baas_study/model/wallet_model.dart';
 import 'package:baas_study/widget/custom_app_bar.dart';
+import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class BalanceDetailPage extends StatefulWidget {
+class BstLogsPage extends StatefulWidget {
   @override
-  _BalanceDetailPageState createState() => _BalanceDetailPageState();
+  _BstLogsPageState createState() => _BstLogsPageState();
 }
 
-class _BalanceDetailPageState extends State<BalanceDetailPage> {
+class _BstLogsPageState extends State<BstLogsPage> {
   RefreshController _refreshController = RefreshController();
   int _pageCurrent = 0;
   int _pageSum = 1;
-  List<BalanceLogsModel> _logs = [];
+  List<BstLogsModel> _logs = [];
   static const Map<String, String> _STATUS = {
-    'Accept': '交易成功',
-    'Reject': '交易失败',
-    'Pending': '交易中..',
+    'Course': '购买课程',
+    'Expend': '课程币兑换',
+    'Recharge': '课程币充值',
   };
 
   @override
@@ -48,16 +51,19 @@ class _BalanceDetailPageState extends State<BalanceDetailPage> {
             child: Material(
               color: Theme.of(context).cardColor,
               child: ListTile(
-                title: Text(_logs[index].details),
-                subtitle: Text(_STATUS[_logs[index].status]),
+                title: Text(_STATUS[_logs[index].productType]),
+                subtitle: Text(
+                  _logs[index].txHash,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 trailing: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     Text(
-                      '${_logs[index].type == 'Income' ? '+' : '-'}${_logs[index].amount}',
+                      '${_logs[index].productType == 'Expend' ? '+' : '-'}${_logs[index].amount}',
                       style: TextStyle(
-                        color: _logs[index].type == 'Income'
+                        color: _logs[index].productType == 'Expend'
                             ? Colors.lightBlue
                             : Colors.redAccent,
                       ),
@@ -68,6 +74,10 @@ class _BalanceDetailPageState extends State<BalanceDetailPage> {
                     ),
                   ],
                 ),
+                onLongPress: () {
+                  Clipboard.setData(ClipboardData(text: _logs[index].txHash));
+                  BotToast.showText(text: '已复制区块号');
+                },
               ),
             ),
           ),
@@ -83,7 +93,7 @@ class _BalanceDetailPageState extends State<BalanceDetailPage> {
     if (_pageCurrent > _pageSum) {
       _refreshController.loadNoData();
     } else {
-      List<BalanceLogsModel> list = await _getBalanceLogs();
+      List<BstLogsModel> list = await _getBalanceLogs();
       if (list == null)
         _refreshController.loadFailed();
       else {
@@ -95,9 +105,9 @@ class _BalanceDetailPageState extends State<BalanceDetailPage> {
     }
   }
 
-  Future<List<BalanceLogsModel>> _getBalanceLogs() async {
+  Future<List<BstLogsModel>> _getBalanceLogs() async {
     try {
-      WalletLogsModel logsModel = await WalletDao.getBalanceLogs(_pageCurrent);
+      WalletLogsModel logsModel = await WalletDao.getBstLogs(_pageCurrent);
       setState(() {
         _pageSum = logsModel.pageSum;
       });
