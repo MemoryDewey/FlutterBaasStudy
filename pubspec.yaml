@@ -37,7 +37,6 @@ dependencies:
   # Data 数据交互处理
   dio: ^3.0.7
   shared_preferences: ^0.5.6
-  adhara_socket_io: ^0.4.1
 
   # Permission 权限管理
   permission_handler: ^4.0.0

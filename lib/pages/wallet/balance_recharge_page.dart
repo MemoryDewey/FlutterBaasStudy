@@ -1,7 +1,5 @@
-import 'package:adhara_socket_io/adhara_socket_io.dart';
 import 'package:baas_study/dao/wallet_dao.dart';
 import 'package:baas_study/providers/user_provider.dart';
-import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/custom_app_bar.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,7 +17,7 @@ class _BalanceRechargePageState extends State<BalanceRechargePage> {
   int _chooseItem = 50;
   TextEditingController _controller = TextEditingController();
   bool _getBstValueSuccess = false;
-  double _bstValue = 0;
+  double _bstValue = 1;
 
   @override
   void initState() {
@@ -218,8 +216,15 @@ class _BalanceRechargePageState extends State<BalanceRechargePage> {
 
   Future<Null> _recharge() async {
     try {
+      BotToast.showLoading();
       await WalletDao.sendRechargeReq(amount: _chooseItem);
-      SocketIOManager manager = SocketIOManager();
+      await Future.delayed(Duration(seconds: 1));
+      BotToast.closeAllLoading();
+      BotToast.showText(text: '已发起交易，请稍后查询交易结果');
+      Navigator.pop(context);
+
+      /// 由于版本问题，暂不使用socket
+      /*SocketIOManager manager = SocketIOManager();
       SocketIO socket = await manager.createInstance(
         SocketOptions(HttpUtil.URL_PREFIX),
       );
@@ -231,10 +236,10 @@ class _BalanceRechargePageState extends State<BalanceRechargePage> {
           Navigator.pop(context);
         } else
           BotToast.showText(text: data['msg']);
-      });
-      BotToast.closeAllLoading();
+      });*/
     } catch (e) {
       print(e);
+      BotToast.showText(text: '交易失败');
       BotToast.closeAllLoading();
     }
   }
