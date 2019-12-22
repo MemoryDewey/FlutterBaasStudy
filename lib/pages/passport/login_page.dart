@@ -11,6 +11,7 @@ import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/theme/passport_theme.dart';
 import 'package:baas_study/utils/token_util.dart';
 import 'package:baas_study/widget/passport/passport_widget.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -305,6 +306,7 @@ class _LoginPageState extends State<LoginPage> {
         );
         if (res.code == 1000) {
           print(res.msg);
+          BotToast.showText(text: res.msg);
           Navigator.pushReplacement(
               context,
               SlideRoute(

@@ -1,5 +1,6 @@
 import 'package:baas_study/dao/passport_dao.dart';
 import 'package:baas_study/pages/passport/bind_email_page.dart';
+import 'package:baas_study/pages/passport/verify_phone_page.dart';
 import 'package:baas_study/pages/passport/login_page.dart';
 import 'package:baas_study/pages/profile/profile_setting_page.dart';
 import 'package:baas_study/providers/dark_mode_provider.dart';
@@ -57,12 +58,23 @@ class _SystemSettingPageState extends State<SystemSettingPage> {
                   ListTileCustom(
                     leadingTitle: '手机',
                     trailingTitle: '更换手机',
-                    subTitle: provider.user.mobile,
+                    subTitle: provider.user?.mobile,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        SlideRoute(
+                          VerifyPhonePage(
+                            title: '更换绑定手机',
+                            option: 'change',
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   ListTileCustom(
                     leadingTitle: '邮箱',
                     trailingTitle: provider.user.email == null ? '去绑定' : '取消绑定',
-                    subTitle: provider.user.email,
+                    subTitle: provider.user?.email,
                     onTap: () {
                       if (provider.user.email == null)
                         Navigator.push(context, SlideRoute(BindEmailPage()));
@@ -81,6 +93,17 @@ class _SystemSettingPageState extends State<SystemSettingPage> {
                   ),
                   ListTileCustom(
                     leadingTitle: '修改账户密码',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        SlideRoute(
+                          VerifyPhonePage(
+                            title: '修改密码',
+                            option: 'mobileReset',
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

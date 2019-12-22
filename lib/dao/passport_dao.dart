@@ -76,4 +76,34 @@ class PassportDao {
     final response = await HttpUtil.get('/passport/delete-email');
     return ResponseNormalModel.fromJson(response).msg;
   }
+
+  /// 改变手机号
+  static Future<String> changeMobile({
+    Map<String, dynamic> data,
+    int step,
+  }) async {
+    final res = await HttpUtil.post('/passport/change-mobile', data: {
+      "data": data,
+      "step": step,
+    });
+    if (res == null)
+      return res;
+    else if (res == "OK") return "OK";
+    return ResponseNormalModel.fromJson(res).msg;
+  }
+
+  /// 修改密码
+  static Future<String> changePsw({
+    Map<String, dynamic> data,
+    int step,
+  }) async {
+    final res = await HttpUtil.post('/passport/mobile-reset', data: {
+      "data": data,
+      "step": step,
+    });
+    if (res == null)
+      return res;
+    else if (res == "OK") return "OK";
+    return ResponseNormalModel.fromJson(res).msg;
+  }
 }
