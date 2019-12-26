@@ -95,3 +95,24 @@ class AvatarModel {
     return data;
   }
 }
+
+class UserInfoModel {
+  String avatarUrl;
+  String nickname;
+
+  UserInfoModel({this.avatarUrl, this.nickname});
+
+  factory UserInfoModel.fromJson(Map<String, dynamic> json) {
+    return UserInfoModel(
+      avatarUrl: json['avatarUrl'],
+      nickname: json['nickname'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['avatarUrl'] = this.avatarUrl;
+    data['nickname'] = this.nickname;
+    return data;
+  }
+}

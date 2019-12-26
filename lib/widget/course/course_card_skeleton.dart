@@ -1,5 +1,5 @@
+import 'package:baas_study/widget/skeleton.dart';
 import 'package:flutter/material.dart';
-import '../skeleton.dart';
 
 class CourseCardSkeletonItem extends StatelessWidget {
   @override

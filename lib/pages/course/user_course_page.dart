@@ -1,6 +1,8 @@
 import 'package:baas_study/dao/course_dao.dart';
 import 'package:baas_study/model/course_manage_model.dart';
 import 'package:baas_study/model/reponse_normal_model.dart';
+import 'package:baas_study/pages/course/course_comment_page.dart';
+import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/confirm_dialog.dart';
 import 'package:baas_study/widget/course/course_card.dart';
@@ -109,10 +111,20 @@ class __UserCourseTabViewState extends State<_UserCourseTabView>
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         CourseManageCard.cardBottomBtn(
-                            text: '评价课程',
-                            textColor: Colors.white,
-                            buttonColor: Colors.blue,
-                            onPressed: () {}),
+                          text: '评价课程',
+                          textColor: Colors.white,
+                          buttonColor: Colors.blue,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              SlideRoute(
+                                CourseCommentPage(
+                                  courseID: _courses[index].courseID,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                         Offstage(
                           offstage: _courses[index].price > 0,
                           child: Container(
@@ -234,38 +246,47 @@ class __BalanceCourseTabViewState extends State<_BalanceCourseTabView>
   Widget build(BuildContext context) {
     super.build(context);
     return _loadComplete
-        ?  _courses.length == 0
-        ? ListEmptyWidget()
-        : SmartRefresher(
-            controller: _refreshBalanceController,
-            enablePullUp: true,
-            enablePullDown: false,
-            child: ListView.builder(
-              padding: EdgeInsets.only(top: 16),
-              itemCount: _courses.length,
-              itemBuilder: (context, index) => CourseManageCard(
-                imageUrl: HttpUtil.getImage(
-                    _courses[index].courseInformation.courseImage),
-                dateTime: _courses[index].createdAt,
-                courseName: _courses[index].courseInformation.courseName,
-                price: '￥${_courses[index].amount}',
-                state: '购买成功',
-                isFree: false,
-                bottom: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    CourseManageCard.cardBottomBtn(
-                      text: '评价课程',
-                      textColor: Colors.white,
-                      buttonColor: Colors.blue,
-                      onPressed: () {},
+        ? _courses.length == 0
+            ? ListEmptyWidget()
+            : SmartRefresher(
+                controller: _refreshBalanceController,
+                enablePullUp: true,
+                enablePullDown: false,
+                child: ListView.builder(
+                  padding: EdgeInsets.only(top: 16),
+                  itemCount: _courses.length,
+                  itemBuilder: (context, index) => CourseManageCard(
+                    imageUrl: HttpUtil.getImage(
+                        _courses[index].courseInformation.courseImage),
+                    dateTime: _courses[index].createdAt,
+                    courseName: _courses[index].courseInformation.courseName,
+                    price: '￥${_courses[index].amount}',
+                    state: '购买成功',
+                    isFree: false,
+                    bottom: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        CourseManageCard.cardBottomBtn(
+                          text: '评价课程',
+                          textColor: Colors.white,
+                          buttonColor: Colors.blue,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              SlideRoute(
+                                CourseCommentPage(
+                                  courseID: _courses[index].productID,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            onLoading: _onBalanceCourseLoading,
-          )
+                onLoading: _onBalanceCourseLoading,
+              )
         : Padding(
             padding: EdgeInsets.only(top: 16),
             child: SkeletonList(
@@ -335,42 +356,42 @@ class __BstCourseTabViewState extends State<_BstCourseTabView>
   Widget build(BuildContext context) {
     super.build(context);
     return _loadComplete
-        ?  _courses.length == 0
-        ? ListEmptyWidget()
-        : SmartRefresher(
-            controller: _refreshBstController,
-            enablePullUp: true,
-            enablePullDown: false,
-            child: ListView.builder(
-              padding: EdgeInsets.only(top: 16),
-              itemCount: _courses.length,
-              itemBuilder: (context, index) => CourseManageCard(
-                imageUrl: HttpUtil.getImage(
-                    _courses[index].courseInformation.courseImage),
-                dateTime: _courses[index].createdAt,
-                courseName: _courses[index].courseInformation.courseName,
-                price: '${_courses[index].amount} BST',
-                state: '报名成功',
-                isFree: false,
-                bottom: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    CourseManageCard.cardBottomBtn(
-                      text: '复制交易ID',
-                      textColor: Colors.white,
-                      buttonColor: Colors.greenAccent,
-                      onPressed: () {
-                        Clipboard.setData(ClipboardData(
-                            text: _courses[index].txHash ?? ''));
-                        BotToast.showText(text: '已复制');
-                      },
+        ? _courses.length == 0
+            ? ListEmptyWidget()
+            : SmartRefresher(
+                controller: _refreshBstController,
+                enablePullUp: true,
+                enablePullDown: false,
+                child: ListView.builder(
+                  padding: EdgeInsets.only(top: 16),
+                  itemCount: _courses.length,
+                  itemBuilder: (context, index) => CourseManageCard(
+                    imageUrl: HttpUtil.getImage(
+                        _courses[index].courseInformation.courseImage),
+                    dateTime: _courses[index].createdAt,
+                    courseName: _courses[index].courseInformation.courseName,
+                    price: '${_courses[index].amount} BST',
+                    state: '报名成功',
+                    isFree: false,
+                    bottom: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        CourseManageCard.cardBottomBtn(
+                          text: '复制交易ID',
+                          textColor: Colors.white,
+                          buttonColor: Colors.greenAccent,
+                          onPressed: () {
+                            Clipboard.setData(ClipboardData(
+                                text: _courses[index].txHash ?? ''));
+                            BotToast.showText(text: '已复制');
+                          },
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            onLoading: _onBstCourseLoading,
-          )
+                onLoading: _onBstCourseLoading,
+              )
         : Padding(
             padding: EdgeInsets.only(top: 16),
             child: SkeletonList(

@@ -1,3 +1,4 @@
+import 'package:baas_study/model/course_info_model.dart';
 import 'package:baas_study/model/course_manage_model.dart';
 import 'package:baas_study/model/course_model.dart';
 import 'package:baas_study/model/reponse_normal_model.dart';
@@ -83,5 +84,76 @@ class CourseDao {
       "page": page,
     });
     return CourseManageModel.fromJson(response, ExamCoursesModel());
+  }
+
+  /// 检查用户是否报名
+  static Future<bool> checkCourseApply(int courseID) async {
+    final response = await HttpUtil.post('/course/information/class', data: {
+      "courseID": courseID,
+    });
+    return response['code'] == 1000;
+  }
+
+  /// 获取课程详情
+  static Future<CourseInfoDetailModel> getInfoDetail(int courseID) async {
+    final response = await HttpUtil.get('/course/information', data: {
+      "courseID": courseID,
+    });
+    return CourseInfoDetailModel.fromJson(response);
+  }
+
+  /// 获取第一节课视频
+  static Future<ResponseNormalModel> getFirstVideo(int courseID) async {
+    final response =
+        await HttpUtil.get('/course/information/first-video', data: {
+      "courseID": courseID,
+    });
+    return ResponseNormalModel.fromJson(response);
+  }
+
+  /// 获取直播课程信息
+  static Future<LiveModel> getLiveInfo(int courseID) async {
+    final response = await HttpUtil.get('/course/information/live', data: {
+      "courseID": courseID,
+    });
+    return LiveModel.fromJson(response);
+  }
+
+  /// 获取录播课程信息
+  static Future<ChapterInfoModel> getChapterInfo(int courseID) async {
+    final response = await HttpUtil.get('/course/information/video', data: {
+      "courseID": courseID,
+      "mobile": 'flutter',
+    });
+    return ChapterInfoModel.fromJson(response);
+  }
+
+  /// 收藏/取消收藏课程
+  static Future<ResponseNormalModel> courseCollect(
+      int courseID, int value) async {
+    final response =
+        await HttpUtil.get('/course/information/collect-course', data: {
+      "courseID": courseID,
+      "value": value,
+    });
+    return ResponseNormalModel.fromJson(response);
+  }
+
+  /// 报名免费课程
+  static Future<CourseApplyModel> applyFree(int courseID) async {
+    final response =
+        await HttpUtil.post('/course/information/apply-free', data: {
+      "courseID": courseID,
+    });
+    return  response == null ? null : CourseApplyModel.fromJson(response);
+  }
+
+  /// 报名付费课程
+  static Future<CourseApplyModel> buyCourse(int courseID) async {
+    final response =
+        await HttpUtil.post('/course/information/buy-course', data: {
+      "courseID": courseID,
+    });
+    return response == null ? null : CourseApplyModel.fromJson(response);
   }
 }

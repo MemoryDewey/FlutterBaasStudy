@@ -28,7 +28,7 @@ class CourseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, SlideRoute(CourseInfoPage()));
+        Navigator.push(context, SlideRoute(CourseInfoPage(courseID: id)));
       },
       child: Container(
         height: 90,
@@ -234,7 +234,8 @@ class CourseDiscountCard extends StatelessWidget {
                       splashColor: Colors.transparent,
                       minWidth: 150,
                       onPressed: () {
-                        print('course:$id');
+                        Navigator.push(
+                            context, SlideRoute(CourseInfoPage(courseID: id)));
                       },
                       child: Text('马上抢购'),
                     ),

@@ -362,7 +362,7 @@ class _CourseListPageState extends State<CourseListPage> {
       _pageCurrent += 1;
     });
     if (_pageCurrent > _pageSum) {
-      _refreshController.footerMode.value = LoadStatus.noMore;
+      _refreshController.loadNoData();
     } else {
       List<CourseModel> course = await _getCourses();
       setState(() {
@@ -389,7 +389,7 @@ class _CourseListPageState extends State<CourseListPage> {
     }
   }
 
-  /// 获取下拉加载次数
+  /// 获取加载次数
   Future<CoursePageModel> _getPage() async {
     try {
       Map<String, dynamic> data = {

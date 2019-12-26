@@ -76,3 +76,21 @@ class SkeletonList extends StatelessWidget {
     );
   }
 }
+
+/// 骨架屏Container
+class SkeletonContainer extends StatelessWidget {
+  final Widget child;
+
+  const SkeletonContainer({Key key, this.child}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return Shimmer.fromColors(
+      period: Duration(milliseconds: 1200),
+      baseColor: isDark ? Colors.grey[700] : Colors.grey[350],
+      highlightColor: isDark ? Colors.grey[500] : Colors.grey[200],
+      child: child,
+    );
+  }
+}
+

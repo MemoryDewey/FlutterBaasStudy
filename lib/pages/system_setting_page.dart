@@ -73,10 +73,10 @@ class _SystemSettingPageState extends State<SystemSettingPage> {
                   ),
                   ListTileCustom(
                     leadingTitle: '邮箱',
-                    trailingTitle: provider.user.email == null ? '去绑定' : '取消绑定',
+                    trailingTitle: provider.user?.email == null ? '去绑定' : '取消绑定',
                     subTitle: provider.user?.email,
                     onTap: () {
-                      if (provider.user.email == null)
+                      if (provider.user?.email == null)
                         Navigator.push(context, SlideRoute(BindEmailPage()));
                       else {
                         showDialog<void>(
