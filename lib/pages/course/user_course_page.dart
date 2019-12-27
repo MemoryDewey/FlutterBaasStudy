@@ -2,6 +2,7 @@ import 'package:baas_study/dao/course_dao.dart';
 import 'package:baas_study/model/course_manage_model.dart';
 import 'package:baas_study/model/reponse_normal_model.dart';
 import 'package:baas_study/pages/course/course_comment_page.dart';
+import 'package:baas_study/pages/course/course_info_page.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/confirm_dialog.dart';
@@ -157,6 +158,14 @@ class __UserCourseTabViewState extends State<_UserCourseTabView>
                         ),
                       ],
                     ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        SlideRoute(
+                          CourseInfoPage(courseID: _courses[index].courseID),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 onLoading: _onUserCourseLoading,
@@ -283,6 +292,14 @@ class __BalanceCourseTabViewState extends State<_BalanceCourseTabView>
                         ),
                       ],
                     ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        SlideRoute(
+                          CourseInfoPage(courseID: _courses[index].productID),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 onLoading: _onBalanceCourseLoading,
@@ -388,6 +405,14 @@ class __BstCourseTabViewState extends State<_BstCourseTabView>
                         ),
                       ],
                     ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        SlideRoute(
+                          CourseInfoPage(courseID: _courses[index].productID),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 onLoading: _onBstCourseLoading,

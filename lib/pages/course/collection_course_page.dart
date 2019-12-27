@@ -1,5 +1,7 @@
 import 'package:baas_study/dao/course_dao.dart';
 import 'package:baas_study/model/course_manage_model.dart';
+import 'package:baas_study/pages/course/course_info_page.dart';
+import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/course/course_card.dart';
 import 'package:baas_study/widget/course/course_card_skeleton.dart';
@@ -73,7 +75,13 @@ class _CollectionCoursePageState extends State<CollectionCoursePage> {
                               ? _selectedSum++
                               : _selectedSum--;
                         });
-                      }
+                      } else
+                        Navigator.push(
+                          context,
+                          SlideTopRoute(
+                            CourseInfoPage(courseID: _courses[index].courseID),
+                          ),
+                        );
                     },
                     onSelected: (value) {
                       setState(() {

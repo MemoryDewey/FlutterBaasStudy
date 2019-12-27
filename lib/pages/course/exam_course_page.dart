@@ -1,5 +1,7 @@
 import 'package:baas_study/dao/course_dao.dart';
 import 'package:baas_study/model/course_manage_model.dart';
+import 'package:baas_study/pages/course/exam_info_page.dart';
+import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/course/course_card.dart';
 import 'package:baas_study/widget/course/course_card_skeleton.dart';
@@ -22,14 +24,15 @@ class _ExamCoursePageState extends State<ExamCoursePage> {
     2: '已完成',
   };
   RefreshController _refreshUserController = RefreshController();
-  List<ExamCoursesModel> _courses = [];
-  int _coursesCurrent = 0;
-  int _coursesPage = 1;
-  bool _loadComplete = false;
+  List<ExamCoursesModel> _courses;
+  int _coursesCurrent;
+  int _coursesPage;
+  bool _loadComplete;
 
   @override
   void initState() {
     super.initState();
+    _initData();
     _onCourseLoading();
   }
 
@@ -68,6 +71,18 @@ class _ExamCoursePageState extends State<ExamCoursePage> {
                           )
                         ],
                       ),
+                      onTap: () async {
+                        var refresh = await Navigator.push(
+                          context,
+                          SlideRoute(ExamInfoPage(
+                            courseID: _courses[index].courseID,
+                          )),
+                        );
+                        if (refresh ?? false) {
+                          _initData();
+                          _onCourseLoading();
+                        }
+                      },
                     ),
                   ),
                   onLoading: _onCourseLoading,
@@ -79,6 +94,13 @@ class _ExamCoursePageState extends State<ExamCoursePage> {
               ),
             ),
     );
+  }
+
+  void _initData() {
+    _courses = [];
+    _coursesCurrent = 0;
+    _coursesPage = 1;
+    _loadComplete = false;
   }
 
   void _onCourseLoading() async {

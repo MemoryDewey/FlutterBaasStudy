@@ -259,6 +259,7 @@ class CourseManageCard extends StatelessWidget {
   final String price;
   final bool isFree;
   final Widget bottom;
+  final void Function() onTap;
 
   const CourseManageCard({
     Key key,
@@ -269,6 +270,7 @@ class CourseManageCard extends StatelessWidget {
     this.price,
     this.isFree = true,
     this.bottom,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -299,56 +301,59 @@ class CourseManageCard extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(vertical: 10),
             height: 100,
-            child: Row(
-              children: <Widget>[
-                AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: ExtendedImage.network(
-                    imageUrl,
-                    cache: true,
-                    fit: BoxFit.cover,
-                    loadStateChanged: (ExtendedImageState state) {
-                      if (state.extendedImageLoadState == LoadState.loading) {
-                        return Image.asset(
-                          'assets/images/loading.gif',
+            child: GestureDetector(
+              onTap: onTap,
+              child: Row(
+                children: <Widget>[
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: ExtendedImage.network(
+                      imageUrl,
+                      cache: true,
+                      fit: BoxFit.cover,
+                      loadStateChanged: (ExtendedImageState state) {
+                        if (state.extendedImageLoadState == LoadState.loading) {
+                          return Image.asset(
+                            'assets/images/loading.gif',
+                            fit: BoxFit.cover,
+                          );
+                        }
+                        if (state.extendedImageLoadState == LoadState.failed)
+                          return null;
+                        return ExtendedRawImage(
+                          image: state.extendedImageInfo?.image,
                           fit: BoxFit.cover,
                         );
-                      }
-                      if (state.extendedImageLoadState == LoadState.failed)
-                        return null;
-                      return ExtendedRawImage(
-                        image: state.extendedImageInfo?.image,
-                        fit: BoxFit.cover,
-                      );
-                    },
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        courseName,
-                        style: TextStyle(fontSize: 16),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      price != null
-                          ? Text(
-                              isFree ? '免费' : price,
-                              style: TextStyle(
-                                color: isFree
-                                    ? Color(0xff07c160)
-                                    : Color(0xffee0a24),
-                              ),
-                            )
-                          : SizedBox(),
-                    ],
-                  ),
-                )
-              ],
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          courseName,
+                          style: TextStyle(fontSize: 16),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        price != null
+                            ? Text(
+                          isFree ? '免费' : price,
+                          style: TextStyle(
+                            color: isFree
+                                ? Color(0xff07c160)
+                                : Color(0xffee0a24),
+                          ),
+                        )
+                            : SizedBox(),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           Divider(height: 0, color: Colors.grey),
