@@ -1,5 +1,7 @@
 import 'package:baas_study/dao/course_dao.dart';
 import 'package:baas_study/model/course_manage_model.dart';
+import 'package:baas_study/pages/course/course_info_page.dart';
+import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/http_util.dart';
 import 'package:baas_study/widget/course/course_card.dart';
 import 'package:baas_study/widget/course/course_card_skeleton.dart';
@@ -34,6 +36,14 @@ class _LatestBrowseCoursePageState extends State<LatestBrowseCoursePage> {
                   name: _courses[index].courseName,
                   count: _courses[index].applyCount,
                   price: _courses[index].price,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      SlideRoute(
+                        CourseInfoPage(courseID: _courses[index].courseID),
+                      ),
+                    );
+                  },
                 ),
             childCount: _courses.length),
       ));

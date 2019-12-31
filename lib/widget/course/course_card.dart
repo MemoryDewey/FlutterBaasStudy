@@ -141,110 +141,117 @@ class CourseDiscountCard extends StatelessWidget {
     return Container(
       width: 200,
       margin: EdgeInsets.only(left: 10),
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            AspectRatio(
-                aspectRatio: 16 / 9,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
-                  ),
-                  child: ExtendedImage.network(
-                    imageUrl,
-                    cache: true,
-                    fit: BoxFit.cover,
-                    loadStateChanged: (ExtendedImageState state) {
-                      if (state.extendedImageLoadState == LoadState.loading) {
-                        return Image.asset(
-                          'assets/images/loading.gif',
+      child: GestureDetector(
+        child: Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8),
+                    ),
+                    child: ExtendedImage.network(
+                      imageUrl,
+                      cache: true,
+                      fit: BoxFit.cover,
+                      loadStateChanged: (ExtendedImageState state) {
+                        if (state.extendedImageLoadState == LoadState.loading) {
+                          return Image.asset(
+                            'assets/images/loading.gif',
+                            fit: BoxFit.cover,
+                          );
+                        }
+                        if (state.extendedImageLoadState == LoadState.failed)
+                          return null;
+                        return ExtendedRawImage(
+                          image: state.extendedImageInfo?.image,
                           fit: BoxFit.cover,
                         );
-                      }
-                      if (state.extendedImageLoadState == LoadState.failed)
-                        return null;
-                      return ExtendedRawImage(
-                        image: state.extendedImageInfo?.image,
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  ),
-                )),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Text(
-                name,
-                style: TextStyle(fontSize: 16),
-                overflow: TextOverflow.ellipsis,
+                      },
+                    ),
+                  )),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  name,
+                  style: TextStyle(fontSize: 16),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        '￥$price',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Color(0xff7d7e80),
-                          decoration: TextDecoration.lineThrough,
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          '￥$price',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Color(0xff7d7e80),
+                            decoration: TextDecoration.lineThrough,
+                          ),
                         ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xffee0a24))),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                        child: Text(
-                          '限时抢购',
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Color(0xffee0a24))),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                          child: Text(
+                            '限时抢购',
+                            style: TextStyle(color: Color(0xffee0a24)),
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          '￥${(price * discount).toStringAsFixed(2)}',
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(color: Color(0xffee0a24)),
                         ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        '￥${(price * discount).toStringAsFixed(2)}',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: Color(0xffee0a24)),
-                      ),
-                      Text(
-                        '$applyCount 人已抢',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: Color(0xff7d7e80)),
-                      ),
-                    ],
-                  ),
-                  Center(
-                    child: MaterialButton(
-                      color: Color(0xffff976a),
-                      textColor: Colors.white,
-                      splashColor: Colors.transparent,
-                      minWidth: 150,
-                      onPressed: () {
-                        Navigator.push(
-                            context, SlideRoute(CourseInfoPage(courseID: id)));
-                      },
-                      child: Text('马上抢购'),
+                        Text(
+                          '$applyCount 人已抢',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Color(0xff7d7e80)),
+                        ),
+                      ],
                     ),
-                  )
-                ],
+                    Center(
+                      child: MaterialButton(
+                        color: Color(0xffff976a),
+                        textColor: Colors.white,
+                        splashColor: Colors.transparent,
+                        minWidth: 150,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            SlideRoute(CourseInfoPage(courseID: id)),
+                          );
+                        },
+                        child: Text('马上抢购'),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        onTap: () {
+          Navigator.push(context, SlideRoute(CourseInfoPage(courseID: id)));
+        },
       ),
     );
   }
@@ -341,13 +348,13 @@ class CourseManageCard extends StatelessWidget {
                         ),
                         price != null
                             ? Text(
-                          isFree ? '免费' : price,
-                          style: TextStyle(
-                            color: isFree
-                                ? Color(0xff07c160)
-                                : Color(0xffee0a24),
-                          ),
-                        )
+                                isFree ? '免费' : price,
+                                style: TextStyle(
+                                  color: isFree
+                                      ? Color(0xff07c160)
+                                      : Color(0xffee0a24),
+                                ),
+                              )
                             : SizedBox(),
                       ],
                     ),

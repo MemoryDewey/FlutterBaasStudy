@@ -22,8 +22,8 @@ class DarkModeProvider with ChangeNotifier {
   void _init() async {
     int localMode = await StorageUtil.getInt(STORE_KEY);
 
-    /// 默认夜间模式跟随系统
-    changeMode(DARK_MODE_MAP[localMode] ?? DARK_MODE_MAP[2]);
+    /// 默认为关闭
+    changeMode(DARK_MODE_MAP[localMode] ?? DARK_MODE_MAP[0]);
   }
 
   void changeMode(DarkModel darkModel) async {

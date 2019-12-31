@@ -106,4 +106,22 @@ class PassportDao {
     else if (res == "OK") return "OK";
     return ResponseNormalModel.fromJson(res).msg;
   }
+
+  /// 二维码扫描
+  static Future<bool> qrCodeScan(String uuid) async {
+    final res = await HttpUtil.post('/passport/qr-code-scan', data: {
+      "uuid": uuid,
+    });
+    if (res == null) return false;
+    return res['code'] == 1000;
+  }
+
+  /// 二维码确认登录
+  static Future<bool> qrCodeLogin(String uuid) async {
+    final res = await HttpUtil.post('/passport/qr-code-login', data: {
+      "uuid": uuid,
+    });
+    if (res == null) return false;
+    return res['code'] == 1000;
+  }
 }

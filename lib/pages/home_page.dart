@@ -4,6 +4,7 @@ import 'package:baas_study/dao/home_course_dao.dart';
 import 'package:baas_study/model/banner_model.dart';
 import 'package:baas_study/model/course_model.dart';
 import 'package:baas_study/model/home_course_model.dart';
+import 'package:baas_study/pages/course/course_list_page.dart';
 import 'package:baas_study/pages/search_page.dart';
 import 'package:baas_study/routes/router.dart';
 import 'package:baas_study/utils/http_util.dart';
@@ -193,6 +194,9 @@ class _HomePageState extends State<HomePage>
                 defaultText: SEARCH_BAR_DEFAULT_TEXT,
                 inputBoxClick: _jumpToSearch,
                 leftButtonClick: _jumpToSearch,
+                rightButtonClick: () {
+                  Navigator.push(context, SlideRoute(CourseListPage()));
+                },
               ),
             ),
           ),
