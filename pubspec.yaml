@@ -35,7 +35,7 @@ dependencies:
   path_provider: ^1.5.1
 
   # Data 数据交互处理
-  dio: ^3.0.7
+  dio: ^3.0.8
   shared_preferences: ^0.5.6
 
   # Permission 权限管理
@@ -62,7 +62,7 @@ dependencies:
   # Qr Scanner 二维码扫描
   qr_code_scanner: ^0.0.12
   # Qr Generator 二维码生成
-  qr_flutter: ^3.1.0
+  qr_flutter: ^3.2.0
 
   # Refresh 下拉刷新
   pull_to_refresh: ^1.5.7
