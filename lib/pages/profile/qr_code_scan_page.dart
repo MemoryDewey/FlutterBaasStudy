@@ -1,6 +1,7 @@
 import 'package:baas_study/dao/passport_dao.dart';
 import 'package:baas_study/pages/profile/qr_code_login_confirm_page.dart';
 import 'package:baas_study/routes/router.dart';
+import 'package:baas_study/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
@@ -23,20 +24,40 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        child: AppBar(
+          brightness: Brightness.dark,
+          backgroundColor: Colors.black,
+          elevation: 0,
+        ),
+        preferredSize: Size.fromHeight(0),
+      ),
       body: Column(
         children: <Widget>[
           Expanded(
             flex: 1,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-              overlay: QrScannerOverlayShape(
-                borderColor: Colors.blue,
-                borderRadius: 10,
-                borderLength: 30,
-                borderWidth: 10,
-                cutOutSize: 300,
-              ),
+            child: Stack(
+              children: <Widget>[
+                QRView(
+                  key: qrKey,
+                  onQRViewCreated: _onQRViewCreated,
+                  overlay: QrScannerOverlayShape(
+                    borderColor: Colors.blue,
+                    borderRadius: 10,
+                    borderLength: 30,
+                    borderWidth: 10,
+                    cutOutSize: 300,
+                  ),
+                ),
+                ListTile(
+                  leading: GestureDetector(
+                    child: Icon(Icons.arrow_back_ios,color: Colors.white),
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                  ),
+                )
+              ],
             ),
           ),
         ],
