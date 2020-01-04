@@ -1,7 +1,6 @@
 import 'package:baas_study/dao/passport_dao.dart';
 import 'package:baas_study/pages/profile/qr_code_login_confirm_page.dart';
 import 'package:baas_study/routes/router.dart';
-import 'package:baas_study/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
