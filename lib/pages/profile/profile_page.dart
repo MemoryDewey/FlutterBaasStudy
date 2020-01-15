@@ -4,6 +4,7 @@ import 'package:baas_study/icons/font_icon.dart';
 import 'package:baas_study/model/profile_model.dart';
 import 'package:baas_study/model/wallet_model.dart';
 import 'package:baas_study/pages/course/collection_course_page.dart';
+import 'package:baas_study/pages/course/course_certificate_page.dart';
 import 'package:baas_study/pages/course/exam_course_page.dart';
 import 'package:baas_study/pages/course/latest_browse_course_page.dart';
 import 'package:baas_study/pages/course/user_course_page.dart';
@@ -187,6 +188,14 @@ class _ProfilePageState extends State<ProfilePage>
               _jumpToLoginOrOther(ExamCoursePage());
             },
           ),
+          ListTileCustom(
+            leading: Icons.assignment_ind,
+            leadingTitle: '我的证书',
+            color: Color(0xff00f6d0),
+            onTap: () {
+              _jumpToLoginOrOther(CertificatePage());
+            },
+          ),
         ],
       );
 
@@ -195,17 +204,17 @@ class _ProfilePageState extends State<ProfilePage>
         top: 20,
         bottom: 20,
         children: <Widget>[
-         Consumer<UserProvider>(
-           builder: (context,userInfo,child)=> ListTileCustom(
-             leading: FontIcons.coin,
-             leadingTitle: '账户余额',
-             trailingTitle: userInfo.balance,
-             color: Color(0xffffdf0c),
-             onTap: (){
-               _jumpToLoginOrOther(BalancePage());
-             },
-           ),
-         ),
+          Consumer<UserProvider>(
+            builder: (context, userInfo, child) => ListTileCustom(
+              leading: FontIcons.coin,
+              leadingTitle: '账户余额',
+              trailingTitle: userInfo.balance,
+              color: Color(0xffffdf0c),
+              onTap: () {
+                _jumpToLoginOrOther(BalancePage());
+              },
+            ),
+          ),
         ],
       );
 
@@ -263,7 +272,9 @@ class _ProfilePageState extends State<ProfilePage>
       } else {
         _userProvider.saveUser(model.info);
       }
-    } catch (e) {print(e);}
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<Null> _getWalletInfo() async {

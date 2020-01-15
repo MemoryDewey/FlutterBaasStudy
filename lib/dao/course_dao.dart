@@ -1,3 +1,4 @@
+import 'package:baas_study/model/certificate_model.dart';
 import 'package:baas_study/model/course_info_model.dart';
 import 'package:baas_study/model/course_manage_model.dart';
 import 'package:baas_study/model/course_model.dart';
@@ -145,7 +146,7 @@ class CourseDao {
         await HttpUtil.post('/course/information/apply-free', data: {
       "courseID": courseID,
     });
-    return  response == null ? null : CourseApplyModel.fromJson(response);
+    return response == null ? null : CourseApplyModel.fromJson(response);
   }
 
   /// 报名付费课程
@@ -155,5 +156,13 @@ class CourseDao {
       "courseID": courseID,
     });
     return response == null ? null : CourseApplyModel.fromJson(response);
+  }
+
+  /// 获取证书信息
+  static Future<CertificateModel> getCertificate(int page) async {
+    final response = await HttpUtil.get('/course/list/certificate', data: {
+      "page": page,
+    });
+    return CertificateModel.fromJson(response);
   }
 }
