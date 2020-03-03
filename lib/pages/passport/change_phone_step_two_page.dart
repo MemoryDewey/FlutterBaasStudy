@@ -119,7 +119,7 @@ class _ChangePhoneStepTwoPageState extends State<ChangePhoneStepTwoPage> {
       String res = await PassportDao.changeMobile(
         data: {
           "account": _phoneController.text,
-          "verifyCode": _codeController.text,
+          "verify": _codeController.text,
         },
         step: 1,
       );

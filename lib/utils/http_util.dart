@@ -12,10 +12,16 @@ class HttpUtil {
   static Dio dio;
 
   /// 设置请求地址
-  static const String URL_PREFIX = 'http://47.102.97.205';
+  /// 测试服
+  /// static const String URL_PREFIX = 'http://47.102.97.205';
+  /// 正式服
+  static const String URL_PREFIX = 'http://www.baasstudy.com';
 
   /// WebSocket请求地址
-  static const String WEBSOCKET_URL_PREFIX = 'ws://47.102.97.205';
+  /// 测试服
+  /// static const String WEBSOCKET_URL_PREFIX = 'ws://47.102.97.205';
+  /// 正式服
+  static const String WEBSOCKET_URL_PREFIX = 'ws://www.baasstudy.com';
 
   /// API前缀
   static const String _API_PREFIX = '$URL_PREFIX/api';
