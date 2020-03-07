@@ -34,66 +34,28 @@ class InviteResultModel {
 }
 
 class InviteListModel {
-  String inviteTime;
   int id;
-  int userID;
-  int inviteUserID;
-  InviteUserModel invitedUser;
+  String nickname;
+  String phone;
+  String time;
 
-  InviteListModel({
-    this.inviteTime,
-    this.id,
-    this.userID,
-    this.inviteUserID,
-    this.invitedUser,
-  });
+  InviteListModel({this.id, this.nickname, this.phone, this.time});
 
   factory InviteListModel.fromJson(Map<String, dynamic> json) {
     return InviteListModel(
-      inviteTime: json['createdAt'],
       id: json['id'],
-      userID: json['userID'],
-      inviteUserID: json['inviteUserID'],
-      invitedUser: json['Invited'] != null
-          ? new InviteUserModel.fromJson(json['Invited'])
-          : null,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['createdAt'] = this.inviteTime;
-    data['id'] = this.id;
-    data['userID'] = this.userID;
-    data['inviteUserID'] = this.inviteUserID;
-    if (this.invitedUser != null) {
-      data['Invited'] = this.invitedUser.toJson();
-    }
-    return data;
-  }
-}
-
-class InviteUserModel {
-  int userID;
-  String nickname;
-  String phone;
-
-  InviteUserModel({this.userID, this.nickname, this.phone});
-
-  factory InviteUserModel.fromJson(Map<String, dynamic> json) {
-    return InviteUserModel(
-      userID: json['userID'],
       nickname: json['nickname'],
-      phone:
-          json['UserPassport'] != null ? json['UserPassport']['phone'] : null,
+      phone: json['phone'],
+      time: json['time'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['userID'] = this.userID;
+    data['id'] = this.id;
     data['nickname'] = this.nickname;
     data['phone'] = this.phone;
+    data['time'] = this.time;
     return data;
   }
 }

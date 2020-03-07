@@ -6,7 +6,7 @@ import 'package:baas_study/utils/http_util.dart';
 class PassportDao {
   /// 检查用户是否登录
   static Future<ProfileModel> checkLogin() async {
-    final response = await HttpUtil.get('/passport/mobile-check-login');
+    final response = await HttpUtil.get('/passport/check-login');
     return ProfileModel.fromJson(response);
   }
 
@@ -16,7 +16,7 @@ class PassportDao {
     String psw,
   }) async {
     final response = await HttpUtil.post(
-      '/passport/m-login-psw',
+      '/passport/mobile-login',
       data: {
         "account": account,
         "password": psw,
@@ -31,7 +31,7 @@ class PassportDao {
     String phone,
     String code,
   }) async {
-    final response = await HttpUtil.post('/passport/m-login', data: {
+    final response = await HttpUtil.post('/passport/message-login', data: {
       "phone": phone,
       "code": code,
     });
@@ -45,7 +45,7 @@ class PassportDao {
     String phone,
   }) async {
     final response =
-        await HttpUtil.post('/passport/short-message-captcha', data: {
+        await HttpUtil.post('/verify-code/message', data: {
       "account": phone,
       "option": option,
     });
@@ -56,7 +56,7 @@ class PassportDao {
   static Future<ResponseNormalModel> sendMailCode({
     String email,
   }) async {
-    final response = await HttpUtil.post('/passport/email-captcha', data: {
+    final response = await HttpUtil.post('/verify-code/email', data: {
       "account": email,
     });
     return ResponseNormalModel.fromJson(response);
@@ -64,7 +64,7 @@ class PassportDao {
 
   /// 添加邮箱
   static Future<EmailModel> bindEmail({String email, String code}) async {
-    final response = await HttpUtil.post('/passport/add-email', data: {
+    final response = await HttpUtil.post('/passport/email', data: {
       "account": email,
       "verifyCode": code,
     });
@@ -73,7 +73,7 @@ class PassportDao {
 
   /// 解除已绑定的邮箱
   static Future<String> unbindEmail() async {
-    final response = await HttpUtil.get('/passport/delete-email');
+    final response = await HttpUtil.delete('/passport/email');
     return ResponseNormalModel.fromJson(response).msg;
   }
 

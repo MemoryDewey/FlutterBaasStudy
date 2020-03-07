@@ -1,9 +1,7 @@
-import 'package:baas_study/model/profile_model.dart';
-
 class CommentAddModel {
   int code;
   String msg;
-  String rate;
+  double rate;
 
   CommentAddModel({this.code, this.msg, this.rate});
 
@@ -25,16 +23,16 @@ class CommentAddModel {
 class CommentCountModel {
   int code;
   CommentCount count;
-  int pageSum;
+  int pageSize;
 
-  CommentCountModel({this.code, this.count, this.pageSum});
+  CommentCountModel({this.code, this.count, this.pageSize});
 
   factory CommentCountModel.fromJson(Map<String, dynamic> json) {
     return CommentCountModel(
       code: json['code'],
       count:
           json['count'] != null ? CommentCount.fromJson(json['count']) : null,
-      pageSum: json['pageSum'],
+      pageSize: json['pageSize'],
     );
   }
 
@@ -44,7 +42,7 @@ class CommentCountModel {
     if (this.count != null) {
       data['count'] = this.count.toJson();
     }
-    data['pageSum'] =this.pageSum;
+    data['pageSize'] =this.pageSize;
     return data;
   }
 }
@@ -104,49 +102,35 @@ class CommentListModel {
 }
 
 class CommentModel {
+  String avatar;
   String content;
-  int courseID;
   int id;
   int star;
   String time;
-  int userID;
-  UserInfoModel user;
+  String user;
 
-  CommentModel({
-    this.content,
-    this.courseID,
-    this.id,
-    this.star,
-    this.time,
-    this.userID,
-    this.user,
-  });
+  CommentModel({this.avatar, this.content, this.id, this.star, this.time, this.user});
 
   factory CommentModel.fromJson(Map<String, dynamic> json) {
     return CommentModel(
+      avatar: json['avatar'],
       content: json['content'],
-      courseID: json['courseID'],
       id: json['id'],
       star: json['star'],
       time: json['time'],
-      userID: json['userID'],
-      user: json['UserInformation'] != null
-          ? UserInfoModel.fromJson(json['UserInformation'])
-          : null,
+      user: json['user'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['avatar'] = this.avatar;
     data['content'] = this.content;
-    data['courseID'] = this.courseID;
     data['id'] = this.id;
     data['star'] = this.star;
     data['time'] = this.time;
-    data['userID'] = this.userID;
-    if (this.user != null) {
-      data['UserInformation'] = this.user.toJson();
-    }
+    data['user'] = this.user;
     return data;
   }
 }
+

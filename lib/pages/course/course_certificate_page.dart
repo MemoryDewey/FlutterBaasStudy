@@ -44,9 +44,9 @@ class _CertificatePageState extends State<CertificatePage> {
                     itemCount: _courses.length,
                     itemBuilder: (context, index) => CourseManageCard(
                       imageUrl: HttpUtil.getImage(
-                          _courses[index].courseInformation.courseImage),
-                      dateTime: '${_courses[index].createdAt} ',
-                      courseName: _courses[index].courseInformation.courseName,
+                          _courses[index].courseImage),
+                      dateTime: '${_courses[index].time} ',
+                      courseName: _courses[index].courseName,
                       state: '请前往PC端下载证书',
                       bottom: Row(
                         mainAxisAlignment: MainAxisAlignment.end,

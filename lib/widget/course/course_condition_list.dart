@@ -134,7 +134,7 @@ class _CourseTypeConditionListState extends State<CourseTypeConditionList> {
                       ? Theme.of(context).cardColor
                       : firstLevelColor,
                   child: Text(
-                    item.systemName,
+                    item.name,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: _selectFirstLevelIndex == index
@@ -161,10 +161,10 @@ class _CourseTypeConditionListState extends State<CourseTypeConditionList> {
                 ? Container()
                 : ListView(
                     children: widget
-                        .systemModel[_selectFirstLevelIndex].courseTypes
+                        .systemModel[_selectFirstLevelIndex].types
                         .map((item) {
                       int index = widget
-                          .systemModel[_selectFirstLevelIndex].courseTypes
+                          .systemModel[_selectFirstLevelIndex].types
                           .indexOf(item);
                       return GestureDetector(
                         onTap: () {
@@ -172,10 +172,10 @@ class _CourseTypeConditionListState extends State<CourseTypeConditionList> {
                             _selectSecondLevelIndex = index;
                             _selectFirstTempIndex = _selectFirstLevelIndex;
                             widget.itemOnTap(SystemTypeCondition(
-                              item.typeName,
+                              item.name,
                               widget
-                                  .systemModel[_selectFirstLevelIndex].systemID,
-                              item.typeID,
+                                  .systemModel[_selectFirstLevelIndex].id,
+                              item.id,
                             ));
                           });
                         },
@@ -189,7 +189,7 @@ class _CourseTypeConditionListState extends State<CourseTypeConditionList> {
                               ),
                               Expanded(
                                 child: Text(
-                                  item.typeName,
+                                  item.name,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: _selectSecondLevelIndex == index &&

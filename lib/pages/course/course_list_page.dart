@@ -31,7 +31,7 @@ class _CourseListPageState extends State<CourseListPage> {
   /// DropdownMenu下拉列表相关
   List<String> _dropdownHeaderItems = ['全部类型', '综合排序', '筛选'];
   List<CourseSystemModel> _systemModel = [
-    CourseSystemModel(systemID: -1, systemName: '全部课程')
+    CourseSystemModel(id: -1, name: '全部课程')
   ];
   List<SortCondition> _filterConditions = [];
   List<SortCondition> _sortConditions = [];
@@ -187,7 +187,7 @@ class _CourseListPageState extends State<CourseListPage> {
                               itemBuilder: (context, index) => CourseCard(
                                 id: _courses[index].id,
                                 imageUrl:
-                                    HttpUtil.getImage(_courses[index].imageUrl),
+                                    HttpUtil.getImage(_courses[index].image),
                                 name: _courses[index].name,
                                 description: _courses[index].description,
                                 rate: _courses[index].rate,

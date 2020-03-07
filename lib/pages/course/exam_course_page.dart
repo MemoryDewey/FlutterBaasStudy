@@ -75,7 +75,7 @@ class _ExamCoursePageState extends State<ExamCoursePage> {
                         var refresh = await Navigator.push(
                           context,
                           SlideRoute(ExamInfoPage(
-                            courseID: _courses[index].courseID,
+                            courseId: _courses[index].courseId,
                           )),
                         );
                         if (refresh ?? false) {

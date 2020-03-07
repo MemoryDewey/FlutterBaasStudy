@@ -216,6 +216,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
 
   /// 裁剪头像并上传
   Future<Null> _cropImage(File file) async {
+    if (file == null) return;
     File cropFile = await ImageCropper.cropImage(
       sourcePath: file.path,
       aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),

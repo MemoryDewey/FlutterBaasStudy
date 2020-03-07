@@ -32,7 +32,7 @@ class ExamInfoModel {
 
 class FinishedModel {
   List<ResultModel> result;
-  int score;
+  num score;
   bool state;
 
   FinishedModel({this.result, this.score, this.state});
@@ -140,16 +140,16 @@ class SectionModel {
 
 class SubmitExamModel {
   List<String> answer;
-  int courseID;
+  int id;
   SubmitExamInfoModel exam;
 
-  SubmitExamModel({this.answer, this.courseID, this.exam});
+  SubmitExamModel({this.answer, this.id, this.exam});
 
   factory SubmitExamModel.fromJson(Map<String, dynamic> json) {
     return SubmitExamModel(
       answer:
           json['answer'] != null ? new List<String>.from(json['answer']) : null,
-      courseID: json['courseID'],
+      id: json['id'],
       exam: json['exam'] != null
           ? SubmitExamInfoModel.fromJson(json['exam'])
           : null,
@@ -158,7 +158,7 @@ class SubmitExamModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['courseID'] = this.courseID;
+    data['id'] = this.id;
     if (this.answer != null) {
       data['answer'] = this.answer;
     }

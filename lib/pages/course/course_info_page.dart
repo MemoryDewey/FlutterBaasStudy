@@ -16,9 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ijkplayer/flutter_ijkplayer.dart';
 
 class CourseInfoPage extends StatefulWidget {
-  final int courseID;
+  final int id;
 
-  const CourseInfoPage({Key key, @required this.courseID}) : super(key: key);
+  const CourseInfoPage({Key key, @required this.id}) : super(key: key);
 
   @override
   _CourseInfoPageState createState() => _CourseInfoPageState();
@@ -69,7 +69,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
               isApply: _isApply,
               load: _loadComplete,
               isCollection: _isCollection,
-              courseID: widget.courseID,
+              courseId: widget.id,
               rightClick: _courseCollect,
               applyClick: _courseInfoDetail?.course?.info?.price == 0
                   ? _applyFreeCourse
@@ -130,7 +130,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
           ),
           CourseInfoChapter(
             isLive: isLive,
-            courseID: widget.courseID,
+            courseID: widget.id,
             onChange: _isApply
                 ? (url) async {
                     await _videoController.setDataSource(
@@ -147,9 +147,9 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
             rate: _courseInfoDetail?.course?.info?.rate ?? 0.0,
             count: _commentCount,
             isApply: _isApply,
-            courseID: widget.courseID,
+            courseID: widget.id,
           ),
-          CourseInfoComment(courseID: widget.courseID),
+          CourseInfoComment(courseID: widget.id),
           SliverToBoxAdapter(
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 20),
@@ -161,7 +161,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
                       SlideRoute(
                         CourseCommentListPage(
                           rate: _courseInfoDetail?.course?.info?.rate ?? 0.0,
-                          courseID: widget.courseID,
+                          id: widget.id,
                         ),
                       ),
                     );
@@ -179,7 +179,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
 
   Future<Null> _checkApply() async {
     try {
-      bool apply = await CourseDao.checkCourseApply(widget.courseID);
+      bool apply = await CourseDao.checkCourseApply(widget.id);
       setState(() {
         _isApply = apply;
         _loadComplete = true;
@@ -195,7 +195,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
   Future<Null> _getInfoDetail() async {
     try {
       CourseInfoDetailModel model =
-          await CourseDao.getInfoDetail(widget.courseID);
+          await CourseDao.getInfoDetail(widget.id);
       if (model != null) {
         setState(() {
           _courseInfoDetail = model;
@@ -211,7 +211,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
   Future<Null> _courseCollect() async {
     try {
       ResponseNormalModel model =
-          await CourseDao.courseCollect(widget.courseID, _isCollection ? 0 : 1);
+          await CourseDao.courseCollect(widget.id, _isCollection ? 0 : 1);
       if (model.code == 1000) {
         BotToast.showText(text: model.msg);
         setState(() {
@@ -225,7 +225,7 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
 
   Future<Null> _getCommentCount() async {
     try {
-      CommentCountModel comment = await CommentDao.getCount(widget.courseID);
+      CommentCountModel comment = await CommentDao.getCount(widget.id);
       setState(() {
         _commentCount = comment.count.all;
         _tabs[2] = '${_tabs[2]}($_commentCount)';
@@ -237,12 +237,12 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
 
   Future<Null> _applyFreeCourse() async {
     try {
-      CourseApplyModel apply = await CourseDao.applyFree(widget.courseID);
+      CourseApplyModel apply = await CourseDao.applyFree(widget.id);
       if (apply != null) {
         BotToast.showText(text: apply.msg);
         setState(() {
           _isApply = true;
-          _courseInfoDetail.course.info.apply = apply.applyCount;
+          _courseInfoDetail.course.info.apply = apply.apply;
         });
       }
     } catch (e) {
@@ -251,12 +251,12 @@ class _CourseInfoPageState extends State<CourseInfoPage> {
   }
 
   Future<Null> _buyCourse() async {
-    CourseApplyModel apply = await CourseDao.buyCourse(widget.courseID);
+    CourseApplyModel apply = await CourseDao.buyCourse(widget.id);
     if (apply != null) {
       BotToast.showText(text: apply.msg);
       setState(() {
         _isApply = true;
-        _courseInfoDetail.course.info.apply = apply.applyCount;
+        _courseInfoDetail.course.info.apply = apply.apply;
       });
     }
   }

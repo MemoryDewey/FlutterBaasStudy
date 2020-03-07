@@ -55,173 +55,137 @@ class CourseManageModel {
 }
 
 class UserCoursesModel {
-  int courseID;
-  String courseName;
+  int id;
+  String name;
   int price;
   String image;
   int score;
-  String joinTime;
+  String time;
 
   UserCoursesModel({
-    this.courseID,
-    this.courseName,
+    this.id,
+    this.name,
     this.price,
     this.image,
     this.score,
-    this.joinTime,
+    this.time,
   });
 
   factory UserCoursesModel.fromJson(Map<String, dynamic> json) {
     return UserCoursesModel(
-      courseID: json['courseID'],
-      courseName: json['courseName'],
+      id: json['id'],
+      name: json['name'],
       price: json['price'],
       image: json['image'],
       score: json['score'],
-      joinTime: json['joinTime'],
+      time: json['time'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['courseID'] = this.courseID;
-    data['courseName'] = this.courseName;
+    data['id'] = this.id;
+    data['name'] = this.name;
     data['price'] = this.price;
     data['image'] = this.image;
     data['score'] = this.score;
-    data['joinTime'] = this.joinTime;
+    data['time'] = this.time;
     return data;
   }
 }
 
 class BalanceCoursesModel {
-  String amount;
-  String createdAt;
-  int productID;
-  int userID;
-  CourseInfoModel courseInformation;
+    num amount;
+    int id;
+    String image;
+    String name;
+    int productId;
+    String time;
 
-  BalanceCoursesModel({
-    this.amount,
-    this.createdAt,
-    this.productID,
-    this.userID,
-    this.courseInformation,
-  });
+    BalanceCoursesModel({this.amount, this.id, this.image, this.name, this.productId, this.time});
 
-  factory BalanceCoursesModel.fromJson(Map<String, dynamic> json) {
-    return BalanceCoursesModel(
-      amount: json['amount'],
-      createdAt: json['createdAt'],
-      productID: json['productID'],
-      userID: json['userID'],
-      courseInformation: json['CourseInformation'] != null
-          ? new CourseInfoModel.fromJson(json['CourseInformation'])
-          : null,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['amount'] = this.amount;
-    data['createdAt'] = this.createdAt;
-    data['productID'] = this.productID;
-    data['userID'] = this.userID;
-    if (this.courseInformation != null) {
-      data['CourseInformation'] = this.courseInformation.toJson();
+    factory BalanceCoursesModel.fromJson(Map<String, dynamic> json) {
+        return BalanceCoursesModel(
+            amount: json['amount'],
+            id: json['id'],
+            image: json['image'],
+            name: json['name'],
+            productId: json['productId'],
+            time: json['time'],
+        );
     }
-    return data;
-  }
+
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> data = new Map<String, dynamic>();
+        data['amount'] = this.amount;
+        data['id'] = this.id;
+        data['image'] = this.image;
+        data['name'] = this.name;
+        data['productId'] = this.productId;
+        data['time'] = this.time;
+        return data;
+    }
 }
 
 class BstCoursesModel {
-  String amount;
-  String createdAt;
-  int productID;
-  int userID;
-  String txHash;
-  CourseInfoModel courseInformation;
+    double amount;
+    int id;
+    String image;
+    String name;
+    int productId;
+    String time;
+    String txHash;
 
-  BstCoursesModel({
-    this.amount,
-    this.createdAt,
-    this.productID,
-    this.userID,
-    this.txHash,
-    this.courseInformation,
-  });
+    BstCoursesModel({this.amount, this.id, this.image, this.name, this.productId, this.time, this.txHash});
 
-  factory BstCoursesModel.fromJson(Map<String, dynamic> json) {
-    return BstCoursesModel(
-      amount: json['amount'],
-      createdAt: json['createdAt'],
-      productID: json['productID'],
-      userID: json['userID'],
-      txHash: json['txHash'],
-      courseInformation: json['CourseInformation'] != null
-          ? new CourseInfoModel.fromJson(json['CourseInformation'])
-          : null,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['amount'] = this.amount;
-    data['createdAt'] = this.createdAt;
-    data['productID'] = this.productID;
-    data['userID'] = this.userID;
-    data['txHash'] = this.txHash;
-    if (this.courseInformation != null) {
-      data['CourseInformation'] = this.courseInformation.toJson();
+    factory BstCoursesModel.fromJson(Map<String, dynamic> json) {
+        return BstCoursesModel(
+            amount: json['amount'],
+            id: json['id'],
+            image: json['image'],
+            name: json['name'],
+            productId: json['productId'],
+            time: json['time'],
+            txHash: json['txHash'],
+        );
     }
-    return data;
-  }
-}
 
-class CourseInfoModel {
-  String courseName;
-  String courseImage;
-
-  CourseInfoModel({this.courseName, this.courseImage});
-
-  factory CourseInfoModel.fromJson(Map<String, dynamic> json) {
-    return CourseInfoModel(
-      courseName: json['courseName'],
-      courseImage: json['courseImage'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['courseName'] = this.courseName;
-    data['courseImage'] = this.courseImage;
-    return data;
-  }
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> data = new Map<String, dynamic>();
+        data['amount'] = this.amount;
+        data['id'] = this.id;
+        data['image'] = this.image;
+        data['name'] = this.name;
+        data['productId'] = this.productId;
+        data['time'] = this.time;
+        data['txHash'] = this.txHash;
+        return data;
+    }
 }
 
 class SimpleCoursesModel {
-  int courseID;
-  String courseName;
-  String courseImage;
-  int applyCount;
+  int id;
+  String name;
+  String image;
+  int apply;
   int price;
   bool selected;
 
   SimpleCoursesModel({
-    this.courseID,
-    this.courseName,
-    this.courseImage,
-    this.applyCount,
+    this.id,
+    this.name,
+    this.image,
+    this.apply,
     this.price,
     this.selected,
   });
 
   factory SimpleCoursesModel.fromJson(Map<String, dynamic> json) {
     return SimpleCoursesModel(
-      courseID: json['courseID'],
-      courseName: json['courseName'],
-      courseImage: json['courseImage'],
-      applyCount: json['applyCount'],
+      id: json['id'],
+      name: json['name'],
+      image: json['image'],
+      apply: json['apply'],
       price: json['price'],
       selected: false,
     );
@@ -229,26 +193,26 @@ class SimpleCoursesModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['courseID'] = this.courseID;
-    data['courseName'] = this.courseName;
-    data['courseImage'] = this.courseImage;
-    data['applyCount'] = this.applyCount;
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['image'] = this.image;
+    data['apply'] = this.apply;
     data['price'] = this.price;
     return data;
   }
 }
 
 class ExamCoursesModel {
-  int courseID;
+  int courseId;
   String courseName;
   String image;
   int state;
-  int score;
+  num score;
   String startTime;
   String endTime;
 
   ExamCoursesModel({
-    this.courseID,
+    this.courseId,
     this.courseName,
     this.image,
     this.state,
@@ -259,7 +223,7 @@ class ExamCoursesModel {
 
   factory ExamCoursesModel.fromJson(Map<String, dynamic> json) {
     return ExamCoursesModel(
-      courseID: json['courseID'],
+      courseId: json['courseId'],
       courseName: json['courseName'],
       image: json['image'],
       state: json['state'],
@@ -271,7 +235,7 @@ class ExamCoursesModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['courseID'] = this.courseID;
+    data['courseId'] = this.courseId;
     data['courseName'] = this.courseName;
     data['image'] = this.image;
     data['state'] = this.state;

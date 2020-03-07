@@ -1,5 +1,5 @@
 import 'package:baas_study/dao/course_dao.dart';
-import 'package:baas_study/model/reponse_normal_model.dart';
+import 'package:baas_study/model/course_video_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ijkplayer/flutter_ijkplayer.dart';
@@ -9,7 +9,7 @@ class CourseVideoAppBar extends StatefulWidget {
   final bool isApply;
   final bool load;
   final bool isCollection;
-  final int courseID;
+  final int courseId;
   final String title;
   final void Function() rightClick;
   final void Function() applyClick;
@@ -20,7 +20,7 @@ class CourseVideoAppBar extends StatefulWidget {
     @required this.isApply,
     @required this.load,
     this.isCollection = false,
-    @required this.courseID,
+    @required this.courseId,
     this.rightClick,
     this.title,
     this.controller,
@@ -120,11 +120,10 @@ class _CourseVideoAppBarState extends State<CourseVideoAppBar> {
 
   Future<Null> _getFirstVideo() async {
     try {
-      ResponseNormalModel model =
-          await CourseDao.getFirstVideo(widget.courseID);
-      if (model.msg != null) {
+      VideoFirstModel model = await CourseDao.getFirstVideo(widget.courseId);
+      if (model.video != null) {
         await widget.controller.setDataSource(
-          DataSource.network(model.msg),
+          DataSource.network(model.video.mediaUrl),
           autoPlay: false,
         );
       }

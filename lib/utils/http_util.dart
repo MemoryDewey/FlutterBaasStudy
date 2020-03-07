@@ -15,13 +15,17 @@ class HttpUtil {
   /// 测试服
   /// static const String URL_PREFIX = 'http://47.102.97.205';
   /// 正式服
-  static const String URL_PREFIX = 'http://www.baasstudy.com';
+  /// static const String URL_PREFIX = 'http://www.baasstudy.com';
+  /// 本地
+  static const String URL_PREFIX = 'http://10.0.2.2:3000';
 
   /// WebSocket请求地址
   /// 测试服
   /// static const String WEBSOCKET_URL_PREFIX = 'ws://47.102.97.205';
   /// 正式服
-  static const String WEBSOCKET_URL_PREFIX = 'ws://www.baasstudy.com';
+  /// static const String WEBSOCKET_URL_PREFIX = 'ws://www.baasstudy.com';
+  /// 本地
+  static const String WEBSOCKET_URL_PREFIX = 'ws://10.0.2.2:3000';
 
   /// API前缀
   static const String _API_PREFIX = '$URL_PREFIX/api';
@@ -40,9 +44,13 @@ class HttpUtil {
       case DioErrorType.RECEIVE_TIMEOUT:
         return '服务器未响应';
       case DioErrorType.RESPONSE:
-        return error.response.statusCode == 404
-            ? '请求的资源不存在'
-            : ResponseNormalModel.fromJson(error.response.data).msg;
+        return error.response.statusCode == 400
+            ? '请求错误'
+            : error.response.statusCode == 404
+                ? '请求的资源不存在'
+                : error.response.statusCode == 500
+                    ? '服务器错误'
+                    : ResponseNormalModel.fromJson(error.response.data).msg;
       default:
         return '发生了未知的错误';
     }
@@ -65,6 +73,20 @@ class HttpUtil {
   /// post请求
   static Future<dynamic> post(String url, {Map<String, dynamic> data}) async {
     return await request(url, data: data, method: 'POST');
+  }
+
+  /// delete请求
+  static Future<dynamic> delete(String url, {Map<String, dynamic> data}) async {
+    if (data != null && data.isNotEmpty) {
+      StringBuffer options = StringBuffer('?');
+      data.forEach((key, value) {
+        options.write('$key=$value&');
+      });
+      String optionStr = options.toString();
+      optionStr = optionStr.substring(0, optionStr.length - 1);
+      url += optionStr;
+    }
+    return await request(url, method: "DELETE");
   }
 
   /// 封装所有请求

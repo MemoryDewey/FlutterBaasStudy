@@ -1,6 +1,6 @@
 class WalletModel {
   int code;
-  String balance;
+  double balance;
 
   WalletModel({this.code, this.balance});
 
@@ -62,10 +62,10 @@ class WalletLogsModel {
 }
 
 class BalanceLogsModel {
-  String amount;
+  num amount;
   String time;
-  int userID;
-  int productID;
+  int id;
+  int productId;
   String productType;
   String type;
   String details;
@@ -74,8 +74,8 @@ class BalanceLogsModel {
   BalanceLogsModel({
     this.amount,
     this.time,
-    this.userID,
-    this.productID,
+    this.id,
+    this.productId,
     this.productType,
     this.type,
     this.details,
@@ -85,9 +85,9 @@ class BalanceLogsModel {
   factory BalanceLogsModel.fromJson(Map<String, dynamic> json) {
     return BalanceLogsModel(
       amount: json['amount'],
-      time: json['createdAt'],
-      userID: json['userID'],
-      productID: json['productID'],
+      time: json['time'],
+      id: json['id'],
+      productId: json['productId'],
       productType: json['productType'],
       type: json['type'],
       details: json['details'],
@@ -98,9 +98,9 @@ class BalanceLogsModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['amount'] = this.amount;
-    data['createdAt'] = this.time;
-    data['userID'] = this.userID;
-    data['productID'] = this.productID;
+    data['time'] = this.time;
+    data['userId'] = this.id;
+    data['productId'] = this.productId;
     data['productType'] = this.productType;
     data['type'] = this.type;
     data['details'] = this.details;
@@ -131,20 +131,20 @@ class BstBalanceModel {
 }
 
 class BstLogsModel {
-  String amount;
+  num amount;
   String time;
-  int userID;
+  int id;
   int statue;
-  int productID;
+  int productId;
   String productType;
   String txHash;
 
   BstLogsModel({
     this.amount,
     this.time,
-    this.userID,
+    this.id,
     this.statue,
-    this.productID,
+    this.productId,
     this.productType,
     this.txHash,
   });
@@ -152,10 +152,10 @@ class BstLogsModel {
   factory BstLogsModel.fromJson(Map<String, dynamic> json) {
     return BstLogsModel(
       amount: json['amount'],
-      time: json['createdAt'],
-      userID: json['userID'],
+      time: json['time'],
+      id: json['id'],
       statue: json['statue'],
-      productID: json['productID'],
+      productId: json['productId'],
       productType: json['productType'],
       txHash: json['txHash'],
     );
@@ -164,10 +164,10 @@ class BstLogsModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['amount'] = this.amount;
-    data['createdAt'] = this.time;
-    data['userID'] = this.userID;
+    data['time'] = this.time;
+    data['id'] = this.id;
     data['statue'] = this.statue;
-    data['productID'] = this.productID;
+    data['productId'] = this.productId;
     data['productType'] = this.productType;
     data['txHash'] = this.txHash;
     return data;
@@ -183,33 +183,33 @@ class WalletPubKeyModel {
   factory WalletPubKeyModel.fromJson(Map<String, dynamic> json) {
     return WalletPubKeyModel(
       code: json['code'],
-      key: json['key'],
+      key: json['publicKey'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['code'] = this.code;
-    data['key'] = this.key;
+    data['publicKey'] = this.key;
     return data;
   }
 }
 
-class BstValueModel {
+class BstPriceModel {
   int code;
-  String bstValue;
+  num price;
 
-  BstValueModel({this.code, this.bstValue});
+  BstPriceModel({this.code, this.price});
 
-  BstValueModel.fromJson(Map<String, dynamic> json) {
+  BstPriceModel.fromJson(Map<String, dynamic> json) {
     code = json['code'];
-    bstValue = json['bstValue'];
+    price = json['price'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['code'] = this.code;
-    data['bstValue'] = this.bstValue;
+    data['price'] = this.price;
     return data;
   }
 }

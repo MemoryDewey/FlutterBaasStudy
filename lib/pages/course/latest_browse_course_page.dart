@@ -32,15 +32,15 @@ class _LatestBrowseCoursePageState extends State<LatestBrowseCoursePage> {
       sliverWidget.add(SliverList(
         delegate: SliverChildBuilderDelegate(
             (context, index) => CourseSimpleCard(
-                  image: HttpUtil.getImage(_courses[index].courseImage),
-                  name: _courses[index].courseName,
-                  count: _courses[index].applyCount,
+                  image: HttpUtil.getImage(_courses[index].image),
+                  name: _courses[index].name,
+                  count: _courses[index].apply,
                   price: _courses[index].price,
                   onTap: () {
                     Navigator.push(
                       context,
                       SlideRoute(
-                        CourseInfoPage(courseID: _courses[index].courseID),
+                        CourseInfoPage(id: _courses[index].id),
                       ),
                     );
                   },
@@ -84,6 +84,9 @@ class _LatestBrowseCoursePageState extends State<LatestBrowseCoursePage> {
         _courses = courses;
         _loadComplete = true;
       });
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+
+    }
   }
 }

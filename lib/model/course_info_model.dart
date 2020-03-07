@@ -30,15 +30,15 @@ class CourseInfoDetailModel {
 
 class InfoDetailModel {
   InfoModel info;
-  DetailModel details;
+  DetailModel detail;
 
-  InfoDetailModel({this.info, this.details});
+  InfoDetailModel({this.info, this.detail});
 
   factory InfoDetailModel.fromJson(Map<String, dynamic> json) {
     return InfoDetailModel(
       info: json['info'] != null ? new InfoModel.fromJson(json['info']) : null,
-      details: json['details'] != null
-          ? DetailModel.fromJson(json['details'])
+      detail: json['detail'] != null
+          ? DetailModel.fromJson(json['detail'])
           : null,
     );
   }
@@ -48,8 +48,8 @@ class InfoDetailModel {
     if (this.info != null) {
       data['info'] = this.info.toJson();
     }
-    if (this.details != null) {
-      data['details'] = this.details.toJson();
+    if (this.detail != null) {
+      data['detail'] = this.detail.toJson();
     }
     return data;
   }
@@ -82,33 +82,33 @@ class InfoModel {
 
   factory InfoModel.fromJson(Map<String, dynamic> json) {
     return InfoModel(
-      id: json['courseID'],
-      name: json['courseName'],
-      description: json['courseDescription'],
-      image: json['courseImage'],
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      image: json['image'],
       price: json['price'],
       discount: json['discount'],
       discountTime: json['discountTime'],
-      form: json['courseForm'],
-      rate: json['favorableRate'] == 1
+      form: json['form'],
+      rate: json['rate'] == 1
           ? 1.0
-          : json['favorableRate'] == 0 ? 0.0 : json['favorableRate'],
-      apply: json['applyCount'],
+          : json['rate'] == 0 ? 0.0 : json['rate'],
+      apply: json['apply'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['courseID'] = this.id;
-    data['courseName'] = this.name;
-    data['courseDescription'] = this.description;
-    data['courseImage'] = this.image;
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['description'] = this.description;
+    data['image'] = this.image;
     data['price'] = this.price;
     data['discount'] = this.discount;
     data['discountTime'] = this.discountTime;
-    data['courseForm'] = this.form;
-    data['favorableRate'] = this.rate;
-    data['applyCount'] = this.apply;
+    data['form'] = this.form;
+    data['rate'] = this.rate;
+    data['apply'] = this.apply;
     return data;
   }
 }
@@ -120,7 +120,7 @@ class DetailModel {
   String cover;
   String arrange;
   String schedule;
-  UserInfoModel userInformation;
+  UserInfoModel teacher;
 
   DetailModel({
     this.start,
@@ -129,174 +129,48 @@ class DetailModel {
     this.cover,
     this.arrange,
     this.schedule,
-    this.userInformation,
+    this.teacher,
   });
 
   factory DetailModel.fromJson(Map<String, dynamic> json) {
     return DetailModel(
-      start: json['startTime'],
-      finish: json['finishTime'],
+      start: json['start'],
+      finish: json['finish'],
       detail: json['detail'],
       cover: json['coverUrl'],
-      arrange: json['courseArrange'],
+      arrange: json['arrange'],
       schedule: json['schedule'],
-      userInformation: json['UserInformation'] != null
-          ? UserInfoModel.fromJson(json['UserInformation'])
+      teacher: json['teacher'] != null
+          ? UserInfoModel.fromJson(json['teacher'])
           : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['startTime'] = this.start;
-    data['finishTime'] = this.finish;
+    data['start'] = this.start;
+    data['finish'] = this.finish;
     data['detail'] = this.detail;
     data['coverUrl'] = this.cover;
-    data['courseArrange'] = this.arrange;
+    data['arrange'] = this.arrange;
     data['schedule'] = this.schedule;
-    if (this.userInformation != null) {
-      data['UserInformation'] = this.userInformation.toJson();
+    if (this.teacher != null) {
+      data['teacher'] = this.teacher.toJson();
     }
-    return data;
-  }
-}
-
-class LiveModel {
-  int code;
-  bool live;
-  String streamName;
-  bool state;
-  String title;
-
-  LiveModel({
-    this.code,
-    this.live,
-    this.streamName,
-    this.state,
-    this.title,
-  });
-
-  factory LiveModel.fromJson(Map<String, dynamic> json) {
-    return LiveModel(
-      code: json['code'],
-      live: json['live'],
-      streamName: json['streamName'],
-      state: json['state'],
-      title: json['title'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    data['live'] = this.live;
-    data['streamName'] = this.streamName;
-    data['state'] = this.state;
-    data['title'] = this.title;
-    return data;
-  }
-}
-
-class ChapterInfoModel {
-  int code;
-  List<ChapterModel> data;
-  int count;
-
-  ChapterInfoModel({this.code, this.data, this.count});
-
-  factory ChapterInfoModel.fromJson(Map<String, dynamic> json) {
-    List<ChapterModel> data = new List<ChapterModel>();
-    json['data'].forEach((v) {
-      data.add(new ChapterModel.fromJson(v));
-    });
-    return ChapterInfoModel(
-      code: json['code'],
-      data: data,
-      count: json['count'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
-    }
-    data['count'] = this.count;
-    return data;
-  }
-}
-
-class ChapterModel {
-  String number;
-  String name;
-  List<VideoModel> video;
-
-  ChapterModel({this.number, this.name, this.video});
-
-  factory ChapterModel.fromJson(Map<String, dynamic> json) {
-    List<VideoModel> video = new List<VideoModel>();
-    json['video'].forEach((v) {
-      video.add(new VideoModel.fromJson(v));
-    });
-    return ChapterModel(
-      number: json['number'],
-      name: json['name'],
-      video: video,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['number'] = this.number;
-    data['name'] = this.name;
-    if (this.video != null) {
-      data['video'] = this.video.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class VideoModel {
-  int id;
-  String name;
-  String ware;
-  int duration;
-  String url;
-
-  VideoModel({this.id, this.name, this.ware, this.duration, this.url});
-
-  factory VideoModel.fromJson(Map<String, dynamic> json) {
-    return VideoModel(
-      id: json['id'],
-      name: json['name'],
-      ware: json['ware'],
-      duration: json['duration'],
-      url: json['url'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['ware'] = this.ware;
-    data['duration'] = this.duration;
-    data['url'] = this.url;
     return data;
   }
 }
 
 class CourseApplyModel {
-  int applyCount;
+  int apply;
   int code;
   String msg;
 
-  CourseApplyModel({this.applyCount, this.code, this.msg});
+  CourseApplyModel({this.apply, this.code, this.msg});
 
   factory CourseApplyModel.fromJson(Map<String, dynamic> json) {
     return CourseApplyModel(
-      applyCount: json['applyCount'],
+      apply: json['apply'],
       code: json['code'],
       msg: json['msg'],
     );
@@ -304,7 +178,7 @@ class CourseApplyModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['applyCount'] = this.applyCount;
+    data['apply'] = this.apply;
     data['code'] = this.code;
     data['msg'] = this.msg;
     return data;

@@ -103,8 +103,8 @@ class __UserCourseTabViewState extends State<_UserCourseTabView>
                   itemCount: _courses.length,
                   itemBuilder: (context, index) => CourseManageCard(
                     imageUrl: HttpUtil.getImage(_courses[index].image),
-                    dateTime: _courses[index].joinTime,
-                    courseName: _courses[index].courseName,
+                    dateTime: _courses[index].time,
+                    courseName: _courses[index].name,
                     price: '￥${_courses[index].price}',
                     state: '报名成功',
                     isFree: _courses[index].price == 0,
@@ -120,7 +120,7 @@ class __UserCourseTabViewState extends State<_UserCourseTabView>
                               context,
                               SlideRoute(
                                 CourseCommentPage(
-                                  courseID: _courses[index].courseID,
+                                  id: _courses[index].id,
                                 ),
                               ),
                             );
@@ -147,7 +147,7 @@ class __UserCourseTabViewState extends State<_UserCourseTabView>
                                         ),
                                         confirmPress: () {
                                           _cancelCourse(
-                                            _courses[index].courseID,
+                                            _courses[index].id,
                                           );
                                         },
                                       );
@@ -162,7 +162,7 @@ class __UserCourseTabViewState extends State<_UserCourseTabView>
                       Navigator.push(
                         context,
                         SlideRoute(
-                          CourseInfoPage(courseID: _courses[index].courseID),
+                          CourseInfoPage(id: _courses[index].id),
                         ),
                       );
                     },
@@ -214,9 +214,9 @@ class __UserCourseTabViewState extends State<_UserCourseTabView>
     }
   }
 
-  Future<Null> _cancelCourse(int courseID) async {
+  Future<Null> _cancelCourse(int courseId) async {
     try {
-      ResponseNormalModel res = await CourseDao.cancelFreeCourse(courseID);
+      ResponseNormalModel res = await CourseDao.cancelFreeCourse(courseId);
       if (res.code == 1000) {
         BotToast.showText(text: res.msg ?? '取消报名成功');
         _courses.clear();
@@ -266,9 +266,9 @@ class __BalanceCourseTabViewState extends State<_BalanceCourseTabView>
                   itemCount: _courses.length,
                   itemBuilder: (context, index) => CourseManageCard(
                     imageUrl: HttpUtil.getImage(
-                        _courses[index].courseInformation.courseImage),
-                    dateTime: _courses[index].createdAt,
-                    courseName: _courses[index].courseInformation.courseName,
+                        _courses[index].image),
+                    dateTime: _courses[index].time,
+                    courseName: _courses[index].name,
                     price: '￥${_courses[index].amount}',
                     state: '购买成功',
                     isFree: false,
@@ -284,7 +284,7 @@ class __BalanceCourseTabViewState extends State<_BalanceCourseTabView>
                               context,
                               SlideRoute(
                                 CourseCommentPage(
-                                  courseID: _courses[index].productID,
+                                  id: _courses[index].productId,
                                 ),
                               ),
                             );
@@ -296,7 +296,7 @@ class __BalanceCourseTabViewState extends State<_BalanceCourseTabView>
                       Navigator.push(
                         context,
                         SlideRoute(
-                          CourseInfoPage(courseID: _courses[index].productID),
+                          CourseInfoPage(id: _courses[index].productId),
                         ),
                       );
                     },
@@ -344,6 +344,7 @@ class __BalanceCourseTabViewState extends State<_BalanceCourseTabView>
       });
       return model.courses;
     } catch (e) {
+      print(e);
       return null;
     }
   }
@@ -384,9 +385,9 @@ class __BstCourseTabViewState extends State<_BstCourseTabView>
                   itemCount: _courses.length,
                   itemBuilder: (context, index) => CourseManageCard(
                     imageUrl: HttpUtil.getImage(
-                        _courses[index].courseInformation.courseImage),
-                    dateTime: _courses[index].createdAt,
-                    courseName: _courses[index].courseInformation.courseName,
+                        _courses[index].image),
+                    dateTime: _courses[index].time,
+                    courseName: _courses[index].name,
                     price: '${_courses[index].amount} BST',
                     state: '报名成功',
                     isFree: false,
@@ -409,7 +410,7 @@ class __BstCourseTabViewState extends State<_BstCourseTabView>
                       Navigator.push(
                         context,
                         SlideRoute(
-                          CourseInfoPage(courseID: _courses[index].productID),
+                          CourseInfoPage(id: _courses[index].productId),
                         ),
                       );
                     },

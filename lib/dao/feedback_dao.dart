@@ -4,7 +4,7 @@ import 'package:baas_study/utils/http_util.dart';
 
 class FeedbackDao {
   static Future<List<FeedbackTypeModel>> getFeedbackType() async {
-    final response = await HttpUtil.get('/profile/personal/feedback-type');
+    final response = await HttpUtil.get('/profile/feedback-type');
     return FeedbackModel.fromJson(response).feedbackType;
   }
 
@@ -12,7 +12,7 @@ class FeedbackDao {
     String content,
     int type,
   }) async {
-    final response = await HttpUtil.post('/profile/personal/feedback', data: {
+    final response = await HttpUtil.post('/profile/feedback', data: {
       "content": content,
       "type": type,
     });

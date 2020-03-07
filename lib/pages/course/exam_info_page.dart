@@ -8,9 +8,9 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 
 class ExamInfoPage extends StatefulWidget {
-  final int courseID;
+  final int courseId;
 
-  const ExamInfoPage({Key key, @required this.courseID}) : super(key: key);
+  const ExamInfoPage({Key key, @required this.courseId}) : super(key: key);
 
   @override
   _ExamInfoPageState createState() => _ExamInfoPageState();
@@ -54,7 +54,7 @@ class _ExamInfoPageState extends State<ExamInfoPage> {
 
   Future<Null> _getExamInfo() async {
     try {
-      ExamInfoModel model = await ExamDao.getExamResult(widget.courseID);
+      ExamInfoModel model = await ExamDao.getExamResult(widget.courseId);
       setState(() {
         _examInfo = model;
         if (!model.finished.state)
@@ -76,8 +76,8 @@ class _ExamInfoPageState extends State<ExamInfoPage> {
             ResponseNormalModel model =
                 await ExamDao.submitAnswer(SubmitExamModel(
               answer: _answer,
-              courseID: widget.courseID,
-              exam: SubmitExamInfoModel(type: 'exam', id: widget.courseID),
+              id: widget.courseId,
+              exam: SubmitExamInfoModel(type: 'exam', id: widget.courseId),
             ));
             if (model != null) {
               BotToast.showText(text: model.msg);

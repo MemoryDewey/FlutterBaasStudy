@@ -208,7 +208,7 @@ class _ProfilePageState extends State<ProfilePage>
             builder: (context, userInfo, child) => ListTileCustom(
               leading: FontIcons.coin,
               leadingTitle: '账户余额',
-              trailingTitle: userInfo.balance,
+              trailingTitle: userInfo.balance.toString(),
               color: Color(0xffffdf0c),
               onTap: () {
                 _jumpToLoginOrOther(BalancePage());
@@ -269,7 +269,7 @@ class _ProfilePageState extends State<ProfilePage>
         _userProvider.clearUser();
         TokenUtil.remove();
         HttpUtil.clear();
-      } else {
+      } else if (model.code == 1000) {
         _userProvider.saveUser(model.info);
       }
     } catch (e) {
@@ -280,7 +280,7 @@ class _ProfilePageState extends State<ProfilePage>
   Future<Null> _getWalletInfo() async {
     try {
       WalletModel wallet = await WalletDao.getWalletInfo();
-      _userProvider.saveWalletInfo(wallet.balance);
+      if (wallet != null) _userProvider.saveWalletInfo(wallet.balance);
     } catch (e) {
       print(e);
     }

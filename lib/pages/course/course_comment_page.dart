@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class CourseCommentPage extends StatefulWidget {
-  final int courseID;
+  final int id;
 
-  const CourseCommentPage({Key key, @required this.courseID}) : super(key: key);
+  const CourseCommentPage({Key key, @required this.id}) : super(key: key);
 
   @override
   _CourseCommentPageState createState() => _CourseCommentPageState();
@@ -102,7 +102,7 @@ class _CourseCommentPageState extends State<CourseCommentPage> {
   Future<Null> _addComment() async {
     try {
       CommentAddModel res = await CommentDao.addComment(
-        courseID: widget.courseID,
+        id: widget.id,
         star: _rating,
         comment: _controller.text,
       );

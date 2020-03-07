@@ -35,15 +35,15 @@ class BannerModel {
 class Banners {
   int id;
   String image;
-  String url;
+  String targetUrl;
 
-  Banners({this.id, this.image, this.url});
+  Banners({this.id, this.image, this.targetUrl});
 
   factory Banners.fromJson(Map<String, dynamic> json) {
     return Banners(
       id: json['id'],
       image: json['image'],
-      url: json['url'],
+      targetUrl: json['targetUrl'],
     );
   }
 
@@ -51,7 +51,7 @@ class Banners {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['image'] = this.image;
-    data['url'] = this.url;
+    data['targetUrl'] = this.targetUrl;
     return data;
   }
 }

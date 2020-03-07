@@ -51,7 +51,7 @@ class _BalanceRechargePageState extends State<BalanceRechargePage> {
                     Consumer<UserProvider>(
                       builder: (context, provider, child) => RichText(
                           text: TextSpan(
-                              text: provider.balance,
+                              text: provider.balance.toString(),
                               style: TextStyle(
                                 fontSize: 36,
                                 color: Color(0xff7493f8),

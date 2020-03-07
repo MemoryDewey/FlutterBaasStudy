@@ -61,9 +61,9 @@ class _CollectionCoursePageState extends State<CollectionCoursePage> {
               : ListView.builder(
                   itemCount: _courses.length,
                   itemBuilder: (context, index) => CourseSimpleCard(
-                    image: HttpUtil.getImage(_courses[index].courseImage),
-                    name: _courses[index].courseName,
-                    count: _courses[index].applyCount,
+                    image: HttpUtil.getImage(_courses[index].image),
+                    name: _courses[index].name,
+                    count: _courses[index].apply,
                     price: _courses[index].price,
                     editable: _editAble,
                     selected: _courses[index].selected,
@@ -79,7 +79,7 @@ class _CollectionCoursePageState extends State<CollectionCoursePage> {
                         Navigator.push(
                           context,
                           SlideTopRoute(
-                            CourseInfoPage(courseID: _courses[index].courseID),
+                            CourseInfoPage(id: _courses[index].id),
                           ),
                         );
                     },
@@ -177,7 +177,7 @@ class _CollectionCoursePageState extends State<CollectionCoursePage> {
     try {
       List<int> deleteCourse = [];
       _courses.forEach((item) {
-        if (item.selected) deleteCourse.add(item.courseID);
+        if (item.selected) deleteCourse.add(item.id);
       });
 
       /// 删除课程
@@ -187,7 +187,7 @@ class _CollectionCoursePageState extends State<CollectionCoursePage> {
       deleteCourse.forEach((item) {
         setState(() {
           _courses.removeWhere((course) {
-            return course.courseID == item;
+            return course.id == item;
           });
         });
       });

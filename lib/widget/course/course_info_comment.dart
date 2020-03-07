@@ -56,7 +56,7 @@ class CourseInfoCommentHeader extends StatelessWidget {
                   ? () {
                       Navigator.push(
                         context,
-                        SlideRoute(CourseCommentPage(courseID: courseID)),
+                        SlideRoute(CourseCommentPage(id: courseID)),
                       );
                     }
                   : null,
@@ -95,8 +95,8 @@ class _CourseInfoCommentState extends State<CourseInfoComment>
         ? SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) => CourseCommentCard(
-                name: _comments[index].user.nickname,
-                avatar: HttpUtil.getImage(_comments[index].user.avatarUrl),
+                name: _comments[index].user,
+                avatar: HttpUtil.getImage(_comments[index].avatar),
                 content: _comments[index].content,
                 time: _comments[index].time,
                 rate: _comments[index].star,
@@ -118,7 +118,7 @@ class _CourseInfoCommentState extends State<CourseInfoComment>
   Future<Null> _getCommentList() async {
     try {
       CommentListModel list =
-          await CommentDao.getCommentList(courseID: widget.courseID);
+          await CommentDao.getCommentList(id: widget.courseID);
       setState(() {
         _comments = list.comments;
         _loadComplete = true;

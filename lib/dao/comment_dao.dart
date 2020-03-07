@@ -4,12 +4,12 @@ import 'package:baas_study/utils/http_util.dart';
 class CommentDao {
   /// 添加评论
   static Future<CommentAddModel> addComment({
-    int courseID,
+    int id,
     double star,
     String comment,
   }) async {
-    final response = await HttpUtil.post('/course/information/comment', data: {
-      "courseID": courseID,
+    final response = await HttpUtil.post('/course/comment', data: {
+      "id": id,
       "star": star.floor(),
       "comment": comment,
     });
@@ -17,22 +17,22 @@ class CommentDao {
   }
 
   /// 获取评论数
-  static Future<CommentCountModel> getCount(int courseID) async {
+  static Future<CommentCountModel> getCount(int id) async {
     final response =
-        await HttpUtil.get('/course/information/comment/count', data: {
-      "courseID": courseID,
+        await HttpUtil.get('/course/comment/count', data: {
+      "id": id,
     });
     return CommentCountModel.fromJson(response);
   }
 
   /// 获取评论
   static Future<CommentListModel> getCommentList({
-    int courseID,
+    int id,
     int page = 1,
     int filter = 0,
   }) async {
-    final response = await HttpUtil.get('/course/information/comment', data: {
-      "courseID": courseID,
+    final response = await HttpUtil.get('/course/comment', data: {
+      "id": id,
       "page": page,
       "filter": filter,
     });

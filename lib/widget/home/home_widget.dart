@@ -13,7 +13,7 @@ class HomeCourseWidget {
         itemCount: course.length,
         itemBuilder: (BuildContext context, int index) => CourseDiscountCard(
           id: course[index].id,
-          imageUrl: HttpUtil.getImage(course[index].imageUrl),
+          imageUrl: HttpUtil.getImage(course[index].image),
           name: course[index].name,
           price: course[index].price,
           discount: course[index].discount / 100,
@@ -30,7 +30,7 @@ class HomeCourseWidget {
       result.add(
         CourseCard(
           id: item.id,
-          imageUrl: HttpUtil.getImage(item.imageUrl),
+          imageUrl: HttpUtil.getImage(item.image),
           name: item.name,
           description: item.description,
           price: item.price,

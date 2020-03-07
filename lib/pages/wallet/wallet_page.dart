@@ -64,7 +64,7 @@ class _WalletPageState extends State<WalletPage> {
                   child: Consumer<UserProvider>(
                     builder: (context, provider, child) => WalletBalanceWidget(
                       balance: _selectedCardIndex == 0
-                          ? provider.balance
+                          ? provider.balance.toString()
                           : _bstBalance == "-1" ? "0.00" : _bstBalance,
                       buttonText: _selectedCardIndex == 0 ? '充值' : '刷新',
                       buttonPress: () {

@@ -70,9 +70,9 @@ class _InviteListPageState extends State<InviteListPage> {
                                 : Border(),
                           ),
                           child: ListTile(
-                            title: Text(_invites[index].invitedUser.nickname),
-                            subtitle: Text(_invites[index].invitedUser.phone),
-                            trailing: Text(_invites[index].inviteTime),
+                            title: Text(_invites[index].nickname),
+                            subtitle: Text(_invites[index].phone),
+                            trailing: Text(_invites[index].time),
                           ),
                         );
                       },

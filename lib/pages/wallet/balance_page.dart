@@ -50,7 +50,7 @@ class _BalancePageState extends State<BalancePage> {
                     SizedBox(width: 10),
                     Consumer<UserProvider>(
                       builder: (context, user, child) => Text(
-                        user.balance,
+                        user.balance.toString(),
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 40,

@@ -2,7 +2,7 @@ class CourseModel {
   int id;
   String name;
   String description;
-  String imageUrl;
+  String image;
   num rate;
   num apply;
   num price;
@@ -13,7 +13,7 @@ class CourseModel {
     this.id,
     this.name,
     this.description,
-    this.imageUrl,
+    this.image,
     this.rate,
     this.apply,
     this.price,
@@ -23,12 +23,12 @@ class CourseModel {
 
   factory CourseModel.fromJson(Map<String, dynamic> json) {
     return CourseModel(
-      id: json['courseID'],
-      name: json['courseName'],
-      description: json['courseDescription'],
-      imageUrl: json['courseImage'],
-      rate: json['favorableRate'],
-      apply: json['applyCount'],
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      image: json['image'],
+      rate: json['rate'],
+      apply: json['apply'],
       price: json['price'],
       discount: json['discount'],
       discountTime: json['discountTime'],
@@ -37,12 +37,12 @@ class CourseModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['courseID'] = this.id;
-    data['courseName'] = this.name;
+    data['id'] = this.id;
+    data['name'] = this.name;
     data['description'] = this.description;
-    data['courseImage'] = this.imageUrl;
-    data['favorableRate'] = this.rate;
-    data['applyCount'] = this.apply;
+    data['image'] = this.image;
+    data['rate'] = this.rate;
+    data['apply'] = this.apply;
     data['price'] = this.price;
     data['discount'] = this.discount;
     data['discountTime'] = this.discountTime;
@@ -101,88 +101,71 @@ class CoursePageModel {
 }
 
 class CourseSystemTypeModel {
-  int code;
-  List<CourseSystemModel> data;
-
-  CourseSystemTypeModel({this.code, this.data});
-
-  factory CourseSystemTypeModel.fromJson(Map<String, dynamic> json) {
-    int code = json['code'];
     List<CourseSystemModel> data;
-    if (json['data'] != null) {
-      data = new List<CourseSystemModel>();
-      json['data'].forEach((v) {
-        data.add(new CourseSystemModel.fromJson(v));
-      });
-    }
-    return CourseSystemTypeModel(
-      code: code,
-      data: data,
-    );
-  }
+    int code;
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
+    CourseSystemTypeModel({this.data, this.code});
+
+    factory CourseSystemTypeModel.fromJson(Map<String, dynamic> json) {
+        return CourseSystemTypeModel(
+            data: json['data'] != null ? (json['data'] as List).map((i) => CourseSystemModel.fromJson(i)).toList() : null,
+            code: json['code'], 
+        );
     }
-    return data;
-  }
+
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> data = new Map<String, dynamic>();
+        data['code'] = this.code;
+        if (this.data != null) {
+            data['data'] = this.data.map((v) => v.toJson()).toList();
+        }
+        return data;
+    }
 }
 
 class CourseSystemModel {
-  int systemID;
-  String systemName;
-  List<CourseTypeModel> courseTypes;
+    int id;
+    String name;
+    List<CourseTypeModel> types;
 
-  CourseSystemModel({this.systemID, this.systemName, this.courseTypes});
+    CourseSystemModel({this.id, this.name, this.types});
 
-  factory CourseSystemModel.fromJson(Map<String, dynamic> json) {
-    int systemID = json['systemID'];
-    String systemName = json['systemName'];
-    List<CourseTypeModel> courseTypes;
-    if (json['CourseTypes'] != null) {
-      courseTypes = new List<CourseTypeModel>();
-      json['CourseTypes'].forEach((v) {
-        courseTypes.add(new CourseTypeModel.fromJson(v));
-      });
+    factory CourseSystemModel.fromJson(Map<String, dynamic> json) {
+        return CourseSystemModel(
+            id: json['id'], 
+            name: json['name'], 
+            types: json['types'] != null ? (json['types'] as List).map((i) => CourseTypeModel.fromJson(i)).toList() : null,
+        );
     }
-    return CourseSystemModel(
-      systemID: systemID,
-      systemName: systemName,
-      courseTypes: courseTypes,
-    );
-  }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['systemID'] = this.systemID;
-    data['systemName'] = this.systemName;
-    if (this.courseTypes != null) {
-      data['CourseTypes'] = this.courseTypes.map((v) => v.toJson()).toList();
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> data = new Map<String, dynamic>();
+        data['id'] = this.id;
+        data['name'] = this.name;
+        if (this.types != null) {
+            data['types'] = this.types.map((v) => v.toJson()).toList();
+        }
+        return data;
     }
-    return data;
-  }
 }
 
 class CourseTypeModel {
-  int typeID;
-  String typeName;
+    int id;
+    String name;
 
-  CourseTypeModel({this.typeID, this.typeName});
+    CourseTypeModel({this.id, this.name});
 
-  factory CourseTypeModel.fromJson(Map<String, dynamic> json) {
-    return CourseTypeModel(
-      typeID: json['typeID'],
-      typeName: json['typeName'],
-    );
-  }
+    factory CourseTypeModel.fromJson(Map<String, dynamic> json) {
+        return CourseTypeModel(
+            id: json['id'], 
+            name: json['name'], 
+        );
+    }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['typeID'] = this.typeID;
-    data['typeName'] = this.typeName;
-    return data;
-  }
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> data = new Map<String, dynamic>();
+        data['id'] = this.id;
+        data['name'] = this.name;
+        return data;
+    }
 }

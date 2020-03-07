@@ -10,12 +10,12 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class CourseCommentListPage extends StatefulWidget {
   final double rate;
-  final int courseID;
+  final int id;
 
   const CourseCommentListPage({
     Key key,
     this.rate = 1,
-    this.courseID,
+    this.id,
   }) : super(key: key);
 
   @override
@@ -96,9 +96,9 @@ class _CourseCommentListPageState extends State<CourseCommentListPage> {
                           enablePullDown: false,
                           child: ListView.builder(
                             itemBuilder: (context, index) => CourseCommentCard(
-                              name: _comments[index].user.nickname,
-                              avatar: HttpUtil.getImage(
-                                  _comments[index].user.avatarUrl),
+                              name: _comments[index].user,
+                              avatar:
+                                  HttpUtil.getImage(_comments[index].avatar),
                               content: _comments[index].content,
                               time: _comments[index].time,
                               rate: _comments[index].star,
@@ -124,10 +124,10 @@ class _CourseCommentListPageState extends State<CourseCommentListPage> {
 
   Future<Null> _getCommentCount() async {
     try {
-      CommentCountModel comment = await CommentDao.getCount(widget.courseID);
+      CommentCountModel comment = await CommentDao.getCount(widget.id);
       setState(() {
         _count = comment.count;
-        _pageEach = comment.pageSum;
+        _pageEach = comment.pageSize;
         _page = _calcPage(_count.all);
         _choose[0] = '全部(${_formatCount(_count.all)})';
         _selected = _choose[0];
@@ -143,7 +143,7 @@ class _CourseCommentListPageState extends State<CourseCommentListPage> {
   Future<List<CommentModel>> _getCommentList() async {
     try {
       CommentListModel list = await CommentDao.getCommentList(
-        courseID: widget.courseID,
+        id: widget.id,
         filter: _filter,
         page: _current,
       );

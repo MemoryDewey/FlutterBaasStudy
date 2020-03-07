@@ -6,11 +6,11 @@ class UserProvider extends ChangeNotifier {
   static const String _USER_KEY = 'userInfo';
   static const String _WALLET_KEY = 'userWallet';
   UserModel _user;
-  String _walletBalance;
+  double _walletBalance;
 
   UserModel get user => _user;
 
-  String get balance => _walletBalance;
+  double get balance => _walletBalance;
 
   bool get hasUser => _user != null;
 
@@ -21,8 +21,8 @@ class UserProvider extends ChangeNotifier {
   void _init() async {
     Map<String, dynamic> userMap = await StorageUtil.getMap(_USER_KEY);
     _user = userMap != null ? UserModel.fromJson(userMap) : null;
-    String balance = await StorageUtil.getString(_WALLET_KEY);
-    _walletBalance = balance ?? '';
+    double balance = await StorageUtil.getDouble(_WALLET_KEY);
+    _walletBalance = balance ?? 0;
   }
 
   /// 保存用户信息
@@ -33,7 +33,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   /// 保存用户钱包余额信息
-  saveWalletInfo(String balance) {
+  saveWalletInfo(double balance) {
     _walletBalance = balance;
     notifyListeners();
     StorageUtil.set(_WALLET_KEY, balance);
@@ -50,6 +50,6 @@ class UserProvider extends ChangeNotifier {
   clearWalletInfo() {
     _walletBalance = null;
     notifyListeners();
-    StorageUtil.remove(_walletBalance);
+    StorageUtil.remove(_WALLET_KEY);
   }
 }

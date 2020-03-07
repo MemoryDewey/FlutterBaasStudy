@@ -1,5 +1,5 @@
 import 'package:baas_study/dao/course_dao.dart';
-import 'package:baas_study/model/course_info_model.dart';
+import 'package:baas_study/model/course_video_model.dart';
 import 'package:flutter/material.dart';
 
 class CourseInfoChapterHeader extends StatelessWidget {
@@ -117,7 +117,7 @@ class _CourseInfoChapterState extends State<CourseInfoChapter>
                     icon: Icons.play_circle_filled,
                     title: video.name,
                     subTitle: '${video.duration}分钟',
-                    url: video.url,
+                    url: video.mediaUrl,
                   );
                 }).toList()));
           });

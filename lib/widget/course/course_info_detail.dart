@@ -152,23 +152,23 @@ class _CourseInfoDetailState extends State<CourseInfoDetail>
                           child: Image.network(
                             HttpUtil.getImage(
                               widget
-                                  .infoDetail.details.userInformation.avatarUrl,
+                                  .infoDetail.detail.teacher.avatarUrl,
                             ),
                           ),
                         ),
                         title: Text(
-                          widget.infoDetail.details.userInformation.nickname,
+                          widget.infoDetail.detail.teacher.nickname,
                         ),
                         contentPadding: EdgeInsets.all(0),
                       ),
                       SizedBox(height: 16),
                       _textIcon(iconData: Icons.widgets, text: '课程详情'),
                       SizedBox(height: 16),
-                      Text(widget.infoDetail.details.detail),
-                      widget.infoDetail.details.cover != null
+                      Text(widget.infoDetail.detail.detail),
+                      widget.infoDetail.detail.cover != null
                           ? ExtendedImage.network(
                               HttpUtil.getImage(
-                                  widget.infoDetail.details.cover),
+                                  widget.infoDetail.detail.cover),
                               cache: true,
                               fit: BoxFit.cover,
                             )

@@ -6,7 +6,7 @@ class WalletDao {
   /// 获取余额信息
   static Future<WalletModel> getWalletInfo() async {
     final response = await HttpUtil.get('/wallet');
-    return WalletModel.fromJson(response);
+    return response != null ? WalletModel.fromJson(response) : null;
   }
 
   /// 获取余额交易记录
@@ -38,7 +38,7 @@ class WalletDao {
 
   /// 解除BST钱包绑定
   static Future<Null> unbindWallet() async {
-    await HttpUtil.post('/profile/personal/user-address/delete');
+    await HttpUtil.post('/profile/user-address/delete');
   }
 
   /// 获取加密公钥
@@ -50,7 +50,7 @@ class WalletDao {
   /// 添加BST账号
   static Future<ResponseNormalModel> addBstAddress({String address}) async {
     final response =
-        await HttpUtil.post('/profile/personal/user-address', data: {
+        await HttpUtil.post('/profile/user-address', data: {
       "address": address,
     });
     return response != null ? ResponseNormalModel.fromJson(response) : null;
@@ -58,9 +58,9 @@ class WalletDao {
 
   /// 获取BST价格
   static Future<double> getBstValue() async {
-    final response = await HttpUtil.get('/wallet/bst-value');
-    BstValueModel model = BstValueModel.fromJson(response);
-    return double.parse(model.bstValue);
+    final response = await HttpUtil.get('/course/info/bst-price');
+    BstPriceModel model = BstPriceModel.fromJson(response);
+    return model.price;
   }
 
   /// 向服务器发送充值请求

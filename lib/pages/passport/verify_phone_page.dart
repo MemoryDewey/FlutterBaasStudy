@@ -105,7 +105,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
   Future<Null> _changeMobile() async {
     try {
       String res = await PassportDao.changeMobile(
-        data: {"verifyCode": _controller.text},
+        data: {"verify": _controller.text},
         step: 0,
       );
       if (res != null)
@@ -123,7 +123,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
   Future<Null> _resetPsw() async {
     try {
       String res = await PassportDao.changePsw(
-        data: {"verifyCode": _controller.text},
+        data: {"verify": _controller.text},
         step: 0,
       );
       if (res != null)
