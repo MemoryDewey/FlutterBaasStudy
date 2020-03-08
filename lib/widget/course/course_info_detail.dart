@@ -203,7 +203,7 @@ class _CourseInfoDetailState extends State<CourseInfoDetail>
   void _initTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       DateTime now = DateTime.now();
-      DateTime end = DateTime(2020, 1, 1);
+      DateTime end = DateTime.parse(widget.infoDetail?.info?.discountTime);
       if (now.isBefore(end)) {
         Duration diff = end.difference(now);
         setState(() {

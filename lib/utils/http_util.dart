@@ -13,19 +13,19 @@ class HttpUtil {
 
   /// 设置请求地址
   /// 测试服
-  /// static const String URL_PREFIX = 'http://47.102.97.205';
+  static const String URL_PREFIX = 'http://47.102.97.205';
   /// 正式服
   /// static const String URL_PREFIX = 'http://www.baasstudy.com';
   /// 本地
-  static const String URL_PREFIX = 'http://10.0.2.2:3000';
+  /// static const String URL_PREFIX = 'http://10.0.2.2:3000';
 
   /// WebSocket请求地址
   /// 测试服
-  /// static const String WEBSOCKET_URL_PREFIX = 'ws://47.102.97.205';
+  static const String WEBSOCKET_URL_PREFIX = 'ws://47.102.97.205';
   /// 正式服
   /// static const String WEBSOCKET_URL_PREFIX = 'ws://www.baasstudy.com';
   /// 本地
-  static const String WEBSOCKET_URL_PREFIX = 'ws://10.0.2.2:3000';
+  /// static const String WEBSOCKET_URL_PREFIX = 'ws://10.0.2.2:3000';
 
   /// API前缀
   static const String _API_PREFIX = '$URL_PREFIX/api';
