@@ -32,32 +32,32 @@ dependencies:
   provider: ^3.2.0
 
   # Path 本地资源管理
-  path_provider: ^1.5.1
+  path_provider: ^1.6.5
 
   # Data 数据交互处理
-  dio: ^3.0.8
-  shared_preferences: ^0.5.6
+  dio: ^3.0.9
+  shared_preferences: ^0.5.6+3
 
   # Permission 权限管理
-  permission_handler: ^4.0.0
+  permission_handler: ^4.4.0+hotfix.4
 
   # Encrypt 加密
   encrypt: ^3.3.1
 
   # Cache 缓存图片
-  extended_image: ^0.6.8
+  extended_image: ^0.6.9
   extended_image_library: ^0.1.9
   # Image Picker 图片选择（相册/相机）
-  image_picker: ^0.6.2+3
+  image_picker: ^0.6.4
   # Image Cropper 图片裁剪
-  image_cropper: ^1.1.2
+  image_cropper: ^1.2.1
   # Image Saver 图片保存
   image_gallery_saver: ^1.2.2
 
   # Screen 屏幕适配
   flutter_screenutil: ^0.7.0
   # Toast 提示
-  bot_toast: ^2.2.0
+  bot_toast: ^2.4.0
 
   # Qr Scanner 二维码扫描
   qr_code_scanner: ^0.0.12
@@ -65,15 +65,15 @@ dependencies:
   qr_flutter: ^3.2.0
 
   # Refresh 下拉刷新
-  pull_to_refresh: ^1.5.7
+  pull_to_refresh: ^1.5.8
   # Menu 下拉菜单
   gzx_dropdown_menu: ^1.0.3
 
   # Shimmer 闪烁（骨架屏使用）
-  shimmer: ^1.0.1
+  shimmer: ^1.1.1
 
   # Rating 评分
-  flutter_rating_bar: ^3.0.0+1
+  flutter_rating_bar: ^3.0.1+1
 
   # Video 视频播放插件
   flutter_ijkplayer: ^0.3.5+1
